@@ -7,22 +7,30 @@
 getTheta(x, standardized = TRUE, ...)
 }
 \arguments{
-\item{x}{asdgfa}
+\item{x}{an object that can be converted into a factor loading matrix, or an
+object containing a fitted model from which a vector of residual variances
+can be extracted. Supported classes are data.frame, matrix, mplus.model,
+lavaan, and SingleGroupClass}
 
-\item{standardized}{If}
-
-\item{...}{Currently, no other options are available}
+\item{standardized}{can be used to specify whether a standardized or unstandardized factor loading matrix
+should be returned. Only relevant for lavaan and mplus.model input. The standardized matrix for mplus.model
+is taken from stdyx results.}
 }
 \value{
-a vector of residual variance for items
+a vector of residual variances for items. If x is a fitted model, then
+the residual variances are extracted from the fitted model. Lavaan, mirt
+(SingleGroupClass), and Mplus (mplus.model) models are supported.
+If Mplus does not report residual variances for categorical variables, then
+factor loadings are used to compute the residual variance for standardized models
+and an error is thrown for unstandardized models. In both cases, the user is
+alerted that residual variances could not be found in the input and perhaps the
+model should be rerun.
 }
 \description{
-getTheta computes or extracts a vector of residual variance for items. If a factor loading matrix is provided, then the
-vector of residual variances is computed from that matrix.
-If x is a fitted model and standardized residual variances are requested then a matrix of standardized factor loadings
-is computed, and the vector of residual variances is computed from that matrix.
-If x is a fitted model and unstandardized residual variances are requested, then the residual variances are extracted
-from the fitted model. Lavaan, mirt (SingleGroupClass), and Mplus (mplus.model) models are supported.
+getTheta extracts or computes a vector of residual variance for items. If a
+factor loading matrix is provided, then the vector of residual variances is
+computed from that matrix if \code{standardized} is \code{TRUE} or an error
+is thrown for unstandardized models.
 }
 \seealso{
 \code{\link{getLambda}}

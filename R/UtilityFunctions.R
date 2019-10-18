@@ -29,7 +29,8 @@ getLambda.lavaan <- function(x, standardized = TRUE, ...) {
     x[is.na(x)] <- 0
     as.matrix(x)
   } else {
-    x <- lavaan::lavInspect(x, "est")$lambda
+    ## Make sure all factors have a variance of one.
+    x <- lavaan::lavInspect(x, "std.lv")$lambda
     x[is.na(x)] <- 0
     as.matrix(x)
   }
@@ -44,8 +45,14 @@ getLambda.SingleGroupClass <- function(x, ...) {
 
 getLambda.mplus.model <- function(x, standardized = TRUE, ...) {
   if (standardized) {
+    ## check to make sure standardized output was requested
+    if (is.null(x$parameters$stdyx.standardized)) stop("You must request standardized output from Mplus when standardized = TRUE")
+
     getLambda(x$parameters$stdyx.standardized)
   } else {
+    ## check to make sure factor variances are all one.
+    if (!all(x$parameters$unstandardized[x$parameters$unstandardized$paramHeader == "Variances", "est"] == 1)) stop("All factor variances must be one when standardized = FALSE")
+
     getLambda(x$parameters$unstandardized)
   }
 }
@@ -85,7 +92,7 @@ getLambda.mplus.params <- function(x, ...) {
 #' object containing a fitted model from which a vector of residual variances
 #' can be extracted. Supported classes are data.frame, matrix, mplus.model,
 #' lavaan, and SingleGroupClass
-#' @param ... can be used to specify whether a standardized or unstandardized factor loading matrix
+#' @param standardized can be used to specify whether a standardized or unstandardized factor loading matrix
 #' should be returned. Only relevant for lavaan and mplus.model input. The standardized matrix for mplus.model
 #' is taken from stdyx results.
 #'
@@ -100,8 +107,6 @@ getLambda.mplus.params <- function(x, ...) {
 #'
 #' @seealso \code{\link{getLambda}}
 #'
-#' @examples
-#'
 #'
 getTheta <- function(x, standardized = TRUE, ...) {
   UseMethod("getTheta")
@@ -111,7 +116,7 @@ getTheta.default <- function(x, standardized = TRUE) {
   if(!standardized) {
     stop("Not enough information is provided to compute indicator residual variances")
   } else {
-    ## This is excessive. There's not way to get here unless x is a data frame or matrix. But, better safe than sorry
+    ## This is excessive. There's no way to get here unless x is a data frame or matrix. But, better safe than sorry
     Lambda <- getLambda(x)
     Ones <- rep(1, nrow(Lambda))
     Ones - rowSums(Lambda^2)    }
@@ -163,18 +168,17 @@ getTheta.mplus.model <- function(x, ...) {
 #'
 #' @seealso isBifactor, getLambda
 #'
-  getGen <- function(Lambda) {
-    if (!("matrix" %in% class(Lambda))) {Lambda <- getLambda(Lambda, standardized = standardized)}
-    ## Make a matrix of logical vectors for non-zero elements of Lambda. Let's replace NA with zero at the start!!
-    inFactorMat <- Lambda != 0
-    ## Now, compute the column sums. [[ If colSum is nrow, then we have a general factor. We cannot have more than one ]]
-    itemsOnFactor <- colSums(inFactorMat == TRUE)
-    if (sum(itemsOnFactor == nrow(Lambda)) == 1 ) {
-      which(sum(itemsOnFactor == nrow(Lambda)) == 1)
-    } else {
-      NULL
-    }
+getGen <- function(Lambda) {
+  ## Make a matrix of logical vectors for non-zero elements of Lambda. Let's replace NA with zero at the start!!
+  inFactorMat <- Lambda != 0
+  ## Now, compute the column sums. [[ If colSum is nrow, then we have a general factor. We cannot have more than one ]]
+  itemsOnFactor <- colSums(inFactorMat == TRUE)
+  if (sum(itemsOnFactor == nrow(Lambda)) == 1 ) {
+    which(sum(itemsOnFactor == nrow(Lambda)) == 1)
+  } else {
+    NULL
   }
+}
 
 
 #' isBifactor
@@ -186,7 +190,6 @@ getTheta.mplus.model <- function(x, ...) {
 #' @return Logical. If each item loads on a general factor and at most one specific factor, returns TRUE. Otherwise FALSE.
 #'
   isBifactor <- function(Lambda) {
-    if (!("matrix" %in% class(Lambda))) {Lambda <- getLambda(Lambda, standardized = standardized)}
     if (is.null(getGen(Lambda))) return(FALSE)
     inFactorMat <- Lambda != 0
     return(sum(rowSums(inFactorMat) > 2) == 0)

@@ -13,5 +13,5 @@ isBifactor(Lambda)
 Logical. If each item loads on a general factor and at most one specific factor, returns TRUE. Otherwise FALSE.
 }
 \description{
-Determines whether a model has bifactor structure
+Determines whether a model has bifactor structure.
 }

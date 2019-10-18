@@ -2,14 +2,29 @@
 #'
 #' Computes an ECV index for all factors which can be interpreted as the proportion of common variance of the items in each factor which is due to that factor. Here, ECV is computed only with respect to items which load on the factor; Stucky and Edelen (2015, p. 201) refer to this index as "within-domain ECV". In the Excel version of the bifactor indices calculator (Dueber, 2017), this index is referred to as ECV (NEW). ECV_SS is useful in that it can be computed when there is no specific factor, such as in a two-tier model.
 #'
-#' \code{ECV_SS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMPlus}}, which are the only functions in this package intended for casual users
+#' \code{ECV_SS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
 #'
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same variance before calling this function.
 #'
 #' @return A vector of ECVs for all factors
 #'
 #' @examples
-#' Hey I need some examples here!!
+#' Lambda <- matrix(c(.82, .10,   0,   0,
+#'                    .77, .35,   0,   0,
+#'                    .79, .32,   0,   0,
+#'                    .66, .39,   0,   0,
+#'                    .51,   0, .71,   0,
+#'                    .56,   0, .43,   0,
+#'                    .68,   0, .13,   0,
+#'                    .60,   0, .50,   0,
+#'                    .83,   0,   0, .47,
+#'                    .60,   0,   0, .27,
+#'                    .78,   0,   0, .28,
+#'                    .55,   0,   0, .75),
+#'                    ncol = 4, byrow = TRUE)
+#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' ECV_SS(Lambda)
+#'
 #'
 #' @section References:
 #' Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool to calculate various indices relevant to bifactor CFA models. <doi:10.13023/edp.tool.01>
@@ -17,7 +32,7 @@
 #'
 #' @export
 #'
-#' @seealso \code{\link{ECV_SG}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMPlus}}
+#' @seealso \code{\link{ECV_SG}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
 #'
 ECV_SS <- function(Lambda) {
   ECV_SS_C <- function(Fac, Lambda) {
@@ -28,7 +43,9 @@ ECV_SS <- function(Lambda) {
     ## Compute the appropriate ratio of sums
     sum(L2[,Fac]*inFactor)/sum(L2*inFactor)
   }
-  sapply(colnames(Lambda), ECV_SS_C, Lambda, standardized = standardized)
+  ECV_results <- sapply(1:ncol(Lambda), ECV_SS_C, Lambda)
+  names(ECV_results) <- colnames(Lambda)
+  ECV_results
 }
 
 
@@ -36,14 +53,28 @@ ECV_SS <- function(Lambda) {
 #'
 #' Computes an ECV index for all factors which can be interpreted as the proportion of common variance of the items in each factor which is due to the general factor. Here, ECV is computed only with respect to all items using the specific factor loadings in the numerator. Neither Stucky and Edelen (2015) or the Excel version of the Bifactor Indices Calculator (Dueber, 2017) use this form of ECV.
 #'
-#' \code{ECV_SG} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMPlus}}, which are the only functions in this package intended for casual users
+#' \code{ECV_SG} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
 #'
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same variance before calling this function.
 #'
 #' @return A vector of ECVs for all factors
 #'
 #' @examples
-#' Hey I need some examples here!!
+#' Lambda <- matrix(c(.82, .10,   0,   0,
+#'                    .77, .35,   0,   0,
+#'                    .79, .32,   0,   0,
+#'                    .66, .39,   0,   0,
+#'                    .51,   0, .71,   0,
+#'                    .56,   0, .43,   0,
+#'                    .68,   0, .13,   0,
+#'                    .60,   0, .50,   0,
+#'                    .83,   0,   0, .47,
+#'                    .60,   0,   0, .27,
+#'                    .78,   0,   0, .28,
+#'                    .55,   0,   0, .75),
+#'                    ncol = 4, byrow = TRUE)
+#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' ECV_SG(Lambda)
 #'
 #' @section References:
 #' Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool to calculate various indices relevant to bifactor CFA models. <doi:10.13023/edp.tool.01>
@@ -51,13 +82,12 @@ ECV_SS <- function(Lambda) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMPlus}}
+#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
 #'
 
 ECV_SG <- function(Lambda) {
   if (is.null(getGen(Lambda))) return(NULL)
   ECV_SG_C <- function(Fac, Lambda) {
-    Lambda <- getLambda(Lambda, standardized = standardized)
     if (is.null(getGen(Lambda))) return(NULL)
     ## Make a matrix of logical vectors for non-zero elements of Lambda.
     inFactor <- Lambda[,Fac] != 0
@@ -66,21 +96,37 @@ ECV_SG <- function(Lambda) {
     ## Compute the appropriate ratio of sums
     sum(L2[,Fac]*inFactor)/sum(L2)
   }
-  sapply(colnames(Lambda), ECV_SG_C, Lambda, standardized = standardized)
+  ECV_results <- sapply(1:ncol(Lambda), ECV_SG_C, Lambda)
+  names(ECV_results) <- colnames(Lambda)
+  ECV_results
 }
 
 #' ECV_GS
 #'
 #' Computes an ECV index for all factors which can be interpreted as the proportion of common variance of the items in each factor which is due to the general factor. Here, ECV is computed only with respect to all items using the general factor loadings in the numerator; Stucky and Edelen (2015, p. 199) refer to this index as ECV for the specific factor. In the Excel version of the bifactor indices calculator (Dueber, 2017), this index is referred to as ECV (S&E).
 #'
-#' \code{ECV_GS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMPlus}}, which are the only functions in this package intended for casual users
+#' \code{ECV_GS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
 #'
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same variance before calling this function.
 #'
 #' @return A vector of ECVs for all factors
 #'
 #' @examples
-#' Hey I need some examples here!!
+#' Lambda <- matrix(c(.82, .10,   0,   0,
+#'                    .77, .35,   0,   0,
+#'                    .79, .32,   0,   0,
+#'                    .66, .39,   0,   0,
+#'                    .51,   0, .71,   0,
+#'                    .56,   0, .43,   0,
+#'                    .68,   0, .13,   0,
+#'                    .60,   0, .50,   0,
+#'                    .83,   0,   0, .47,
+#'                    .60,   0,   0, .27,
+#'                    .78,   0,   0, .28,
+#'                    .55,   0,   0, .75),
+#'                    ncol = 4, byrow = TRUE)
+#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' ECV_GS(Lambda)
 #'
 #' @section References:
 #' Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool to calculate various indices relevant to bifactor CFA models. <doi:10.13023/edp.tool.01>
@@ -88,7 +134,7 @@ ECV_SG <- function(Lambda) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMPlus}}
+#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
 #'
 
 ECV_GS <- function(Lambda) {
@@ -103,7 +149,9 @@ ECV_GS <- function(Lambda) {
     ## Compute the appropriate ratio of sums
     sum(L2[,genFac]*inFactor)/sum(L2*inFactor)
   }
-  sapply(colnames(Lambda), ECV_GS_C, Lambda)
+  ECV_results <- sapply(1:ncol(Lambda), ECV_GS_C, Lambda)
+  names(ECV_results) <- colnames(Lambda)
+  ECV_results
 }
 
 
@@ -112,14 +160,28 @@ ECV_GS <- function(Lambda) {
 #'
 #' Computes an ECV index for each item which can be interpreted as the proportion of common variance of that item due to the general factor. Stucky and Edelen (2015, p. 201) define I-ECV, which is also computed in the Excel version of the bifactor indices calculator (Dueber, 2017).
 #'
-#' \code{IECV} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMPlus}}, which are the only functions in this package intended for casual users
+#' \code{IECV} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
 #'
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same variance before calling this function.
 #'
 #' @return A vector of ECVs for all factors
 #'
 #' @examples
-#' Hey I need some examples here!!
+#' Lambda <- matrix(c(.82, .10,   0,   0,
+#'                    .77, .35,   0,   0,
+#'                    .79, .32,   0,   0,
+#'                    .66, .39,   0,   0,
+#'                    .51,   0, .71,   0,
+#'                    .56,   0, .43,   0,
+#'                    .68,   0, .13,   0,
+#'                    .60,   0, .50,   0,
+#'                    .83,   0,   0, .47,
+#'                    .60,   0,   0, .27,
+#'                    .78,   0,   0, .28,
+#'                    .55,   0,   0, .75),
+#'                    ncol = 4, byrow = TRUE)
+#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' IECV(Lambda)
 #'
 #' @section References:
 #' Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool to calculate various indices relevant to bifactor CFA models. <doi:10.13023/edp.tool.01>
@@ -127,7 +189,7 @@ ECV_GS <- function(Lambda) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMPlus}}
+#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
 #'
 
 IECV <- function(Lambda) {

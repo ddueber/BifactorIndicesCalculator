@@ -77,7 +77,7 @@ bifactorIndices <- function(Lambda, Theta = getTheta(Lambda), UniLambda = NULL, 
 #' @examples
 #' FIGURE OUT A WAY TO DO AN EXAMPLE OR THREE
 #'
-bifactorIndicesMPlus <- function(Lambda = file.choose(), UniLambda = NULL, standardized = TRUE) {
+bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, standardized = TRUE) {
   Lambda <- MplusAutomation::readModels(Lambda)
   Theta <- getTheta(Lambda, standardized = standardized)
   Lambda <- getLambda(Lambda, standardized = standardized)
