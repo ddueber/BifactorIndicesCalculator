@@ -25,24 +25,50 @@
 #'
 #' @examples
 #'
-#' GENERATE MATRICES, SEND IT TO BINDICES
+#' ## Computing bifactor indices from fitted lavaan object
+#' ## (using mirt object is similar)
+#' HS_model_bifactor <- "visual  =~ x1 + x2 + x3
+#'                       textual =~ x4 + x5 + x6
+#'                       speed   =~ x7 + x8 + x9
+#'                       general =~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9"
+#' ## lavaan cannot find a good solution, but that's ok since this is just for illustration
+#' fit <- ignore.warnings(lavaan::cfa(HS_model_bifactor,
+#'                    data = lavaan::HolzingerSwineford1939,
+#'                    orthogonal = TRUE))
+#' bifactorIndices(fit)
 #'
-#' USE SOME LAVAAN DATA, CREATE BIFACTOR MODEL, FEED IT TO BINDICES
 #'
-#' USE BINDICES TO COMPUTE OMEGA
+#' ## Computing bifactor indices from factor loading matrices
+#' Lambda <-  matrix(c(.82, .10,   0,   0,
+#'                     .77, .35,   0,   0,
+#'                     .79, .32,   0,   0,
+#'                     .66, .39,   0,   0,
+#'                     .51,   0, .71,   0,
+#'                     .56,   0, .43,   0,
+#'                     .68,   0, .13,   0,
+#'                     .60,   0, .50,   0,
+#'                     .83,   0,   0, .47,
+#'                     .60,   0,   0, .27,
+#'                     .78,   0,   0, .28,
+#'                     .55,   0,   0, .75),
+#'                     ncol = 4, byrow = TRUE)
+#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
+#' bifactorIndices(Lambda, UniLambda = UniLambda)
+#'
 #'
 
 
 bifactorIndices <- function(Lambda, Theta = getTheta(Lambda), UniLambda = NULL, standardized = TRUE) {
   Lambda <- getLambda(Lambda, standardized = standardized)
-  UniLambda <- getLambda(UniLambda, standardized = standardized)
+  if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
   indicesList <- list(ECV_SS  = ECV_SS(Lambda),
                       ECV_SG  = ECV_SG(Lambda),
                       ECV_GS  = ECV_GS(Lambda),
                       IECV    = IECV(Lambda),
                       PUC     = PUC(Lambda),
-                      Omega   = Omega_S(Lambda),
-                      Omega_H = Omega_H(Lambda),
+                      Omega   = Omega_S(Lambda, Theta),
+                      Omega_H = Omega_H(Lambda, Theta),
                       ARPB    = ARPB(Lambda, UniLambda)
   )
   indicesList[which(!sapply(indicesList, is.null))]
@@ -75,7 +101,9 @@ bifactorIndices <- function(Lambda, Theta = getTheta(Lambda), UniLambda = NULL, 
 #' @export
 #'
 #' @examples
-#' FIGURE OUT A WAY TO DO AN EXAMPLE OR THREE
+#' \dontrun{
+#' bifactorIndicesMplus()
+#' }
 #'
 bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, standardized = TRUE) {
   Lambda <- MplusAutomation::readModels(Lambda)

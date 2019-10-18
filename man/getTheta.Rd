@@ -4,7 +4,7 @@
 \alias{getTheta}
 \title{getTheta}
 \usage{
-getTheta(x, standardized = TRUE, ...)
+getTheta(x, standardized = TRUE)
 }
 \arguments{
 \item{x}{an object that can be converted into a factor loading matrix, or an

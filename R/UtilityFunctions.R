@@ -8,22 +8,22 @@
 #' @param x an object to be converted into a factor loading matrix, or an object containing a fitted model from which
 #' a factor loading matrix will be extracted. Supported classes are data.frame, matrix, mplus.model, lavaan, and SingleGroupClass
 #'
-#' @param ... can be used to specify whether a standardized or unstandardized factor loading matrix
+#' @param standardized can be used to specify whether a standardized or unstandardized factor loading matrix
 #' should be returned. Only relevant for lavaan and mplus.model input. The standardized matrix for mplus.model
 #' is taken from stdyx results.
 #'
 #' @return a matrix of factor loadings
 #'
-getLambda <- function(x, ...) {
+getLambda <- function(x, standardized = TRUE) {
   UseMethod("getLambda")
 }
 
-getLambda.default <- function(x, ...) {
+getLambda.default <- function(x, standardized = TRUE) {
   x[is.na(x)] <- 0
   as.matrix(x)
 }
 
-getLambda.lavaan <- function(x, standardized = TRUE, ...) {
+getLambda.lavaan <- function(x, standardized = TRUE) {
   if (standardized) {
     x <- lavaan::lavInspect(x, "std")$lambda
     x[is.na(x)] <- 0
@@ -36,14 +36,14 @@ getLambda.lavaan <- function(x, standardized = TRUE, ...) {
   }
 }
 
-getLambda.SingleGroupClass <- function(x, ...) {
+getLambda.SingleGroupClass <- function(x, standardized = TRUE) {
   FitSum <- mirt::summary(x)
   x <- FitSum$rotF
   x[is.na(x)] <- 0
   as.matrix(x)
 }
 
-getLambda.mplus.model <- function(x, standardized = TRUE, ...) {
+getLambda.mplus.model <- function(x, standardized = TRUE) {
   if (standardized) {
     ## check to make sure standardized output was requested
     if (is.null(x$parameters$stdyx.standardized)) stop("You must request standardized output from Mplus when standardized = TRUE")
@@ -57,10 +57,10 @@ getLambda.mplus.model <- function(x, standardized = TRUE, ...) {
   }
 }
 
-getLambda.mplus.params <- function(x, ...) {
+getLambda.mplus.params <- function(x) {
   ## I am not proud of this function, but it works...
   ## This line throws warnings because not every row has a period. But, all the rows we care about *do* have a period. So, I am suppressing the warnings
-  x <- suppressWarnings(tidyr::separate(x, col = paramHeader, into = c("Fac", "op"), sep = "\\."))
+  x <- suppressWarnings(tidyr::separate(x, col = "paramHeader", into = c("Fac", "op"), sep = "\\."))
   loadings <- na.omit(x[x$op == "BY",])
   Facs <- unique(loadings$Fac)
   Items <- unique(loadings$param)
@@ -108,7 +108,7 @@ getLambda.mplus.params <- function(x, ...) {
 #' @seealso \code{\link{getLambda}}
 #'
 #'
-getTheta <- function(x, standardized = TRUE, ...) {
+getTheta <- function(x, standardized = TRUE) {
   UseMethod("getTheta")
 }
 
@@ -122,24 +122,28 @@ getTheta.default <- function(x, standardized = TRUE) {
     Ones - rowSums(Lambda^2)    }
 }
 
-getTheta.SingleGroupClass <- function(x, ...) {
+getTheta.SingleGroupClass <- function(x) {
   FitSum <- summary(x)
   Theta <- 1 - FitSum$h2
   as.vector(Theta)
 }
 
-getTheta.lavaan <- function(x, standardized = TRUE, ...) {
+getTheta.lavaan <- function(x, standardized = TRUE) {
   if (standardized) {
-    diag(lavInspect(x, "std")$theta)
+    diag(lavaan::lavInspect(x, "std")$theta)
   } else {
-    diag(lavInspect(x, "est")$theta)
+    diag(lavaan::lavInspect(x, "est")$theta)
   }
 }
 
-getTheta.mplus.model <- function(x, ...) {
-  pars <- x$parameters$unstandardized
+getTheta.mplus.model <- function(x, standardized = TRUE) {
+  if (standardized) {
+    pars <- x$parameters$stdyx.standardized
+  } else {
+    pars <- x$parameters$unstandardized
+  }
   ## This line throws warning because not every row has a period. But, all the rows we care about *do* have a period. So, I am suppressing the warnings
-  loadings <- suppressWarnings(tidyr::separate(pars, col = paramHeader, into = c("Fac", "op"), sep = "\\."))
+  loadings <- suppressWarnings(tidyr::separate(pars, col = "paramHeader", into = c("Fac", "op"), sep = "\\."))
   loadings_2 <- na.omit(loadings[loadings$op == "BY",])
   items <- unique(loadings_2$param)
   ## Item names are not preserved below.
@@ -162,19 +166,18 @@ getTheta.mplus.model <- function(x, ...) {
 #'
 #' getGen detects whether or not a single factor loads on all items, and returns the column index of that factor if it exists.
 #'
-#' @param Lambda is a factor loading matrix or an object which can be converted to one using getLambda
+#' @param Lambda is a factor loading matrix
 #'
 #' @return The index of the general factor, or \code{NULL} if there is no general factor
 #'
-#' @seealso isBifactor, getLambda
 #'
 getGen <- function(Lambda) {
   ## Make a matrix of logical vectors for non-zero elements of Lambda. Let's replace NA with zero at the start!!
   inFactorMat <- Lambda != 0
   ## Now, compute the column sums. [[ If colSum is nrow, then we have a general factor. We cannot have more than one ]]
   itemsOnFactor <- colSums(inFactorMat == TRUE)
-  if (sum(itemsOnFactor == nrow(Lambda)) == 1 ) {
-    which(sum(itemsOnFactor == nrow(Lambda)) == 1)
+  if (length(which(itemsOnFactor == nrow(Lambda))) == 1 ) {
+    which(itemsOnFactor == nrow(Lambda))
   } else {
     NULL
   }

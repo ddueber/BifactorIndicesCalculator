@@ -7,14 +7,11 @@
 getGen(Lambda)
 }
 \arguments{
-\item{Lambda}{is a factor loading matrix or an object which can be converted to one using getLambda}
+\item{Lambda}{is a factor loading matrix}
 }
 \value{
 The index of the general factor, or \code{NULL} if there is no general factor
 }
 \description{
 getGen detects whether or not a single factor loads on all items, and returns the column index of that factor if it exists.
-}
-\seealso{
-isBifactor, getLambda
 }

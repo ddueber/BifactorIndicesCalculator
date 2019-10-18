@@ -88,7 +88,6 @@ ECV_SS <- function(Lambda) {
 ECV_SG <- function(Lambda) {
   if (is.null(getGen(Lambda))) return(NULL)
   ECV_SG_C <- function(Fac, Lambda) {
-    if (is.null(getGen(Lambda))) return(NULL)
     ## Make a matrix of logical vectors for non-zero elements of Lambda.
     inFactor <- Lambda[,Fac] != 0
     ## Square the loadings
@@ -138,10 +137,8 @@ ECV_SG <- function(Lambda) {
 #'
 
 ECV_GS <- function(Lambda) {
-  if (is.null(getGen(Lambda))) return(NULL)
-  ECV_GS_C <- function(Fac, Lambda) {
-    if (is.null(getGen(Lambda))) return(NULL)
-    genFac <- getGen(Lambda)
+
+  ECV_GS_C <- function(Fac, Lambda, genFac) {
     ## Make a matrix of logical vectors for non-zero elements of Lambda.
     inFactor <- Lambda[,Fac] != 0
     ## Square the loadings
@@ -149,7 +146,11 @@ ECV_GS <- function(Lambda) {
     ## Compute the appropriate ratio of sums
     sum(L2[,genFac]*inFactor)/sum(L2*inFactor)
   }
-  ECV_results <- sapply(1:ncol(Lambda), ECV_GS_C, Lambda)
+  ## ECV_GS only makes sense when there is a general factor
+  if (is.null(getGen(Lambda))) return(NULL)
+  genFac <- getGen(Lambda)
+
+  ECV_results <- sapply(1:ncol(Lambda), ECV_GS_C, Lambda, genFac)
   names(ECV_results) <- colnames(Lambda)
   ECV_results
 }
@@ -206,5 +207,7 @@ IECV <- function(Lambda) {
   ## I-ECV only makes sense when there is a general factor
   if (is.null(getGen(Lambda))) return(NULL)
   genFac <- getGen(Lambda)
-  sapply(1:nrow(Lambda), IECV_C, Lambda, genFac)
+  IECV_results <- sapply(1:nrow(Lambda), IECV_C, Lambda, genFac)
+  names(IECV_results) <- rownames(Lambda)
+  IECV_results
 }

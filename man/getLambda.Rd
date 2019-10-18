@@ -4,13 +4,13 @@
 \alias{getLambda}
 \title{getLambda}
 \usage{
-getLambda(x, ...)
+getLambda(x, standardized = TRUE)
 }
 \arguments{
 \item{x}{an object to be converted into a factor loading matrix, or an object containing a fitted model from which
 a factor loading matrix will be extracted. Supported classes are data.frame, matrix, mplus.model, lavaan, and SingleGroupClass}
 
-\item{...}{can be used to specify whether a standardized or unstandardized factor loading matrix
+\item{standardized}{can be used to specify whether a standardized or unstandardized factor loading matrix
 should be returned. Only relevant for lavaan and mplus.model input. The standardized matrix for mplus.model
 is taken from stdyx results.}
 }
