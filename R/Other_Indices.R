@@ -29,7 +29,7 @@ PUC <- function(Lambda) {
 
 
 
-#' ARPB_All
+#' ARPB
 #'
 #' \code{ARPB} computes absolute relative bias in factor loadings between the
 #' general factor of a bifactor model and a unidimensional model.
@@ -53,10 +53,8 @@ PUC <- function(Lambda) {
 #'
 #'
 ## put another example in there from HS data using lavaan (do a 1+3 bifactor, compare to unidimensional)
-ARPB_All <- function(Lambda, UniLambda, standardized = TRUE) {
+ARPB <- function(Lambda, UniLambda = NULL) {
   if (is.null(UniLambda)) return(NULL)
-  Lambda <- getLambda(Lambda, standardized = standardized)
-  UniLambda <- getLambda(UniLambda, standardized = standardized)
   if (is.null(getGen(Lambda))) return(NULL)
   genFac <- getGen(Lambda)
   genLambda <- Lambda[,genFac]

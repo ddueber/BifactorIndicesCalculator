@@ -2,7 +2,7 @@
 #'
 #' Computes all available bifactor indices for the input given.
 #'
-#' @param Lambda is a matrix of factor loadings or an object that can be converted to a matrix of factor loadings by \code{\link{getLambda}}. Currently fitted lavaan objects and fitted mirt objects are supported in addition to raw factor loading matrix input.
+#' @param Lambda is a matrix of factor loadings or an object that can be converted to a matrix of factor loadings by \code{\link{getLambda}}. Currently fitted lavaan objects and fitted mirt objects are supported in addition to raw factor loading matrix input. For Mplus output files, use \code{\link{bifactorIndicesMplus}}.
 #' @param Theta is a vector of residual variances. If omitted, Theta will be computed from input for Lambda
 #' @param UniLambda is a matrix of factor loadings or an object that can be converted to a matrix of factor loadings by \code{\link{getLambda}}
 #' @param standardized lets the function know whether to look for standardized or unstandardized results from Mplus or lavaan. If lambda is not a lavaan object, then \code{standardized} will be ignored.
@@ -34,16 +34,17 @@
 
 
 bifactorIndices <- function(Lambda, Theta = getTheta(Lambda), UniLambda = NULL, standardized = TRUE) {
-  indicesList <- list(ECV_SS  = ECV_SS_All(Lambda, standardized = standardized),
-                      ECV_SG  = ECV_SG_All(Lambda, standardized = standardized),
-                      ECV_GS  = ECV_GS_All(Lambda, standardized = standardized),
-                      IECV    = IECV_All(Lambda, standardized = standardized),
+  Lambda <- getLambda(Lambda, standardized = standardized)
+  UniLambda <- getLambda(UniLambda, standardized = standardized)
+  indicesList <- list(ECV_SS  = ECV_SS(Lambda),
+                      ECV_SG  = ECV_SG(Lambda),
+                      ECV_GS  = ECV_GS(Lambda),
+                      IECV    = IECV(Lambda),
                       PUC     = PUC(Lambda),
-                      Omega   = Omega_S_All(Lambda, Theta, standardized = standardized),
-                      Omega_H = Omega_H_All(Lambda, Theta, standardized = standardized),
-                      ARPB    = ARPB_All(Lambda, UniLambda, standardized = standardized)
+                      Omega   = Omega_S(Lambda),
+                      Omega_H = Omega_H(Lambda),
+                      ARPB    = ARPB(Lambda, UniLambda)
   )
-  ## RelOmega? H? FD?
   indicesList[which(!sapply(indicesList, is.null))]
 }
 
@@ -52,8 +53,7 @@ bifactorIndices <- function(Lambda, Theta = getTheta(Lambda), UniLambda = NULL, 
 #' Computes all available bifactor indices given an Mplus .out file for a bifactor model
 #'
 #' @param Lambda is an Mplus .out file. Defaults to an open file dialog box
-#' @param UniLambda is an object that the function can convert to a matrix of
-#'   factor loadings. See examples. Defaults to \code{NULL}
+#' @param UniLambda is an object that the function can convert to a matrix of factor loadings. The expected behavior is to store an Mplus output file as a variable and pass that variable as UniLambda. Defaults to \code{NULL}, as UniLambda is only required if you wish to compute \code{\link{ARPB}}
 #' @param standardized lets the function know whether it should be looking in
 #'   the unstandardized results or the STDYX results from the Mplus output.
 #'

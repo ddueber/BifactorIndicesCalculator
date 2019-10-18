@@ -102,7 +102,6 @@ getLambda <- function(x, ...) {
 #'
 #' @examples
 #'
-#' MAKE SOME EXAMPLES
 #'
 getTheta <- function(x, standardized = TRUE, ...) {
   UseMethod("getTheta")
@@ -180,12 +179,11 @@ getTheta.SingleGroupClass <- function(x, ...) {
 
 #' isBifactor
 #'
-#' Determines whether a model has bifactor structure
+#' Determines whether a model has bifactor structure.
 #'
 #' @param Lambda Matrix of factor loadings
 #'
 #' @return Logical. If each item loads on a general factor and at most one specific factor, returns TRUE. Otherwise FALSE.
-#' @export
 #'
   isBifactor <- function(Lambda) {
     if (!("matrix" %in% class(Lambda))) {Lambda <- getLambda(Lambda, standardized = standardized)}
