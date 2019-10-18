@@ -18,59 +18,59 @@ getLambda <- function(x, ...) {
   UseMethod("getLambda")
 }
 
-    getLambda.default <- function(x, ...) {
-      x[is.na(x)] <- 0
-      as.matrix(x)
-    }
+getLambda.default <- function(x, ...) {
+  x[is.na(x)] <- 0
+  as.matrix(x)
+}
 
-    getLambda.lavaan <- function(x, standardized = TRUE, ...) {
-      if (standardized) {
-        x <- lavaan::lavInspect(x, "std")$lambda
-        x[is.na(x)] <- 0
-        as.matrix(x)
+getLambda.lavaan <- function(x, standardized = TRUE, ...) {
+  if (standardized) {
+    x <- lavaan::lavInspect(x, "std")$lambda
+    x[is.na(x)] <- 0
+    as.matrix(x)
+  } else {
+    x <- lavaan::lavInspect(x, "est")$lambda
+    x[is.na(x)] <- 0
+    as.matrix(x)
+  }
+}
+
+getLambda.SingleGroupClass <- function(x, ...) {
+  FitSum <- mirt::summary(x)
+  x <- FitSum$rotF
+  x[is.na(x)] <- 0
+  as.matrix(x)
+}
+
+getLambda.mplus.model <- function(x, standardized = TRUE, ...) {
+  if (standardized) {
+    getLambda(x$parameters$stdyx.standardized)
+  } else {
+    getLambda(x$parameters$unstandardized)
+  }
+}
+
+getLambda.mplus.params <- function(x, ...) {
+  ## I am not proud of this function, but it works...
+  ## This line throws warnings because not every row has a period. But, all the rows we care about *do* have a period. So, I am suppressing the warnings
+  x <- suppressWarnings(tidyr::separate(x, col = paramHeader, into = c("Fac", "op"), sep = "\\."))
+  loadings <- na.omit(x[x$op == "BY",])
+  Facs <- unique(loadings$Fac)
+  Items <- unique(loadings$param)
+  Lambda <- matrix(ncol = length(Facs), nrow = length(Items))
+  for (i in 1:length(Facs)) {
+    for (j in 1:length(Items)) {
+      if (length(loadings[loadings$Fac == Facs[i] & loadings$param == Items[j], "est"]) == 0) {
+        Lambda[j,i] <- 0
       } else {
-        x <- lavaan::lavInspect(x, "est")$lambda
-        x[is.na(x)] <- 0
-        as.matrix(x)
+        Lambda[j,i] <- loadings[loadings$Fac == Facs[i] & loadings$param == Items[j], "est"]
       }
     }
-
-    getLambda.SingleGroupClass <- function(x, ...) {
-      FitSum <- mirt::summary(x)
-      x <- FitSum$rotF
-      x[is.na(x)] <- 0
-      as.matrix(x)
-    }
-
-    getLambda.mplus.model <- function(x, standardized = TRUE, ...) {
-      if (standardized) {
-        getLambda(x$parameters$stdyx.standardized)
-      } else {
-        getLambda(x$parameters$unstandardized)
-      }
-    }
-
-    getLambda.mplus.params <- function(x, ...) {
-      ## I am not proud of this function, but it works...
-      ## This line throws warnings because not every row has a period. But, all the rows we care about *do* have a period. So, I am suppressing the warnings
-      x <- suppressWarnings(tidyr::separate(x, col = paramHeader, into = c("Fac", "op"), sep = "\\."))
-      loadings <- na.omit(x[x$op == "BY",])
-      Facs <- unique(loadings$Fac)
-      Items <- unique(loadings$param)
-      Lambda <- matrix(ncol = length(Facs), nrow = length(Items))
-      for (i in 1:length(Facs)) {
-        for (j in 1:length(Items)) {
-          if (length(loadings[loadings$Fac == Facs[i] & loadings$param == Items[j], "est"]) == 0) {
-            Lambda[j,i] <- 0
-          } else {
-            Lambda[j,i] <- loadings[loadings$Fac == Facs[i] & loadings$param == Items[j], "est"]
-          }
-        }
-      }
-      rownames(Lambda) <- Items
-      colnames(Lambda) <- Facs
-      Lambda
-    }
+  }
+  rownames(Lambda) <- Items
+  colnames(Lambda) <- Facs
+  Lambda
+}
 
 
 
@@ -123,34 +123,34 @@ getTheta.SingleGroupClass <- function(x, ...) {
   as.vector(Theta)
 }
 
-    getTheta.lavaan <- function(x, standardized = TRUE, ...) {
-      if (standardized) {
-        diag(lavInspect(x, "std")$theta)
-      } else {
-        diag(lavInspect(x, "est")$theta)
-      }
-    }
+getTheta.lavaan <- function(x, standardized = TRUE, ...) {
+  if (standardized) {
+    diag(lavInspect(x, "std")$theta)
+  } else {
+    diag(lavInspect(x, "est")$theta)
+  }
+}
 
-    getTheta.mplus.model <- function(x, ...) {
-      pars <- x$parameters$unstandardized
-      ## This line throws warning because not every row has a period. But, all the rows we care about *do* have a period. So, I am suppressing the warnings
-      loadings <- suppressWarnings(tidyr::separate(pars, col = paramHeader, into = c("Fac", "op"), sep = "\\."))
-      loadings_2 <- na.omit(loadings[loadings$op == "BY",])
-      items <- unique(loadings_2$param)
-      ## Item names are not preserved below.
-      if (length(x$input$variable$categorical) == 0) {
-        Theta <- c()
-        thetaOutput <- pars[pars$paramHeader == "Residual.Variances",]
-        for (i in 1:length(items)) {
-          Theta <- c(Theta, thetaOutput[thetaOutput$param == items[i], "est"])
-        }} else {
-          Theta <- c()
-          for (i in 1:length(items)) {
-            Theta <- c(Theta, x$parameters$r2[x$parameters$r2$param == items[i], "resid_var"])
-          }}
-      names(Theta) <- items
-      Theta
-    }
+getTheta.mplus.model <- function(x, ...) {
+  pars <- x$parameters$unstandardized
+  ## This line throws warning because not every row has a period. But, all the rows we care about *do* have a period. So, I am suppressing the warnings
+  loadings <- suppressWarnings(tidyr::separate(pars, col = paramHeader, into = c("Fac", "op"), sep = "\\."))
+  loadings_2 <- na.omit(loadings[loadings$op == "BY",])
+  items <- unique(loadings_2$param)
+  ## Item names are not preserved below.
+  if (length(x$input$variable$categorical) == 0) {
+    Theta <- c()
+    thetaOutput <- pars[pars$paramHeader == "Residual.Variances",]
+    for (i in 1:length(items)) {
+      Theta <- c(Theta, thetaOutput[thetaOutput$param == items[i], "est"])
+    }} else {
+      Theta <- c()
+      for (i in 1:length(items)) {
+        Theta <- c(Theta, x$parameters$r2[x$parameters$r2$param == items[i], "resid_var"])
+      }}
+  names(Theta) <- items
+  Theta
+}
 
 
 #' getGen

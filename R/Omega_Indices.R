@@ -1,28 +1,24 @@
-#' ECV_SS_C
+#' Omega_S
 #'
-#' Computes ECV index for a single factor. Here, ECV is computed with respect to items which load on the factor. In the Excel version of the bifactor indices calculator, this index is referred to as ECV (NEW)
+#' Computes omega reliability estimate for all factors as described in Rodriguez, Reise, and Haviland (2016).
 #'
-#' \code{ECV_SS}
+#' \code{Omega_S} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMPlus}}, which are the only functions in this package intended for casual users
 #'
-#' @param Fac is the factor for which ECV is being requested
-#' @param Lambda is a matrix of factor loadings or an object the function can convert to a matrix of factor loadings
-#' @param standardized if the factor loading matrix needs to be extracted, \code{standardized} tells the function whether to extract standardized or unstandardized loadings
+#' @param Lambda is a matrix of factor loadings
+#' @param Theta is a vector of indicator error variances
 #'
-#' @return A \code{numeric}, the ECV of the factor with respect to the items in that factor
+#' @return A \code{numeric}, the omega reliability estimate for all factors.
 #'
-#' @seealso \code{\link{ECV_SS_All}}
+#' @examples
+#'
+#' @section References:
+#' Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models: calculating and interpreting statistical indices. Psychological methods, 21(2), 137 <doi:10.1037/met0000045>.
+#'
+#' @export
+#'
+#' @seealso \code{\link{Omega_H}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMPlus}}
 #'
 #'
-
-### Compute Omega, OmegaS
-Omega_S_C <- function(Fac, Lambda, Theta = getTheta(Lambda, standardized = standardized), standardized = TRUE) {
-  Lambda <- getLambda(Lambda, standardized = standardized)
-  ## Make a matrix of logical vectors for non-zero elements of Lambda.
-  inFactor <- Lambda[,Fac] != 0
-  ## Compute the appropriate ratio of sums
-  sum(colSums(Lambda*inFactor)^2)/(sum(colSums(Lambda*inFactor)^2) + sum(Theta*inFactor))
-}
-
 
 Omega_S <- function(Lambda, Theta) {
   Omega_S_C <- function(Fac, Lambda, Theta) {
@@ -34,8 +30,28 @@ Omega_S <- function(Lambda, Theta) {
   sapply(colnames(Lambda), Omega_S_C, Lambda = Lambda, Theta = Theta, standardized = standardized)
 }
 
-  ### Compute Omega_H, Omega_HS
 
+#' Omega_H
+#'
+#' Computes hierarchical omega reliability estimate for all factors as described in Rodriguez, Reise, and Haviland (2016).
+#'
+#' \code{Omega_H} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMPlus}}, which are the only functions in this package intended for casual users
+#'
+#' @param Lambda is a matrix of factor loadings
+#' @param Theta is a vector of indicator error variances
+#'
+#' @return A \code{numeric}, the omega reliability estimate for all factors.
+#'
+#' @examples
+#'
+#' @section References:
+#' Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models: calculating and interpreting statistical indices. Psychological methods, 21(2), 137 <doi:10.1037/met0000045>.
+#'
+#' @export
+#'
+#' @seealso \code{\link{Omega_S}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMPlus}}
+#'
+#'
 
 Omega_H <- function(Lambda, Theta) {
   Omega_H_C <- function(Fac, Lambda, Theta) {
