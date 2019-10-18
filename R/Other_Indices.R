@@ -1,0 +1,67 @@
+#' PUC
+#'
+#' \code{PUC} computes the proportion of uncontaminated correlations for a bifactor mode
+#'
+#' @param Lambda is a matrix of factor loadings or an object that can be converted to a matrix of factor loadings by \code{\link{getLambda}}
+#'
+#' @return \code{numeric}
+#'
+#' @seealso \code{\link{bifactorIndices}}
+#'
+#' @export
+#'
+#' @examples
+#'
+#' \dontrun{
+#' ARPB(MplusAutomation::readModels(file.choose), MplusAutomation::readModels(file.choose))
+#' }
+#'
+PUC <- function(Lambda) {
+  Lambda <- getLambda(Lambda, standardized = standardized)
+  if (!isBifactor(Lambda)) return(NULL)
+  ### Count how many items are on each factor
+  numItemsOnFactor <- colSums(Lambda != 0)
+  ## contaminated correlations: add up n*(n-1)/2 for all factors, then subtract off the n(n-1)/2 for general factor
+  specificCorrelationCount <- sum(sapply(numItemsOnFactor, function (x) {x*(x-1)/2})) - (nrow(Lambda)*(nrow(Lambda)-1)/2)
+  ## PUC = 1 - PCC
+  1 - specificCorrelationCount/(nrow(Lambda)*(nrow(Lambda)-1)/2)
+}
+
+
+
+#' ARPB_All
+#'
+#' \code{ARPB} computes absolute relative bias in factor loadings between the
+#' general factor of a bifactor model and a unidimensional model.
+#'
+#' @param Lambda is a matrix of factor loadings or an object that can be converted to a matrix of factor loadings by \code{\link{getLambda}}
+#' @param UniLambda is a matrix of factor loadings or an object that can be converted to a matrix of factor loadings by \code{\link{getLambda}}
+#' @param standardized
+#'
+#' @return a list where the first element is a vector of absolute relative bias by item, and the second
+#' item is
+#'
+#' @seealso \code{\link{bifactorIndices}}
+#'
+#' @export
+#'
+#' @examples
+#'
+#' \dontrun{
+#' ARPB(MplusAutomation::readModels(file.choose), MplusAutomation::readModels(file.choose))
+#' }
+#'
+#'
+## put another example in there from HS data using lavaan (do a 1+3 bifactor, compare to unidimensional)
+ARPB_All <- function(Lambda, UniLambda, standardized = TRUE) {
+  if (is.null(UniLambda)) return(NULL)
+  Lambda <- getLambda(Lambda, standardized = standardized)
+  UniLambda <- getLambda(UniLambda, standardized = standardized)
+  if (is.null(getGen(Lambda))) return(NULL)
+  genFac <- getGen(Lambda)
+  genLambda <- Lambda[,genFac]
+  relBias <- abs((UniLambda - genLambda)/genLambda)
+  rownames(relBias) <- rownames(Lambda)
+  colnames(relBias) <- c("Abs Rel Bias")
+  list(ARPB = mean(relBias), relBias = relBias)
+}
