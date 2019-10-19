@@ -59,7 +59,8 @@
 #'
 
 
-bifactorIndices <- function(Lambda, Theta = getTheta(Lambda), UniLambda = NULL, standardized = TRUE) {
+bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE) {
+  if (is.null(Theta)) {Theta = getTheta(Lambda, standardized = standardized)}
   Lambda <- getLambda(Lambda, standardized = standardized)
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
   indicesList <- list(ECV_SS  = ECV_SS(Lambda),
@@ -106,8 +107,20 @@ bifactorIndices <- function(Lambda, Theta = getTheta(Lambda), UniLambda = NULL, 
 #' }
 #'
 bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, standardized = TRUE) {
-  Lambda <- MplusAutomation::readModels(Lambda)
-  Theta <- getTheta(Lambda, standardized = standardized)
-  Lambda <- getLambda(Lambda, standardized = standardized)
+  if (!("mplus.model" %in% class(Lambda))) {Lambda <- MplusAutomation::readModels(Lambda)}
+  ## if categorical, then error if unstandardized and manually compute Theta is Standardized
+  categorical <- !is.null(Lambda$input$variable$categorical)
+  if (categorical) {
+    if (standardized) {
+      Lambda <- getLambda(Lambda, standardized = standardized)
+      Theta <- getTheta(Lambda, standardized = standardized)
+    } else {
+      stop("Bifactor indices based on unstandardized coefficients with categorical variables is not available")
+    }
+  } else {
+    Theta <- getTheta(Lambda, standardized = standardized)
+    Lambda <- getLambda(Lambda, standardized = standardized)
+  }
+
   bifactorIndices(Lambda, Theta, UniLambda, standardized)
 }

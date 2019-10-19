@@ -114,7 +114,7 @@ getTheta <- function(x, standardized = TRUE) {
 
 getTheta.default <- function(x, standardized = TRUE) {
   if(!standardized) {
-    stop("Not enough information is provided to compute indicator residual variances")
+    stop("Not enough information is provided to compute indicator residual variances. Either provide indicator residual variances or use a standardized solution.")
   } else {
     ## This is excessive. There's no way to get here unless x is a data frame or matrix. But, better safe than sorry
     Lambda <- getLambda(x)
@@ -138,6 +138,7 @@ getTheta.lavaan <- function(x, standardized = TRUE) {
 
 getTheta.mplus.model <- function(x, standardized = TRUE) {
   if (standardized) {
+    if (is.null(x$parameters$stdyx.standardized)) stop("You must request standardized output from Mplus when standardized = TRUE")
     pars <- x$parameters$stdyx.standardized
   } else {
     pars <- x$parameters$unstandardized
