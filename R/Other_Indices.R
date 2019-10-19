@@ -83,6 +83,6 @@ ARPB <- function(Lambda, UniLambda = NULL) {
   genFac <- getGen(Lambda)
   genLambda <- Lambda[,genFac]
   relBias <- abs((UniLambda - genLambda)/genLambda)
-  rownames(relBias) <- rownames(Lambda)
+  names(relBias) <- rownames(Lambda)
   list(ARPB = mean(relBias), AbsRelBias = relBias)
 }

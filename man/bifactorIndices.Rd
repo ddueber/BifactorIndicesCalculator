@@ -34,7 +34,7 @@ HS_model_bifactor <- "visual  =~ x1 + x2 + x3
                       speed   =~ x7 + x8 + x9
                       general =~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9"
 ## lavaan cannot find a good solution, but that's ok since this is just for illustration
-fit <- ignore.warnings(lavaan::cfa(HS_model_bifactor,
+fit <- suppressWarnings(lavaan::cfa(HS_model_bifactor,
                    data = lavaan::HolzingerSwineford1939,
                    orthogonal = TRUE))
 bifactorIndices(fit)

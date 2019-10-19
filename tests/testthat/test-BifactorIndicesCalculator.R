@@ -385,7 +385,7 @@ test_that("bifactorIndices Works", {
                      .75, .55,   0,   0),
                    ncol = 4, byrow = TRUE)
   UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
-  expect_known_output(bifactorIndices(Lambda, UniLambda = UniLambda), "bindices_from_matrix.rds", tolerance = .000001)
+  expect_equal(bifactorIndices(Lambda, UniLambda = UniLambda), readRDS("bindices_from_matrix.rds"), tolerance = .000001)
   expect_error(bifactorIndices(Lambda, UniLambda = UniLambda, standardized = FALSE), "Not enough information is provided to compute indicator residual variances. Either provide indicator residual variances or use a standardized solution.")
 
   ## bifactor from lavaan
@@ -399,8 +399,8 @@ test_that("bifactorIndicesMplus Works", {
   cat_output <- MplusAutomation::readModels("categorical.out")
 
   expect_error(bifactorIndicesMplus(cont_output), "You must request standardized output from Mplus when standardized = TRUE")
-  expect_known_output(bifactorIndicesMplus(cont_output, standardized = FALSE), "cont_unst.rds", tolerance = .000001)
-  expect_known_output(bifactorIndicesMplus(cat_output), "cat_stdyx.rds", tolerance = .000001)
+  expect_equal(bifactorIndicesMplus(cont_output, standardized = FALSE), readRDS("cont_unst.rds"), tolerance = .000001)
+  expect_equal(bifactorIndicesMplus(cat_output), readRDS("cat_stdyx.rds"), tolerance = .000001)
   expect_error(bifactorIndicesMplus(cat_output, standardized = FALSE), "Bifactor indices based on unstandardized coefficients with categorical variables is not available")
 
 })
