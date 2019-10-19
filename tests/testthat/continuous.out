@@ -1,0 +1,285 @@
+Mplus VERSION 7
+MUTHEN & MUTHEN
+10/19/2019   1:58 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE: bifactor
+
+  DATA: FILE IS saqonly.csv;
+
+  VARIABLE: NAMES ARE saq1-saq24;
+
+  Usevariables are saq1-saq24;
+
+  Model:
+  Gen by saq1* saq2 saq4 saq8 saq11 saq12 saq17 saq22;
+    Gen by      saq3 saq5 saq6 saq7 saq13 saq15 saq16 saq18;
+    Gen by      saq9 saq10 saq14 saq19 saq20 saq21 saq23 saq24;
+
+  S1 by saq1* saq2 saq4 saq8 saq11 saq12 saq17 saq22;
+  S2 by saq3* saq5 saq6 saq7 saq13 saq15 saq16 saq18;
+  S3 by saq9* saq10 saq14 saq19 saq20 saq21 saq23 saq24;
+
+  Gen with S1-S3@0;
+
+  S1 with S2-S3@0;
+  S2 with S3@0;
+
+  Gen@1;
+
+  S1-S3@1;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+bifactor
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1007
+
+Number of dependent variables                                   24
+Number of independent variables                                  0
+Number of continuous latent variables                            4
+
+Observed dependent variables
+
+  Continuous
+   SAQ1        SAQ2        SAQ3        SAQ4        SAQ5        SAQ6
+   SAQ7        SAQ8        SAQ9        SAQ10       SAQ11       SAQ12
+   SAQ13       SAQ14       SAQ15       SAQ16       SAQ17       SAQ18
+   SAQ19       SAQ20       SAQ21       SAQ22       SAQ23       SAQ24
+
+Continuous latent variables
+   GEN         S1          S2          S3
+
+
+Estimator                                                       ML
+Information matrix                                        OBSERVED
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+
+Input data file(s)
+  saqonly.csv
+
+Input data format  FREE
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       96
+
+Loglikelihood
+
+          H0 Value                      -28851.479
+          H1 Value                      -28257.101
+
+Information Criteria
+
+          Akaike (AIC)                   57894.959
+          Bayesian (BIC)                 58366.773
+          Sample-Size Adjusted BIC       58061.870
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                           1188.757
+          Degrees of Freedom                   228
+          P-Value                           0.0000
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.065
+          90 Percent C.I.                    0.061  0.068
+          Probability RMSEA <= .05           0.000
+
+CFI/TLI
+
+          CFI                                0.951
+          TLI                                0.941
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                          19928.597
+          Degrees of Freedom                   276
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.031
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ GEN      BY
+    SAQ1               0.778      0.028     27.440      0.000
+    SAQ2               0.779      0.029     26.525      0.000
+    SAQ4               0.852      0.033     25.961      0.000
+    SAQ8               1.020      0.034     30.411      0.000
+    SAQ11              0.905      0.030     30.287      0.000
+    SAQ12              0.914      0.033     27.852      0.000
+    SAQ17              0.989      0.032     30.605      0.000
+    SAQ22              0.895      0.030     30.197      0.000
+    SAQ3               0.775      0.032     24.377      0.000
+    SAQ5               0.806      0.034     23.567      0.000
+    SAQ6               0.745      0.032     23.444      0.000
+    SAQ7               0.845      0.034     25.136      0.000
+    SAQ13              0.849      0.031     27.179      0.000
+    SAQ15              0.781      0.033     23.846      0.000
+    SAQ16              0.823      0.031     26.473      0.000
+    SAQ18              0.944      0.031     30.494      0.000
+    SAQ9               1.014      0.034     30.100      0.000
+    SAQ10              0.902      0.034     26.734      0.000
+    SAQ14              0.925      0.031     29.664      0.000
+    SAQ19              0.977      0.033     29.796      0.000
+    SAQ20              0.960      0.030     31.716      0.000
+    SAQ21              0.949      0.031     31.052      0.000
+    SAQ23              0.915      0.032     28.773      0.000
+    SAQ24              0.964      0.035     27.327      0.000
+
+ S1       BY
+    SAQ1              -0.178      0.040     -4.392      0.000
+    SAQ2               0.259      0.043      6.038      0.000
+    SAQ4               0.052      0.042      1.218      0.223
+    SAQ8              -0.331      0.056     -5.940      0.000
+    SAQ11              0.218      0.041      5.375      0.000
+    SAQ12              0.375      0.046      8.190      0.000
+    SAQ17              0.005      0.041      0.114      0.909
+    SAQ22             -0.034      0.035     -0.984      0.325
+
+ S2       BY
+    SAQ3               0.311      0.032      9.654      0.000
+    SAQ5               0.558      0.033     16.653      0.000
+    SAQ6               0.398      0.032     12.415      0.000
+    SAQ7               0.417      0.033     12.814      0.000
+    SAQ13              0.184      0.031      5.935      0.000
+    SAQ15              0.520      0.032     16.143      0.000
+    SAQ16              0.454      0.029     15.599      0.000
+    SAQ18              0.060      0.029      2.100      0.036
+
+ S3       BY
+    SAQ9               0.223      0.035      6.285      0.000
+    SAQ10              0.291      0.037      7.850      0.000
+    SAQ14              0.305      0.033      9.160      0.000
+    SAQ19              0.415      0.036     11.612      0.000
+    SAQ20             -0.027      0.034     -0.807      0.420
+    SAQ21             -0.143      0.036     -4.004      0.000
+    SAQ23              0.364      0.036     10.176      0.000
+    SAQ24              0.397      0.042      9.398      0.000
+
+ GEN      WITH
+    S1                 0.000      0.000    999.000    999.000
+    S2                 0.000      0.000    999.000    999.000
+    S3                 0.000      0.000    999.000    999.000
+
+ S1       WITH
+    S2                 0.000      0.000    999.000    999.000
+    S3                 0.000      0.000    999.000    999.000
+
+ S2       WITH
+    S3                 0.000      0.000    999.000    999.000
+
+ Intercepts
+    SAQ1               2.545      0.033     77.429      0.000
+    SAQ2               3.397      0.034    101.361      0.000
+    SAQ3               3.538      0.036     99.191      0.000
+    SAQ4               3.628      0.038     96.691      0.000
+    SAQ5               3.131      0.038     82.106      0.000
+    SAQ6               3.443      0.035     97.345      0.000
+    SAQ7               3.237      0.038     84.962      0.000
+    SAQ8               2.962      0.040     73.918      0.000
+    SAQ9               2.785      0.040     69.405      0.000
+    SAQ10              2.839      0.039     73.189      0.000
+    SAQ11              3.121      0.036     87.603      0.000
+    SAQ12              3.169      0.038     83.590      0.000
+    SAQ13              3.459      0.036     95.720      0.000
+    SAQ14              2.568      0.037     69.435      0.000
+    SAQ15              3.428      0.037     93.587      0.000
+    SAQ16              3.063      0.036     85.698      0.000
+    SAQ17              3.066      0.039     78.981      0.000
+    SAQ18              2.676      0.037     72.222      0.000
+    SAQ19              2.593      0.039     66.729      0.000
+    SAQ20              3.224      0.037     87.684      0.000
+    SAQ21              3.127      0.037     84.962      0.000
+    SAQ22              3.673      0.035    103.572      0.000
+    SAQ23              2.982      0.037     79.983      0.000
+    SAQ24              3.122      0.041     76.661      0.000
+
+ Variances
+    GEN                1.000      0.000    999.000    999.000
+    S1                 1.000      0.000    999.000    999.000
+    S2                 1.000      0.000    999.000    999.000
+    S3                 1.000      0.000    999.000    999.000
+
+ Residual Variances
+    SAQ1               0.451      0.024     18.467      0.000
+    SAQ2               0.457      0.027     17.094      0.000
+    SAQ3               0.584      0.028     20.825      0.000
+    SAQ4               0.689      0.032     21.504      0.000
+    SAQ5               0.504      0.031     16.395      0.000
+    SAQ6               0.547      0.028     19.691      0.000
+    SAQ7               0.574      0.029     19.644      0.000
+    SAQ8               0.468      0.040     11.725      0.000
+    SAQ9               0.543      0.026     20.615      0.000
+    SAQ10              0.618      0.031     20.213      0.000
+    SAQ11              0.411      0.023     17.680      0.000
+    SAQ12              0.471      0.035     13.502      0.000
+    SAQ13              0.560      0.026     21.447      0.000
+    SAQ14              0.429      0.023     18.572      0.000
+    SAQ15              0.470      0.028     16.765      0.000
+    SAQ16              0.402      0.023     17.589      0.000
+    SAQ17              0.539      0.026     20.878      0.000
+    SAQ18              0.487      0.024     20.674      0.000
+    SAQ19              0.394      0.026     15.072      0.000
+    SAQ20              0.439      0.022     20.033      0.000
+    SAQ21              0.444      0.025     17.837      0.000
+    SAQ22              0.464      0.022     20.799      0.000
+    SAQ23              0.431      0.025     16.931      0.000
+    SAQ24              0.582      0.034     17.266      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.133E-01
+       (ratio of smallest to largest eigenvalue)
+
+
+DIAGRAM INFORMATION
+
+  Use View Diagram under the Diagram menu in the Mplus Editor to view the diagram.
+  If running Mplus from the Mplus Diagrammer, the diagram opens automatically.
+
+  Diagram output
+    d:\dropbox\2. courses\679 measurement\notes\10 bifactor\bifactor examples in mplus\bifac\bifacto
+
+     Beginning Time:  13:58:23
+        Ending Time:  13:58:23
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2012 Muthen & Muthen
