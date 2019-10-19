@@ -1,7 +1,7 @@
 Package: BifactorIndicesCalculator
 Type: Package
 Title: Bifactor Indices Calculator
-Version: 0.0.0.9001
+Version: 0.1.0
 Author: David Dueber
 Maintainer: David Dueber <david.dueber@uky.edu>
 Description: The calculator computes bifactor indices such as ECV, OmegaH, PUC, I-ECV, and more given inputs of Mplus, lavaan, or mirt models or a matrix of factor loadings. This package is an R version of the Excel Bifactor Indices Calculator <doi:10.13023/edp.tool.01> with added convenience features. Specifically, Mplus output files, fitted lavaan models, and fitted mirt models can be input directly into various functions in this package. 
