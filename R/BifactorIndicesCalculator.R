@@ -60,6 +60,17 @@
 
 
 bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE) {
+  ## if fitted mirt object, then we only want ECVs
+  if ("SingleGroupClass" %in% class(Lambda)) {
+    Lambda <- getLambda(Lambda)
+    indicesList <- list(ECV_SS  = ECV_SS(Lambda),
+                        ECV_SG  = ECV_SG(Lambda),
+                        ECV_GS  = ECV_GS(Lambda),
+                        IECV    = IECV(Lambda),
+                        PUC     = PUC(Lambda))
+    return(indicesList[which(!sapply(indicesList, is.null))])
+  }
+
   if (is.null(Theta)) {Theta = getTheta(Lambda, standardized = standardized)}
   Lambda <- getLambda(Lambda, standardized = standardized)
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
@@ -70,8 +81,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
                       PUC     = PUC(Lambda),
                       Omega   = Omega_S(Lambda, Theta),
                       Omega_H = Omega_H(Lambda, Theta),
-                      ARPB    = ARPB(Lambda, UniLambda)
-  )
+                      ARPB    = ARPB(Lambda, UniLambda))
   indicesList[which(!sapply(indicesList, is.null))]
 }
 

@@ -37,7 +37,8 @@ getLambda.lavaan <- function(x, standardized = TRUE) {
 }
 
 getLambda.SingleGroupClass <- function(x, standardized = TRUE) {
-  FitSum <- mirt::summary(x)
+  ## the summary method for mirt likes to print to screen, so this next line very awkwardly suppresses that printing
+  temp <- capture.output(FitSum <- mirt::summary(x))
   x <- FitSum$rotF
   x[is.na(x)] <- 0
   as.matrix(x)
@@ -51,7 +52,7 @@ getLambda.mplus.model <- function(x, standardized = TRUE) {
     getLambda(x$parameters$stdyx.standardized)
   } else {
     ## check to make sure factor variances are all one.
-    if (!all(x$parameters$unstandardized[x$parameters$unstandardized$paramHeader == "Variances", "est"] == 1)) stop("All factor variances must be one when standardized = FALSE")
+    if (!all(x$parameters$unstandardized[x$parameters$unstandardized$paramHeader == "Variances", "est"] == 1)) stop("All factor variances must be one when standardized = FALSE. Please respecify your model.")
 
     getLambda(x$parameters$unstandardized)
   }
@@ -123,7 +124,8 @@ getTheta.default <- function(x, standardized = TRUE) {
 }
 
 getTheta.SingleGroupClass <- function(x) {
-  FitSum <- summary(x)
+  ## the summary method for mirt likes to print to screen, so this next line very awkwardly suppresses that printing
+  temp <- capture.output(FitSum <- mirt::summary(x))
   Theta <- 1 - FitSum$h2
   as.vector(Theta)
 }

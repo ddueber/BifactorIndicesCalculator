@@ -389,8 +389,23 @@ test_that("bifactorIndices Works", {
   expect_error(bifactorIndices(Lambda, UniLambda = UniLambda, standardized = FALSE), "Not enough information is provided to compute indicator residual variances. Either provide indicator residual variances or use a standardized solution.")
 
   ## bifactor from lavaan
+  bi_data <- read.csv("bifactorData.csv")
+  colnames(bi_data) <- c(paste0("x", 1:24))
+  bi_model <- "Gen =~ NA*x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 + x12 + x13 + x14 + x15 + x16 + x17 + x18 + x19 + x20 + x21 + x22 + x23 + x24
+               SF1 =~ NA*x1 + x2 + x4 + x8 + x11 + x12 + x17 + x22
+               SF2 =~ NA*x3 + x5 + x6 + x7 + x13 + x15 + x16 + x18
+               SF3 =~ NA*x9 + x10 + x14 + x19 + x20 + x21 + x23 + x24
+               Gen ~~ 1*Gen
+               SF1 ~~ 1*SF1
+               SF2 ~~ 1*SF2
+               SF3 ~~ 1*SF3"
+  bi_fit_cfa <- lavaan::cfa(model = bi_model, data = bi_data, orthogonal = TRUE)
+  expect_equal(bifactorIndices(bi_fit_cfa), readRDS("lav_indices.rds"), tolerance = .000001)
 
   ## bifactor from mirt
+  specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
+  bi_fit_mirt <- mirt::bfactor(bi_data, specific)
+  expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
 
 })
 
