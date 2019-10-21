@@ -123,7 +123,7 @@ getTheta.default <- function(x, standardized = TRUE) {
     Ones - rowSums(Lambda^2)    }
 }
 
-getTheta.SingleGroupClass <- function(x) {
+getTheta.SingleGroupClass <- function(x, standardized = TRUE) {
   ## the summary method for mirt likes to print to screen, so this next line very awkwardly suppresses that printing
   temp <- capture.output(FitSum <- mirt::summary(x))
   Theta <- 1 - FitSum$h2

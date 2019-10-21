@@ -4,7 +4,7 @@
 \alias{ARPB}
 \title{ARPB}
 \usage{
-ARPB(Lambda, UniLambda = NULL)
+ARPB(Lambda, UniLambda)
 }
 \arguments{
 \item{Lambda}{is a matrix of factor loadings}
@@ -37,7 +37,7 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    ncol = 4, byrow = TRUE)
 colnames(Lambda) <- c("General", "PS", "HA", "SA")
 UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
-ARPB(Lambda)
+ARPB(Lambda, UniLambda)
 
 
 }

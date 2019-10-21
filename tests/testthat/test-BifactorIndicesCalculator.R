@@ -137,12 +137,12 @@ test_that("IECV Works", {
   Lambda2 <- matrix(c(.3,  0,  0,
                       .4,  0,  0,
                       .5,  0,  0,
-                      0, .4,  0,
-                      0, .6,  0,
-                      0, .7,  0,
-                      0,  0, .4,
-                      0,  0, .5,
-                      0,  0, .3),
+                       0, .4,  0,
+                       0, .6,  0,
+                       0, .7,  0,
+                       0,  0, .4,
+                       0,  0, .5,
+                       0,  0, .3),
                     ncol = 3, byrow = TRUE)
   expect_equal(IECV(Lambda2), NULL)
 
@@ -388,6 +388,19 @@ test_that("bifactorIndices Works", {
   expect_equal(bifactorIndices(Lambda, UniLambda = UniLambda), readRDS("bindices_from_matrix.rds"), tolerance = .000001)
   expect_error(bifactorIndices(Lambda, UniLambda = UniLambda, standardized = FALSE), "Not enough information is provided to compute indicator residual variances. Either provide indicator residual variances or use a standardized solution.")
 
+  # non-bifactor example
+  Lambda2 <- matrix(c(.3,  0,  0,
+                      .4,  0,  0,
+                      .5,  0,  0,
+                      0, .4,  0,
+                      0, .6,  0,
+                      0, .7,  0,
+                      0,  0, .4,
+                      0,  0, .5,
+                      0,  0, .3),
+                    ncol = 3, byrow = TRUE)
+  expect_equal(bifactorIndices(Lambda2), readRDS("Lambda2_indices.rds"),  tolerance = .000001)
+
   ## bifactor from lavaan
   bi_data <- read.csv("bifactorData.csv")
   colnames(bi_data) <- c(paste0("x", 1:24))
@@ -402,7 +415,7 @@ test_that("bifactorIndices Works", {
   bi_fit_cfa <- lavaan::cfa(model = bi_model, data = bi_data, orthogonal = TRUE)
   expect_equal(bifactorIndices(bi_fit_cfa), readRDS("lav_indices.rds"), tolerance = .000001)
 
-  ## bifactor from mirt
+  ## bifactor from mirt -- these lines commented out because they take too long for the R CMD check on CRAN
   specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
   bi_fit_mirt <- mirt::bfactor(bi_data, specific)
   expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)

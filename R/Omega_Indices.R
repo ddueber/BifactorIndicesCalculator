@@ -43,6 +43,7 @@ Omega_S <- function(Lambda, Theta) {
     ## Compute the appropriate ratio of sums
     sum(colSums(Lambda*inFactor)^2)/(sum(colSums(Lambda*inFactor)^2) + sum(Theta*inFactor))
   }
+  if (is.null(Theta)) return(NULL)
   omega_results <- sapply(1:ncol(Lambda), Omega_S_C, Lambda = Lambda, Theta = Theta)
   names(omega_results) <- colnames(Lambda)
   omega_results
@@ -94,6 +95,7 @@ Omega_H <- function(Lambda, Theta) {
     ## Compute the appropriate ratio of sums
     sum(Lambda[,Fac])^2/(sum(colSums(Lambda*inFactor)^2) + sum(Theta*inFactor))
   }
+  if (is.null(Theta)) return(NULL)
   omega_results <- sapply(1:ncol(Lambda), Omega_H_C, Lambda = Lambda, Theta = Theta)
   names(omega_results) <- colnames(Lambda)
   omega_results

@@ -60,28 +60,50 @@
 
 
 bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE) {
-  ## if fitted mirt object, then we only want ECVs
+  ## if fitted mirt object, then throw warning about Omegas probably being meaningless
   if ("SingleGroupClass" %in% class(Lambda)) {
-    Lambda <- getLambda(Lambda)
-    indicesList <- list(ECV_SS  = ECV_SS(Lambda),
-                        ECV_SG  = ECV_SG(Lambda),
-                        ECV_GS  = ECV_GS(Lambda),
-                        IECV    = IECV(Lambda),
-                        PUC     = PUC(Lambda))
-    return(indicesList[which(!sapply(indicesList, is.null))])
+    warning("Interpreting omega indices for IRT models is not recommended at this time")
   }
 
+  ## Make Lambda, Theta, and UniLambda matrices. Do Theta first because getTheta needs the
+  ## Lambda object, not the Lambda matrix
   if (is.null(Theta)) {Theta = getTheta(Lambda, standardized = standardized)}
   Lambda <- getLambda(Lambda, standardized = standardized)
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
-  indicesList <- list(ECV_SS  = ECV_SS(Lambda),
-                      ECV_SG  = ECV_SG(Lambda),
-                      ECV_GS  = ECV_GS(Lambda),
-                      IECV    = IECV(Lambda),
-                      PUC     = PUC(Lambda),
-                      Omega   = Omega_S(Lambda, Theta),
-                      Omega_H = Omega_H(Lambda, Theta),
-                      ARPB    = ARPB(Lambda, UniLambda))
+
+  ## Build up the lists of indices. FactorLevelIndices first
+  FactorLevelIndices = list(ECV_SS  = ECV_SS(Lambda),
+                            ECV_SG  = ECV_SG(Lambda),
+                            ECV_GS  = ECV_GS(Lambda),
+                            Omega   = Omega_S(Lambda, Theta),
+                            Omega_H = Omega_H(Lambda, Theta))
+  ## Remove any NULL values and convert to dataframe
+  FactorLevelIndices <- FactorLevelIndices[which(!sapply(FactorLevelIndices, is.null))]
+  FactorLevelIndices <- as.data.frame(FactorLevelIndices)
+
+
+  ## Item level indices next
+  ARPB_indices <- ARPB(Lambda, UniLambda)
+  ItemLevelIndices <- list(IECV             = IECV(Lambda),
+                           RelParameterBias = ARPB_indices[[2]])
+  ## Remove any NULL values and convert to dataframe
+  ItemLevelIndices <- ItemLevelIndices[which(!sapply(ItemLevelIndices, is.null))]
+  ItemLevelIndices <- as.data.frame(ItemLevelIndices)
+  if (isTRUE(all.equal(dim(ItemLevelIndices), c(0, 0)))) {ItemLevelIndices <- NULL}
+
+  ## Model level indices next
+  if (is.null(ECV_SG(Lambda))) {
+    ECV <- NULL
+  } else {
+    ECV <- max(ECV_SG(Lambda))
+  }
+  ModelLevelIndices <- c(ECV = ECV, PUC = PUC(Lambda), ARPB = ARPB_indices[[1]])
+
+  ## Now put them all together
+  indicesList <- list(FactorLevelIndices = FactorLevelIndices,
+                      ItemLevelIndices   = ItemLevelIndices,
+                      ModelLevelIndices  = ModelLevelIndices)
+  ## if any index type is emtirely missing, remove that index type entirely (e.g., no model or item level indices if not bifactor)
   indicesList[which(!sapply(indicesList, is.null))]
 }
 
@@ -118,7 +140,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #'
 bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, standardized = TRUE) {
   if (!("mplus.model" %in% class(Lambda))) {Lambda <- MplusAutomation::readModels(Lambda)}
-  ## if categorical, then error if unstandardized and manually compute Theta is Standardized
+  ## if categorical, then error if standardized = FALSE and manually compute Theta if standardized - TRUE
   categorical <- !is.null(Lambda$input$variable$categorical)
   if (categorical) {
     if (standardized) {

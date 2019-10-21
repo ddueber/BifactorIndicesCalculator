@@ -74,10 +74,10 @@ PUC <- function(Lambda) {
 #'                    ncol = 4, byrow = TRUE)
 #' colnames(Lambda) <- c("General", "PS", "HA", "SA")
 #' UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
-#' ARPB(Lambda)
+#' ARPB(Lambda, UniLambda)
 #'
 #'
-ARPB <- function(Lambda, UniLambda = NULL) {
+ARPB <- function(Lambda, UniLambda) {
   if (is.null(UniLambda)) return(NULL)
   if (is.null(getGen(Lambda))) return(NULL)
   genFac <- getGen(Lambda)
