@@ -17,7 +17,7 @@ matrix input. For \code{Mplus} output files, use \code{\link{bifactorIndicesMplu
 input for \code{Lambda}.}
 
 \item{UniLambda}{is a matrix of factor loadings or an object that can be converted to
-a matrix of factor loadings such as a fitted \pkg{lavaan} objects pr fitted \pkg{mirt}
+a matrix of factor loadings such as a fitted \pkg{lavaan} objects or fitted \pkg{mirt}
 object. Defaults to \code{NULL}, as \code{UniLambda} is only required if you wish to
 compute \code{\link{ARPB}}}
 
@@ -26,7 +26,7 @@ unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan}
 then \code{standardized} will be ignored.}
 }
 \value{
-a list of bifactor indices, including three different ECV indices, IECV, PUC,
+A list of bifactor indices, including three different ECV indices, IECV, PUC,
 Omega, OmegaH, and ARPB. Please note that many of these indices are interpretable even
 when the model being used is not a bifactor model; some indices may be useful for
 two-tier, trifactor, correlated traits, and even unidimensional models.
@@ -37,32 +37,33 @@ Computes all available bifactor indices for the input given.
 \details{
 Currently, factor loading matrices, fitted \pkg{lavaan} objects, and fitted \pkg{mirt}
 objects are supported. For \code{Mplus} output, see \code{\link{bifactorIndicesMplus}}.
-IRT parameters from mirt are converted to standardized factor loadings via the
+IRT parameters from \pkg{mirt} are converted to standardized factor loadings via the
 correspondence described in Kamata & Bauer (2008). If you wish to use standardized
 coefficients, item error variance will be computed directly from standardized factor
-loadings. ARPB will only be computed if the factor loadings from a unidimensional model
-are included, while PUC, ECV_GS, and ECV_SG will only be computed if the the model is a
-true bifactor model. Note that if a correlated traits model is provided, the omega indices
+loadings. \code{\link{ARPB}} will only be computed if the factor loadings from a unidimensional model
+are included, while \code{\link{ECV_GS}} and \code{\link{ECV_SG}} will only be computed for
+models with a general factor, and \code{\link{PUC}} will only be conputed for a true bifactor
+model. Note that if a correlated traits model is provided, the omega indices
 will simply be the regular omega values for those factors. Interpretations for individual
 indices as well as details about their computation can be found in the man page for the
 individual indices.
 }
 \examples{
 
-## Computing bifactor indices from fitted lavaan object
-## (using mirt object is similar)
+# Computing bifactor indices from fitted lavaan object
+# (using mirt object is similar)
 HS_model_bifactor <- "visual  =~ x1 + x2 + x3
                       textual =~ x4 + x5 + x6
                       speed   =~ x7 + x8 + x9
                       general =~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9"
-## lavaan cannot find a good solution, but that's ok since this is just for illustration
+# lavaan cannot find a good solution, but that's ok since this is just for illustration
 fit <- suppressWarnings(lavaan::cfa(HS_model_bifactor,
                    data = lavaan::HolzingerSwineford1939,
                    orthogonal = TRUE))
 bifactorIndices(fit)
 
 
-## Computing bifactor indices from factor loading matrices
+# Computing bifactor indices from factor loading matrices
 Lambda <-  matrix(c(.82, .10,   0,   0,
                     .77, .35,   0,   0,
                     .79, .32,   0,   0,

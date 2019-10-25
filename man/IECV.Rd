@@ -11,7 +11,7 @@ IECV(Lambda)
 before calling this function.}
 }
 \value{
-A vector of ECVs for all factors
+A vector of item ECVs
 }
 \description{
 Computes an ECV index for each item which can be interpreted as the proportion of common
@@ -42,7 +42,6 @@ IECV(Lambda)
 
 }
 \references{
-:
 Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool to calculate
 various indices relevant to bifactor CFA models. \doi{10.13023/edp.tool.01}
 

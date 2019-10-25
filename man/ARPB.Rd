@@ -12,8 +12,8 @@ ARPB(Lambda, UniLambda)
 \item{UniLambda}{is a matrix of factor loadings}
 }
 \value{
-a list where the first element is a vector of absolute relative bias by item, and the second
-item is
+a list where the first element is the average absolute relative paramter bias, and the second
+element is a vector of absolute relative bias by item
 }
 \description{
 \code{ARPB} computes absolute relative bias in factor loadings between the general factor of a

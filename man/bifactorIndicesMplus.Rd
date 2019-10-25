@@ -2,7 +2,7 @@
 % Please edit documentation in R/BifactorIndicesCalculator.R
 \name{bifactorIndicesMplus}
 \alias{bifactorIndicesMplus}
-\title{bifactorIndicesMPlus}
+\title{bifactorIndicesMplus}
 \usage{
 bifactorIndicesMplus(Lambda = file.choose(), UniLambda = NULL,
   standardized = TRUE)
@@ -19,7 +19,7 @@ compute \code{\link{ARPB}}}
 the unstandardized results or the STDYX results from the Mplus output.}
 }
 \value{
-a list of bifactor indices, including three different ECV indices, IECV, PUC, Omega,
+A list of bifactor indices, including three different ECV indices, IECV, PUC, Omega,
 OmegaH, and ARPB. Please note that many of these indices are interpretable even when the
 model being used is not a bifactor model; some indices may be useful for two-tier, trifactor,
 correlated traits, and even unidimensional models.
@@ -27,8 +27,17 @@ correlated traits, and even unidimensional models.
 \description{
 Computes all available bifactor indices given an \code{Mplus} .out file for a bifactor model
 }
+\details{
+ARPB will only be compute if the factor loadings from a unidimensional model
+(as a vector or as the result of using \code{\link[MplusAutomation]{readModels}} on an
+\code{Mplus} .out file) are included. Note that if a correlated traits model is provided,
+the omega indices will simply be the regular omega values for those factors. Interpretations
+for individual indices as well as details about their computation can be found in the
+man page for the individual indices.
+}
 \examples{
 \dontrun{
+# A window will pop up prompting you to select an Mplus .out file
 bifactorIndicesMplus()
 }
 

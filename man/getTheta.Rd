@@ -9,28 +9,27 @@ getTheta(x, standardized = TRUE)
 \arguments{
 \item{x}{an object that can be converted into a factor loading matrix, or an
 object containing a fitted model from which a vector of residual variances
-can be extracted. Supported classes are data.frame, matrix, mplus.model,
-lavaan, and SingleGroupClass}
+can be extracted. Supported classes are \code{data.frame}, \code{matrix}, \code{mplus.model},
+\code{lavaan}, and \code{SingleGroupClass}}
 
-\item{standardized}{can be used to specify whether a standardized or unstandardized factor loading matrix
-should be returned. Only relevant for lavaan and mplus.model input. The standardized matrix for mplus.model
-is taken from stdyx results.}
+\item{standardized}{can be used to specify whether a standardized or unstandardized factor
+loading matrix should be returned. Only relevant for \code{lavaan} and \code{mplus.model}
+input. The standardized matrix for \code{mplus.model} is taken from stdyx results.}
 }
 \value{
 a vector of residual variances for items. If x is a fitted model, then
-the residual variances are extracted from the fitted model. Lavaan, mirt
-(SingleGroupClass), and Mplus (mplus.model) models are supported.
-If Mplus does not report residual variances for categorical variables, then
+the residual variances are extracted from the fitted model. \pkg{lavaan}, \pkg{mirt}
+(\code{SingleGroupClass}), and \code{Mplus} (\code{mplus.model}) models are supported.
+If \code{Mplus} does not report residual variances for categorical variables, then
 factor loadings are used to compute the residual variance for standardized models
 and an error is thrown for unstandardized models. In both cases, the user is
 alerted that residual variances could not be found in the input and perhaps the
 model should be rerun.
 }
 \description{
-getTheta extracts or computes a vector of residual variance for items. If a
+\code{getTheta} extracts or computes a vector of residual variance for items. If a
 factor loading matrix is provided, then the vector of residual variances is
-computed from that matrix if \code{standardized} is \code{TRUE} or an error
-is thrown for unstandardized models.
+computed from that matrix if \code{standardized} is \code{TRUE}.
 }
 \seealso{
 \code{\link{getLambda}}

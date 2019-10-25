@@ -7,19 +7,21 @@
 getLambda(x, standardized = TRUE)
 }
 \arguments{
-\item{x}{an object to be converted into a factor loading matrix, or an object containing a fitted model from which
-a factor loading matrix will be extracted. Supported classes are data.frame, matrix, mplus.model, lavaan, and SingleGroupClass}
+\item{x}{an object to be converted into a factor loading matrix, or an object containing a fitted
+model from which a factor loading matrix will be extracted. Supported classes are
+\code{data.frame}, \code{matrix}, \code{mplus.model}, \code{lavaan}, and \code{SingleGroupClass}.}
 
-\item{standardized}{can be used to specify whether a standardized or unstandardized factor loading matrix
-should be returned. Only relevant for lavaan and mplus.model input. The standardized matrix for mplus.model
-is taken from stdyx results.}
+\item{standardized}{can be used to specify whether a standardized or unstandardized factor
+loading matrix should be returned. Only relevant for \code{lavaan} and \code{mplus.model} input. The
+standardized matrix for \code{mplus.model} is taken from stdyx results.}
 }
 \value{
-a matrix of factor loadings
+A matrix of factor loadings
 }
 \description{
-getLambda computes or extracts a matrix of factor loadings given some input. Methods exist to support an input of
-a dataframe, an mplus.model from MplusAutomation, a SingleGroupClass object from mirt, and a
-lavaan object from lavaan. Please do not use tibbles, as they do not support row names, and it is
-best if your items are given names.
+getLambda computes or extracts a matrix of factor loadings given some input. Methods exist to
+support an input of
+a \code{dataframe}, an \code{mplus.model} from \pkg{MplusAutomation}, a \code{SingleGroupClass} object from \pkg{mirt}, and a
+\code{lavaan} object from \pkg{lavaan}. Please do not use a \code{tibble}, as they do not support
+row names, and it is best if your items are given names.
 }

@@ -18,7 +18,7 @@ Computes an ECV index for all factors which can be interpreted as the proportion
 common variance of all items which is due to the specific factor;
 \code{ECV_SG} should be read 'ECV of a specific factor with respect to the general
 factor.' Here,
-ECV is computed only with respect to all items using the specific factor loadings in
+ECV is computed with respect to the items of the general factor using the specific factor loadings in
 the numerator; Stucky and Edelen (2015, p. 199)
 refer to this index simply as 'specific-dimension ECV.' Note that \code{ECV_SG} of the general factor
 is simply the ECV. In the Excel version of the Bifactor

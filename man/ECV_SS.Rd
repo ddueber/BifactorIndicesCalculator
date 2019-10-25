@@ -16,11 +16,11 @@ A vector of ECVs for all factors
 \description{
 Computes an ECV index for all factors which can be interpreted as the proportion of common
 variance of the items in each factor which is due to that factor;
-#' \code{ECV_SS} should be read 'ECV of a specific factor with respect to itself.' Here, ECV is computed
+\code{ECV_SS} should be read 'ECV of a specific factor with respect to itself.' Here, ECV is computed
 only with respect to items which load on the factor. Note that \code{ECV_SS} of the general factor
-is simply the ECV. Stucky and Edelen (2015, p. 201) do not refer to tis form of ECV. In the Excel
+is simply the ECV. Stucky and Edelen (2015, p. 201) do not refer to this form of ECV. In the Excel
 version of the bifactor indices calculator (Dueber, 2017), this index is referred to as
-ECV (NEW). 'ECV_SS' is useful in that it can be computed when there is no general factor, such
+'ECV (NEW).' \code{ECV_SS} is useful in that it can be computed when there is no general factor, such
 as in a two-tier model.
 }
 \details{
