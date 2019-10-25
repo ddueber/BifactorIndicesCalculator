@@ -2,11 +2,11 @@
 #'
 #' Computes an ECV index for all factors which can be interpreted as the proportion of common
 #' variance of the items in each factor which is due to that factor;
-#' #' \code{ECV_SS} should be read 'ECV of a specific factor with respect to itself.' Here, ECV is computed
+#' \code{ECV_SS} should be read 'ECV of a specific factor with respect to itself.' Here, ECV is computed
 #' only with respect to items which load on the factor. Note that \code{ECV_SS} of the general factor
-#' is simply the ECV. Stucky and Edelen (2015, p. 201) do not refer to tis form of ECV. In the Excel
+#' is simply the ECV. Stucky and Edelen (2015, p. 201) do not refer to this form of ECV. In the Excel
 #' version of the bifactor indices calculator (Dueber, 2017), this index is referred to as
-#' ECV (NEW). 'ECV_SS' is useful in that it can be computed when there is no general factor, such
+#' 'ECV (NEW).' \code{ECV_SS} is useful in that it can be computed when there is no general factor, such
 #' as in a two-tier model.
 #'
 #' \code{ECV_SS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
@@ -65,7 +65,7 @@ ECV_SS <- function(Lambda) {
 #' common variance of all items which is due to the specific factor;
 #' \code{ECV_SG} should be read 'ECV of a specific factor with respect to the general
 #' factor.' Here,
-#' ECV is computed only with respect to all items using the specific factor loadings in
+#' ECV is computed with respect to the items of the general factor using the specific factor loadings in
 #' the numerator; Stucky and Edelen (2015, p. 199)
 #' refer to this index simply as 'specific-dimension ECV.' Note that \code{ECV_SG} of the general factor
 #' is simply the ECV. In the Excel version of the Bifactor
@@ -213,7 +213,7 @@ ECV_GS <- function(Lambda) {
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same variance
 #' before calling this function.
 #'
-#' @return A vector of ECVs for all factors
+#' @return A vector of item ECVs
 #'
 #' @examples
 #' Lambda <- matrix(c(.82, .10,   0,   0,
@@ -232,7 +232,7 @@ ECV_GS <- function(Lambda) {
 #' colnames(Lambda) <- c("General", "PS", "HA", "SA")
 #' IECV(Lambda)
 #'
-#' @references:
+#' @references
 #' Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool to calculate
 #' various indices relevant to bifactor CFA models. \doi{10.13023/edp.tool.01}
 #'

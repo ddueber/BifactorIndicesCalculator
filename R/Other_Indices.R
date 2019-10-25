@@ -54,8 +54,8 @@ PUC <- function(Lambda) {
 #' @param Lambda is a matrix of factor loadings
 #' @param UniLambda is a matrix of factor loadings
 #'
-#' @return a list where the first element is a vector of absolute relative bias by item, and the second
-#' item is
+#' @return a list where the first element is the average absolute relative paramter bias, and the second
+#' element is a vector of absolute relative bias by item
 #'
 #' @seealso \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
 #'

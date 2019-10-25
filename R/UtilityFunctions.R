@@ -1,18 +1,20 @@
 #' getLambda
 #'
-#' getLambda computes or extracts a matrix of factor loadings given some input. Methods exist to support an input of
-#' a dataframe, an mplus.model from MplusAutomation, a SingleGroupClass object from mirt, and a
-#' lavaan object from lavaan. Please do not use tibbles, as they do not support row names, and it is
-#' best if your items are given names.
+#' getLambda computes or extracts a matrix of factor loadings given some input. Methods exist to
+#' support an input of
+#' a \code{dataframe}, an \code{mplus.model} from \pkg{MplusAutomation}, a \code{SingleGroupClass} object from \pkg{mirt}, and a
+#' \code{lavaan} object from \pkg{lavaan}. Please do not use a \code{tibble}, as they do not support
+#' row names, and it is best if your items are given names.
 #'
-#' @param x an object to be converted into a factor loading matrix, or an object containing a fitted model from which
-#' a factor loading matrix will be extracted. Supported classes are data.frame, matrix, mplus.model, lavaan, and SingleGroupClass
+#' @param x an object to be converted into a factor loading matrix, or an object containing a fitted
+#'  model from which a factor loading matrix will be extracted. Supported classes are
+#'  \code{data.frame}, \code{matrix}, \code{mplus.model}, \code{lavaan}, and \code{SingleGroupClass}.
 #'
-#' @param standardized can be used to specify whether a standardized or unstandardized factor loading matrix
-#' should be returned. Only relevant for lavaan and mplus.model input. The standardized matrix for mplus.model
-#' is taken from stdyx results.
+#' @param standardized can be used to specify whether a standardized or unstandardized factor
+#' loading matrix should be returned. Only relevant for \code{lavaan} and \code{mplus.model} input. The
+#' standardized matrix for \code{mplus.model} is taken from stdyx results.
 #'
-#' @return a matrix of factor loadings
+#' @return A matrix of factor loadings
 #'
 getLambda <- function(x, standardized = TRUE) {
   UseMethod("getLambda")
@@ -84,23 +86,22 @@ getLambda.mplus.params <- function(x) {
 
 #' getTheta
 #'
-#' getTheta extracts or computes a vector of residual variance for items. If a
+#' \code{getTheta} extracts or computes a vector of residual variance for items. If a
 #' factor loading matrix is provided, then the vector of residual variances is
-#' computed from that matrix if \code{standardized} is \code{TRUE} or an error
-#' is thrown for unstandardized models.
+#' computed from that matrix if \code{standardized} is \code{TRUE}.
 #'
 #' @param x an object that can be converted into a factor loading matrix, or an
 #' object containing a fitted model from which a vector of residual variances
-#' can be extracted. Supported classes are data.frame, matrix, mplus.model,
-#' lavaan, and SingleGroupClass
-#' @param standardized can be used to specify whether a standardized or unstandardized factor loading matrix
-#' should be returned. Only relevant for lavaan and mplus.model input. The standardized matrix for mplus.model
-#' is taken from stdyx results.
+#' can be extracted. Supported classes are \code{data.frame}, \code{matrix}, \code{mplus.model},
+#' \code{lavaan}, and \code{SingleGroupClass}
+#' @param standardized can be used to specify whether a standardized or unstandardized factor
+#' loading matrix should be returned. Only relevant for \code{lavaan} and \code{mplus.model}
+#' input. The standardized matrix for \code{mplus.model} is taken from stdyx results.
 #'
 #' @return a vector of residual variances for items. If x is a fitted model, then
-#' the residual variances are extracted from the fitted model. Lavaan, mirt
-#' (SingleGroupClass), and Mplus (mplus.model) models are supported.
-#' If Mplus does not report residual variances for categorical variables, then
+#' the residual variances are extracted from the fitted model. \pkg{lavaan}, \pkg{mirt}
+#' (\code{SingleGroupClass}), and \code{Mplus} (\code{mplus.model}) models are supported.
+#' If \code{Mplus} does not report residual variances for categorical variables, then
 #' factor loadings are used to compute the residual variance for standardized models
 #' and an error is thrown for unstandardized models. In both cases, the user is
 #' alerted that residual variances could not be found in the input and perhaps the
@@ -167,7 +168,8 @@ getTheta.mplus.model <- function(x, standardized = TRUE) {
 
 #' getGen
 #'
-#' getGen detects whether or not a single factor loads on all items, and returns the column index of that factor if it exists.
+#' \code{getGen} detects whether or not a single factor loads on all items, and returns the column
+#' index of the general factor if it exists.
 #'
 #' @param Lambda is a factor loading matrix
 #'
