@@ -10,19 +10,22 @@ bifactorIndicesMplus(Lambda = file.choose(), UniLambda = NULL,
 \arguments{
 \item{Lambda}{is an Mplus .out file. Defaults to an open file dialog box}
 
-\item{UniLambda}{is an object that the function can convert to a matrix of factor loadings. The expected behavior is to store an Mplus output file as a variable and pass that variable as UniLambda. Defaults to \code{NULL}, as UniLambda is only required if you wish to compute \code{\link{ARPB}}}
+\item{UniLambda}{is an object that the function can convert to a matrix of factor loadings.
+The expected behavior is to store an Mplus output file as a variable and pass that variable
+as \code{UniLambda}. Defaults to \code{NULL}, as \code{UniLambda} is only required if you wish to
+compute \code{\link{ARPB}}}
 
 \item{standardized}{lets the function know whether it should be looking in
 the unstandardized results or the STDYX results from the Mplus output.}
 }
 \value{
-a list of bifactor indices, including three different ECV indices, IECV, PUC, Omega, OmegaH, and ARPB. Please note that many of these indices are interpretable even when the model being used is not a bifactor model; some indices may be useful for two-tier, trifactor, correlated traits, and even unidimensional models.
+a list of bifactor indices, including three different ECV indices, IECV, PUC, Omega,
+OmegaH, and ARPB. Please note that many of these indices are interpretable even when the
+model being used is not a bifactor model; some indices may be useful for two-tier, trifactor,
+correlated traits, and even unidimensional models.
 }
 \description{
-Computes all available bifactor indices given an Mplus .out file for a bifactor model
-}
-\details{
-ARPB will only be compute if the factor loadings from a unidimensional model (as a vector or as the result of using MplusAutomation::readModels() on an Mplus .out file) are included. Note that if a correlated traits model is provided, the omega indices will simply be the regular omega values for those factors. Interpretations for individual indices as well as details about their computation can be found in the man page for the individual indices.
+Computes all available bifactor indices given an \code{Mplus} .out file for a bifactor model
 }
 \examples{
 \dontrun{

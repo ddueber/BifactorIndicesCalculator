@@ -2,7 +2,8 @@
 #'
 #' \code{PUC} computes the proportion of uncontaminated correlations for a bifactor mode
 #'
-#' \code{PUC} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
+#' \code{PUC} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+#' which are the only functions in this package intended for casual users
 #'
 #' @param Lambda is a matrix of factor loadings
 #'
@@ -44,9 +45,11 @@ PUC <- function(Lambda) {
 
 #' ARPB
 #'
-#' \code{ARPB} computes absolute relative bias in factor loadings between the general factor of a bifactor model and a unidimensional model.
+#' \code{ARPB} computes absolute relative bias in factor loadings between the general factor of a
+#' bifactor model and a unidimensional model.
 #'
-#'\code{ARPB} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
+#'\code{ARPB} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+#'which are the only functions in this package intended for casual users
 #'
 #' @param Lambda is a matrix of factor loadings
 #' @param UniLambda is a matrix of factor loadings

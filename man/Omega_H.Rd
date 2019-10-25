@@ -15,14 +15,18 @@ Omega_H(Lambda, Theta)
 A \code{numeric}, the omega reliability estimate for all factors.
 }
 \description{
-Computes hierarchical omega reliability estimate for all factors as described in Rodriguez, Reise, and Haviland (2016).
+Computes hierarchical omega reliability estimate for all factors as described in
+Rodriguez, Reise, and Haviland (2016).
 }
 \details{
-\code{Omega_H} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
+\code{Omega_H} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+which are the only functions in this package intended for casual users
 }
 \section{References}{
 
-Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models: calculating and interpreting statistical indices. Psychological methods, 21(2), 137 <doi:10.1037/met0000045>.
+Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models:
+Calculating and interpreting statistical indices. Psychological methods, 21(2),
+137 \doi{10.1037/met0000045}.
 }
 
 \examples{

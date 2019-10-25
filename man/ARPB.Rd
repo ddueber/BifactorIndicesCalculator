@@ -16,10 +16,12 @@ a list where the first element is a vector of absolute relative bias by item, an
 item is
 }
 \description{
-\code{ARPB} computes absolute relative bias in factor loadings between the general factor of a bifactor model and a unidimensional model.
+\code{ARPB} computes absolute relative bias in factor loadings between the general factor of a
+bifactor model and a unidimensional model.
 }
 \details{
-\code{ARPB} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
+\code{ARPB} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+which are the only functions in this package intended for casual users
 }
 \examples{
 Lambda <- matrix(c(.82, .10,   0,   0,

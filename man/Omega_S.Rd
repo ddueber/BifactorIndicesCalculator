@@ -15,16 +15,13 @@ Omega_S(Lambda, Theta)
 A \code{numeric}, the omega reliability estimate for all factors.
 }
 \description{
-Computes omega reliability estimate for all factors as described in Rodriguez, Reise, and Haviland (2016).
+Computes an omega reliability estimate for all factors as described in Rodriguez, Reise, and
+Haviland (2016).
 }
 \details{
-\code{Omega_S} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
+\code{Omega_S} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+which are the only functions in this package intended for casual users
 }
-\section{References}{
-
-Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models: calculating and interpreting statistical indices. Psychological methods, 21(2), 137 <doi:10.1037/met0000045>.
-}
-
 \examples{
 Lambda <- matrix(c(.82, .10,   0,   0,
                    .77, .35,   0,   0,
@@ -43,6 +40,11 @@ colnames(Lambda) <- c("General", "PS", "HA", "SA")
 Theta <- rep(1, nrow(Lambda)) - rowSums(Lambda^2)
 Omega_S(Lambda, Theta)
 
+}
+\references{
+Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models:
+calculating and interpreting statistical indices. \emph{Psychological Methods, 21}(2),
+137 \doi{10.1037/met0000045}.
 }
 \seealso{
 \code{\link{Omega_H}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}

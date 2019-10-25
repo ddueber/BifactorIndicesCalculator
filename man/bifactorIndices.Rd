@@ -8,22 +8,44 @@ bifactorIndices(Lambda, Theta = NULL, UniLambda = NULL,
   standardized = TRUE)
 }
 \arguments{
-\item{Lambda}{is a matrix of factor loadings or an object that can be converted to a matrix of factor loadings by \code{\link{getLambda}}. Currently fitted lavaan objects and fitted mirt objects are supported in addition to raw factor loading matrix input. For Mplus output files, use \code{\link{bifactorIndicesMplus}}.}
+\item{Lambda}{is a matrix of factor loadings or an object that can be converted to a
+matrix of factor loadings by \code{\link{getLambda}}. Currently fitted \pkg{lavaan}
+objects and fitted \pkg{mirt} objects are supported in addition to raw factor loading
+matrix input. For \code{Mplus} output files, use \code{\link{bifactorIndicesMplus}}.}
 
-\item{Theta}{is a vector of residual variances. If omitted, Theta will be computed from input for Lambda}
+\item{Theta}{is a vector of residual variances. If omitted, \code{Theta} will be computed from
+input for \code{Lambda}.}
 
-\item{UniLambda}{is a matrix of factor loadings or an object that can be converted to a matrix of factor loadings by \code{\link{getLambda}}}
+\item{UniLambda}{is a matrix of factor loadings or an object that can be converted to
+a matrix of factor loadings such as a fitted \pkg{lavaan} objects pr fitted \pkg{mirt}
+object. Defaults to \code{NULL}, as \code{UniLambda} is only required if you wish to
+compute \code{\link{ARPB}}}
 
-\item{standardized}{lets the function know whether to look for standardized or unstandardized results from Mplus or lavaan. If lambda is not a lavaan object, then \code{standardized} will be ignored.}
+\item{standardized}{lets the function know whether to look for standardized or
+unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan} object,
+then \code{standardized} will be ignored.}
 }
 \value{
-a list of bifactor indices, including three different ECV indices, IECV, PUC, Omega, OmegaH, and ARPB. Please note that many of these indices are interpretable even when the model being used is not a bifactor model; some indices may be useful for two-tier, trifactor, correlated traits, and even unidimensional models.
+a list of bifactor indices, including three different ECV indices, IECV, PUC,
+Omega, OmegaH, and ARPB. Please note that many of these indices are interpretable even
+when the model being used is not a bifactor model; some indices may be useful for
+two-tier, trifactor, correlated traits, and even unidimensional models.
 }
 \description{
 Computes all available bifactor indices for the input given.
 }
 \details{
-Currently, factor loading matrices, fitted lavaan objects, and fitted mirt objects are supported. For Mplus output, see \code{\link{bifactorIndicesMplus}}. IRT parameters from mirt are converted to standardized factor loadings via the correspondence described in Kamata & Bauer (2008). If you wish to use standardized coefficients, item error variance will be computed directly from standardized factor loadings. ARPB will only be computed if the factor loadings from a unidimensional model are included, while PUC, ECV_GS, and ECV_SG will only be computed if the the model is a true bifactor model. Note that if a correlated traits model is provided, the omega indices will simply be the regular omega values for those factors. Interpretations for individual indices as well as details about their computation can be found in the man page for the individual indices.
+Currently, factor loading matrices, fitted \pkg{lavaan} objects, and fitted \pkg{mirt}
+objects are supported. For \code{Mplus} output, see \code{\link{bifactorIndicesMplus}}.
+IRT parameters from mirt are converted to standardized factor loadings via the
+correspondence described in Kamata & Bauer (2008). If you wish to use standardized
+coefficients, item error variance will be computed directly from standardized factor
+loadings. ARPB will only be computed if the factor loadings from a unidimensional model
+are included, while PUC, ECV_GS, and ECV_SG will only be computed if the the model is a
+true bifactor model. Note that if a correlated traits model is provided, the omega indices
+will simply be the regular omega values for those factors. Interpretations for individual
+indices as well as details about their computation can be found in the man page for the
+individual indices.
 }
 \examples{
 
@@ -59,6 +81,11 @@ UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
 bifactorIndices(Lambda, UniLambda = UniLambda)
 
 
+}
+\references{
+Kamata, A., & Bauer, D. J. (2008). A note on the relation between factor analytic and item
+response theory models. \emph{Structural Equation Modeling: A Multidisciplinary Journal, 15}
+(1), 136-153.
 }
 \seealso{
 \code{\link{bifactorIndicesMplus}},

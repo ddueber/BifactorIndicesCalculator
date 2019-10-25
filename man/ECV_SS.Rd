@@ -7,23 +7,26 @@
 ECV_SS(Lambda)
 }
 \arguments{
-\item{Lambda}{is a matrix of factor loadings. Be sure that all factors have the same variance before calling this function.}
+\item{Lambda}{is a matrix of factor loadings. Be sure that all factors have the same variance
+before calling this function.}
 }
 \value{
 A vector of ECVs for all factors
 }
 \description{
-Computes an ECV index for all factors which can be interpreted as the proportion of common variance of the items in each factor which is due to that factor. Here, ECV is computed only with respect to items which load on the factor; Stucky and Edelen (2015, p. 201) refer to this index as "within-domain ECV". In the Excel version of the bifactor indices calculator (Dueber, 2017), this index is referred to as ECV (NEW). ECV_SS is useful in that it can be computed when there is no specific factor, such as in a two-tier model.
+Computes an ECV index for all factors which can be interpreted as the proportion of common
+variance of the items in each factor which is due to that factor;
+#' \code{ECV_SS} should be read 'ECV of a specific factor with respect to itself.' Here, ECV is computed
+only with respect to items which load on the factor. Note that \code{ECV_SS} of the general factor
+is simply the ECV. Stucky and Edelen (2015, p. 201) do not refer to tis form of ECV. In the Excel
+version of the bifactor indices calculator (Dueber, 2017), this index is referred to as
+ECV (NEW). 'ECV_SS' is useful in that it can be computed when there is no general factor, such
+as in a two-tier model.
 }
 \details{
-\code{ECV_SS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}}, which are the only functions in this package intended for casual users
+\code{ECV_SS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+which are the only functions in this package intended for casual users
 }
-\section{References}{
-
-Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool to calculate various indices relevant to bifactor CFA models. <doi:10.13023/edp.tool.01>
-Stucky, B. D., & Edelen, M. O. (2015). Using hierarchical IRT models to create unidimensional measures from multidimensional data. In S. P. Reise & D. A. Revicki (Eds.), Handbook of item response theory modeling: Applications to typical performance assessment (pp.183-206). New York: Routledge.
-}
-
 \examples{
 Lambda <- matrix(c(.82, .10,   0,   0,
                    .77, .35,   0,   0,
@@ -42,6 +45,11 @@ colnames(Lambda) <- c("General", "PS", "HA", "SA")
 ECV_SS(Lambda)
 
 
+}
+\references{
+Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool to calculate various indices relevant to bifactor CFA models. \doi{10.13023/edp.tool.01}
+
+Stucky, B. D., & Edelen, M. O. (2015). Using hierarchical IRT models to create unidimensional measures from multidimensional data. In S. P. Reise & D. A. Revicki (Eds.), \emph{Handbook of item response theory modeling: Applications to typical performance assessment} (pp.183-206). New York: Routledge.
 }
 \seealso{
 \code{\link{ECV_SG}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
