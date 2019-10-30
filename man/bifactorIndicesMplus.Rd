@@ -35,13 +35,6 @@ the omega indices will simply be the regular omega values for those factors. Int
 for individual indices as well as details about their computation can be found in the
 man page for the individual indices.
 }
-\examples{
-\dontrun{
-# A window will pop up prompting you to select an Mplus .out file
-bifactorIndicesMplus()
-}
-
-}
 \seealso{
 \code{\link{bifactorIndices}},
          \code{\link{ECV_SS}},
