@@ -143,7 +143,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #' @param UniLambda is an object that the function can convert to a matrix of factor loadings.
 #' The expected behavior is to store an Mplus output file as a variable and pass that variable
 #' as \code{UniLambda}. Defaults to \code{NULL}, as \code{UniLambda} is only required if you wish to
-#' compute \code{\link{ARPB}}
+#' compute \code{\link{ARPB}}.
 #' @param standardized lets the function know whether it should be looking in
 #'   the unstandardized results or the STDYX results from the Mplus output.
 #'
@@ -175,6 +175,9 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 
 
 bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, standardized = TRUE) {
+  ## Expectation is that UniLambda is either a .out file, which will have a class of "character"
+  if ("character" %in% class(UniLambda)) {UniLambda <- MplusAutomation::readModels(UniLambda)}
+
   if (!("mplus.model" %in% class(Lambda))) {Lambda <- MplusAutomation::readModels(Lambda)}
   ## if categorical, then error if standardized = FALSE and manually compute Theta if standardized - TRUE
   categorical <- !is.null(Lambda$input$variable$categorical)

@@ -416,9 +416,9 @@ test_that("bifactorIndices Works", {
   expect_equal(bifactorIndices(bi_fit_cfa), readRDS("lav_indices.rds"), tolerance = .000001)
 
   ## bifactor from mirt -- these lines commented out because they take too long for the R CMD check on CRAN
-  specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
-  bi_fit_mirt <- mirt::bfactor(bi_data, specific)
-  expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
+  #specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
+  #bi_fit_mirt <- mirt::bfactor(bi_data, specific)
+  #expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
 
 })
 
