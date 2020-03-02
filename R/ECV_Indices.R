@@ -69,7 +69,7 @@ ECV_SS <- function(Lambda) {
 #' the numerator; Stucky and Edelen (2015, p. 199)
 #' refer to this index simply as 'specific-dimension ECV.' Note that \code{ECV_SG} of the general factor
 #' is simply the ECV. In the Excel version of the Bifactor
-#' Indices Calculator (Dueber, 2017), this form of ECV is not referred to as 'ECV (S&E).'
+#' Indices Calculator (Dueber, 2017), this form of ECV is referred to as 'ECV (S&E).'
 #
 #' \code{ECV_SG} is called by \code{\link{bifactorIndices}} and
 #' \code{\link{bifactorIndicesMplus}}, which are the only functions in this package
