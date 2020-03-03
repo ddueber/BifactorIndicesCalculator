@@ -189,6 +189,7 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
   if (!("mplus.model" %in% class(Lambda))) {Lambda <- MplusAutomation::readModels(Lambda)}
   ## if categorical, then error if standardized = FALSE and manually compute Theta if standardized - TRUE
   categorical <- !is.null(Lambda$input$variable$categorical)
+
   if (categorical) {
     if (standardized) {
       Lambda <- getLambda(Lambda, standardized = standardized)
@@ -200,6 +201,7 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
     Theta <- getTheta(Lambda, standardized = standardized)
     Lambda <- getLambda(Lambda, standardized = standardized)
   }
+
 
   bifactorIndices(Lambda, Theta, UniLambda, standardized)
 }
