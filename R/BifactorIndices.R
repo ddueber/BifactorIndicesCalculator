@@ -111,8 +111,8 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 
   ## Item level indices next
   ARPB_indices <- ARPB(Lambda, UniLambda)
+  colnames(ARPB_indices$AbsRelBias) <- "AbsRelativeBias"
   ItemLevelIndices <- list(IECV             = IECV(Lambda),
-                           AbsParameterBias = ARPB_indices[[1]],
                            RelParameterBias = ARPB_indices[[2]])
 
   ## Remove any NULL values and convert to dataframe
