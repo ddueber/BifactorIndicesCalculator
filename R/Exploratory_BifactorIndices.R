@@ -56,11 +56,18 @@ bifactorIndices_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
       Items[Lambda[,Fac] > LoadMin]
     })
     names(ItemsBySF) <- Factors
-  } else { # issue a warning for each loading above LoadMin on the wrong factor
+    SmallLambda <- round(Lambda, 3)
+    SmallLambda[SmallLambda < LoadMin] <- 0
+    print("This matrix describes assignemnt of items to factors")
+    print(ifelse(SmallLambda == 0, "", SmallLambda), quote = FALSE)
+  } else { # issue a warning for each loading above LoadMin on the wrong factor or loading below LoadMin on the right factor
     for (I in Items) {
-      for (Fac in Factors) { # UGH. Why is "F" the same as "FALSE." I hate that convention.
+      for (Fac in Factors) {
         if (!(I %in% ItemsBySF[[Fac]]) & (Lambda[I,Fac] > LoadMin)) {
           warning(paste0("Item ", I, " loads on factor ", Fac, "above ", LoadMin))
+        }
+        if ((I %in% ItemsBySF[[Fac]]) & (Lambda[I,Fac] < LoadMin)) {
+          warning(paste0("Item ", I, " loads on factor ", Fac, "below ", LoadMin))
         }
       }
     }
@@ -90,11 +97,9 @@ bifactorIndices_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     # ECV_GS is the general factor's ECV_SS when only items on the specific are included
     SpecificIndices$ECV_GS <- sapply(Factors, function (Fac) {
       SpecificIndicesList[[Fac]]$FactorLevelIndices[1,"ECV_SS"]
-
-    # Reorder the columns
-      SpecificIndices <- SpecificIndices[,c("ECV_SS", "ECV_SG", "ECV_GS", "Omega", "Omega_H")]
     })
-
+    # Reorder the columns
+    SpecificIndices <- SpecificIndices[,c("ECV_SS", "ECV_SG", "ECV_GS", "Omega", "Omega_H")]
     return(list(FactorLevelIndices = SpecificIndices,
                 ModelLevelIndices = GlobalIndices[["FactorLevelIndices"]][1,]))
   } else {
@@ -191,5 +196,5 @@ bifactorIndicesMplus_ESEM <- function(Lambda = file.choose(),
   ## Now we need to fish out the factor loading matrix
   Lambda <- getLambda(Lambda)
 
-  bifactorIndices_EFA(Lambda, ItemsBySF = NULL, LoadMin = 0.2, UniLambda = NULL)
+  bifactorIndices_EFA(Lambda, ItemsBySF = NULL, LoadMin = 0.2)
 }

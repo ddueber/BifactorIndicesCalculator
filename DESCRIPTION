@@ -1,7 +1,7 @@
 Package: BifactorIndicesCalculator
 Type: Package
 Title: Bifactor Indices Calculator
-Version: 0.1.0.9001
+Version: 0.1.0.9002
 Authors@R: c(person("David", family = "Dueber", role=c("aut", "cre"), email="david.dueber@uky.edu"))
 Maintainer: David Dueber <david.dueber@uky.edu>
 Description: The calculator computes bifactor indices such as explained common variance (ECV), hierarchical Omega (OmegaH), percentage of uncontaminated correlations (PUC), item explained common variance (I-ECV), and more. This package is an R version of the 'Excel' based 'Bifactor Indices Calculator' (Dueber, 2017)  <doi:10.13023/edp.tool.01> with added convenience features for directly utilizing output from several programs that can fit confirmatory factor analysis or item response models.

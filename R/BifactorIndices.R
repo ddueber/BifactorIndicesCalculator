@@ -180,8 +180,6 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #'
 #' @export
 #'
-
-
 bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, standardized = TRUE) {
   ## Expectation is that UniLambda is either a .out file, which will have a class of "character"
   if ("character" %in% class(UniLambda)) {UniLambda <- MplusAutomation::readModels(UniLambda)}
