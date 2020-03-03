@@ -128,8 +128,8 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   } else {
     Gen <- getGen(Lambda)
     ECV <- ECV_SG(Lambda)[Gen]
-    Omega <- Omega_S(Lambda)[Gen]
-    OmegaH <- Omega_H(Lambda)[Gen]
+    Omega <- Omega_S(Lambda, Theta)[Gen]
+    OmegaH <- Omega_H(Lambda, Theta)[Gen]
   }
 
   ModelLevelIndices <- c(ECV = ECV, PUC = PUC(Lambda), Omega = Omega, OmegaH  = OmegaH, ARPB = ARPB_indices[[1]])
