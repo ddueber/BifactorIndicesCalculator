@@ -84,9 +84,6 @@
 #' UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
 #' bifactorIndices(Lambda, UniLambda = UniLambda)
 #'
-#'
-
-
 bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE) {
   ## if fitted mirt object, then throw warning about Omegas probably being meaningless
   if ("SingleGroupClass" %in% class(Lambda)) {
@@ -96,7 +93,9 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   ## Make Lambda, Theta, and UniLambda matrices. Do Theta first because getTheta needs the
   ## Lambda object, not the Lambda matrix
   if (is.null(Theta)) {Theta = getTheta(Lambda, standardized = standardized)}
+
   Lambda <- getLambda(Lambda, standardized = standardized)
+
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
 
   ## Build up the lists of indices. FactorLevelIndices first
@@ -113,19 +112,27 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   ## Item level indices next
   ARPB_indices <- ARPB(Lambda, UniLambda)
   ItemLevelIndices <- list(IECV             = IECV(Lambda),
+                           AbsParameterBias = ARPB_indices[[1]],
                            RelParameterBias = ARPB_indices[[2]])
+
   ## Remove any NULL values and convert to dataframe
   ItemLevelIndices <- ItemLevelIndices[which(!sapply(ItemLevelIndices, is.null))]
   ItemLevelIndices <- as.data.frame(ItemLevelIndices)
   if (isTRUE(all.equal(dim(ItemLevelIndices), c(0, 0)))) {ItemLevelIndices <- NULL}
 
   ## Model level indices next
-  if (is.null(ECV_SG(Lambda))) {
+  if (is.null(getGen(Lambda))) { # No general factor
     ECV <- NULL
+    Omega <- NULL
+    OmegaH <- NULL
   } else {
-    ECV <- max(ECV_SG(Lambda))
+    Gen <- getGen(Lambda)
+    ECV <- ECV_SG(Lambda)[Gen]
+    Omega <- Omega_S(Lambda)[Gen]
+    OmegaH <- Omega_H(Lambda)[Gen]
   }
-  ModelLevelIndices <- c(ECV = ECV, PUC = PUC(Lambda), ARPB = ARPB_indices[[1]])
+
+  ModelLevelIndices <- c(ECV = ECV, PUC = PUC(Lambda), Omega = Omega, OmegaH  = OmegaH, ARPB = ARPB_indices[[1]])
 
   ## Now put them all together
   indicesList <- list(FactorLevelIndices = FactorLevelIndices,
@@ -133,6 +140,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
                       ModelLevelIndices  = ModelLevelIndices)
   ## if any index type is emtirely missing, remove that index type entirely (e.g., no model or item level indices if not bifactor)
   indicesList[which(!sapply(indicesList, is.null))]
+
 }
 
 #' bifactorIndicesMplus
@@ -195,3 +203,4 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
 
   bifactorIndices(Lambda, Theta, UniLambda, standardized)
 }
+
