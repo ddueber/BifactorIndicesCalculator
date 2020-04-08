@@ -109,9 +109,8 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   FactorLevelIndices <- as.data.frame(FactorLevelIndices)
 
 
-  ## Item level indices next
+  ## Item level indices next. Figure out label on ARPB later
   ARPB_indices <- ARPB(Lambda, UniLambda)
-  colnames(ARPB_indices$AbsRelBias) <- "AbsRelativeBias"
   ItemLevelIndices <- list(IECV             = IECV(Lambda),
                            RelParameterBias = ARPB_indices[[2]])
 
@@ -135,9 +134,10 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   ModelLevelIndices <- c(ECV = ECV, PUC = PUC(Lambda), Omega = Omega, OmegaH  = OmegaH, ARPB = ARPB_indices[[1]])
 
   ## Now put them all together
-  indicesList <- list(FactorLevelIndices = FactorLevelIndices,
-                      ItemLevelIndices   = ItemLevelIndices,
-                      ModelLevelIndices  = ModelLevelIndices)
+  indicesList <- list(ModelLevelIndices  = ModelLevelIndices,
+                      FactorLevelIndices = FactorLevelIndices,
+                      ItemLevelIndices   = ItemLevelIndices
+                      )
   ## if any index type is emtirely missing, remove that index type entirely (e.g., no model or item level indices if not bifactor)
   indicesList[which(!sapply(indicesList, is.null))]
 
