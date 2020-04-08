@@ -54,7 +54,7 @@ Omega_S <- function(Lambda, Theta) {
 }
 
 
-#' Omega_H
+#' OmegaH
 #'
 #' Computes hierarchical omega reliability estimate for all factors as described in
 #' Rodriguez, Reise, and Haviland (2016).
@@ -98,7 +98,7 @@ Omega_S <- function(Lambda, Theta) {
 
 Omega_H <- function(Lambda, Theta) {
   Omega_H_C <- function(Fac, Lambda, Theta) {
-    ## Make a matrix of logical vectors for non-zero elements of Lambda. Let's replace NA with zero at the start!!
+    ## Make a matrix of logical vectors for non-zero elements of Lambda.
     inFactor <- Lambda[,Fac] != 0
     ## Compute the appropriate ratio of sums
     sum(Lambda[,Fac])^2/(sum(colSums(Lambda*inFactor)^2) + sum(Theta*inFactor))
@@ -108,4 +108,3 @@ Omega_H <- function(Lambda, Theta) {
   names(omega_results) <- colnames(Lambda)
   omega_results
 }
-
