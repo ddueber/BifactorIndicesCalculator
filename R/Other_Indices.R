@@ -89,3 +89,91 @@ ARPB <- function(Lambda, UniLambda) {
   names(relBias) <- rownames(Lambda)
   list(ARPB = mean(relBias), AbsRelBias = relBias)
 }
+
+
+
+#' Factor Determinacy
+#'
+#' \code{FD} computes factor determinacies for all factors provided
+#' standardized factor loadings and an interfactor correlation matrix.
+#'
+#' \code{FD} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+#' which are the only functions in this package intended for casual users.
+#'
+#' @param Lambda is a matrix of standardized factor loadings
+#' @param Phi is the matrix of factor intercorrelations. For bifactor models
+#' \code{Phi} is diagonal with ones on the diagonal.
+#'
+#' @return a vector of factor determinacies.
+#'
+#' @seealso \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#'
+#' @export
+#'
+#' @examples
+#' Lambda <- matrix(c(.82, .10,   0,   0,
+#'                    .77, .35,   0,   0,
+#'                    .79, .32,   0,   0,
+#'                    .66, .39,   0,   0,
+#'                    .51,   0, .71,   0,
+#'                    .56,   0, .43,   0,
+#'                    .68,   0, .13,   0,
+#'                    .60,   0, .50,   0,
+#'                    .83,   0,   0, .47,
+#'                    .60,   0,   0, .27,
+#'                    .78,   0,   0, .28,
+#'                    .55,   0,   0, .75),
+#'                    ncol = 4, byrow = TRUE)
+#' Phi <- matrix(c(1, 0, 0, 0,
+#'                 0, 1, 0, 0,
+#'                 0, 0, 1, 0,
+#'                 0, 0, 0, 1), ncol = 4)
+#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' FD(Lambda, Phi)
+#'
+
+FD <- function(Lambda, Phi) {
+  Psi   <- getTheta(Lambda)
+  Sigma <- Lambda %*% Phi %*% t(Lambda) + diag(Psi)
+  sqrt(diag(Phi %*% t(Lambda) %*% solve(Sigma) %*% Lambda %*% Phi))
+}
+
+
+#' Construct Replicability
+#'
+#' \code{H} computes construct replicability for all factors given
+#' standardized factor loadings.
+#'
+#' \code{H} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+#' which are the only functions in this package intended for casual users.
+#'
+#' @param Lambda is a matrix of standardized factor loadings
+#'
+#' @return a vector of construct reliabilities.
+#'
+#' @seealso \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#'
+#' @export
+#'
+#' @examples
+#' Lambda <- matrix(c(.82, .10,   0,   0,
+#'                    .77, .35,   0,   0,
+#'                    .79, .32,   0,   0,
+#'                    .66, .39,   0,   0,
+#'                    .51,   0, .71,   0,
+#'                    .56,   0, .43,   0,
+#'                    .68,   0, .13,   0,
+#'                    .60,   0, .50,   0,
+#'                    .83,   0,   0, .47,
+#'                    .60,   0,   0, .27,
+#'                    .78,   0,   0, .28,
+#'                    .55,   0,   0, .75),
+#'                    ncol = 4, byrow = TRUE)
+#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' H(Lambda)
+#'
+
+H <- function(Lambda) {
+  1/(1+1/(colSums(Lambda^2/(1-Lambda^2))))
+}
+
