@@ -34,7 +34,7 @@
 #'          \code{\link{Omega_S}},
 #'          \code{\link{Omega_H}},
 #'          \code{\link{H}},
-#'          \code{\link{FD}},
+#'          \code{\link{FD}}
 #'
 #'
 #' @export
@@ -159,8 +159,11 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
 #'          \code{\link{ECV_SS}},
 #'          \code{\link{ECV_SG}},
 #'          \code{\link{ECV_GS}},
+#'          \code{\link{IECV}},
 #'          \code{\link{Omega_S}},
 #'          \code{\link{Omega_H}},
+#'          \code{\link{H}},
+#'          \code{\link{FD}}
 #'
 #'
 #' @export
@@ -203,8 +206,11 @@ bifactorIndicesMplus_expl <- function(Lambda = file.choose(), ItemsBySF = NULL, 
 #'          \code{\link{ECV_SS}},
 #'          \code{\link{ECV_SG}},
 #'          \code{\link{ECV_GS}},
+#'          \code{\link{IECV}},
 #'          \code{\link{Omega_S}},
 #'          \code{\link{Omega_H}},
+#'          \code{\link{H}},
+#'          \code{\link{FD}}
 #'
 #'
 #' @export
