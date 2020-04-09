@@ -15,9 +15,13 @@
 #' @param standardized lets the function know whether to look for standardized or
 #' unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan} object,
 #' then \code{standardized} will be ignored.
+#' @param Psi is the correlation matrix of factors. User should generally ignore this
+#' parameter. \code(bifactorIndices) will try to determine it from Lambda or will assume
+#' it is the identity matrix.
 #'
 #' @return A list of bifactor indices, including three different ECV indices, IECV, PUC,
-#' Omega, OmegaH, and ARPB. Please note that many of these indices are interpretable even
+#' Omega, OmegaH, Factor Determinacy (FD), Consruct Replicability (H) and ARPB.
+#' Please note that many of these indices are interpretable even
 #' when the model being used is not a bifactor model; some indices may be useful for
 #' two-tier, trifactor, correlated traits, and even unidimensional models.
 #'
@@ -49,6 +53,8 @@
 #'          \code{\link{PUC}},
 #'          \code{\link{Omega_S}},
 #'          \code{\link{Omega_H}},
+#'          \code{\link{H}},
+#'          \code{\link{FD}},
 #'          \code{\link{ARPB}}
 #'
 #' @examples
@@ -84,17 +90,32 @@
 #' UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
 #' bifactorIndices(Lambda, UniLambda = UniLambda)
 #'
-bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE) {
+bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE, Psi = NULL) {
   ## if fitted mirt object, then throw warning about Omegas probably being meaningless
   if ("SingleGroupClass" %in% class(Lambda)) {
     warning("Interpreting omega indices for IRT models is not recommended at this time")
   }
 
-  ## Make Lambda, Theta, and UniLambda matrices. Do Theta first because getTheta needs the
-  ## Lambda object, not the Lambda matrix
+  ## Make Lambda, Theta, Phi, and UniLambda matrices. Do Theta and Phi first because
+  ## they need the Lambda object, not the Lambda matrix
   if (is.null(Theta)) {Theta = getTheta(Lambda, standardized = standardized)}
 
+  # Can do Phi for SingleGroupClass and for lavaan
+  if (is.null(Psi)) {
+    if ("SingleGroupClass" %in% class(Lambda)) {
+      Psi <- mirt::summary(Lambda)$fcor
+    } else if ("lavaan" %in% class(Lambda)) {
+      Psi <- lavaan::lavInspect(Lambda, "std")$psi
+      # I hate that dumb symmetric matrix print method
+      class(Psi) <- "matrix"
+    }
+  }
+
+
   Lambda <- getLambda(Lambda, standardized = standardized)
+
+  # If Psi is still NULL, let's make it the identity matrix
+  if (is.null(Psi)) {Psi <- diag(nrow = nrow(Lambda))}
 
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
 
@@ -103,7 +124,14 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
                             ECV_SG  = ECV_SG(Lambda),
                             ECV_GS  = ECV_GS(Lambda),
                             Omega   = Omega_S(Lambda, Theta),
-                            Omega_H = Omega_H(Lambda, Theta))
+                            OmegaH  = Omega_H(Lambda, Theta))
+  if (standardized) {
+    FactorLevelIndices[["H"]] <- H(Lambda)
+    if (!is.null(Psi)) {
+      FactorLevelIndices[["FD"]] <- FD(Lambda)
+    }
+  }
+
   ## Remove any NULL values and convert to dataframe
   FactorLevelIndices <- FactorLevelIndices[which(!sapply(FactorLevelIndices, is.null))]
   FactorLevelIndices <- as.data.frame(FactorLevelIndices)
@@ -175,6 +203,8 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #'          \code{\link{PUC}},
 #'          \code{\link{Omega_S}},
 #'          \code{\link{Omega_H}},
+#'          \code{\link{H}},
+#'          \code{\link{FD}},
 #'          \code{\link{ARPB}}
 #'
 #'

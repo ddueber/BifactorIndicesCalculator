@@ -1,4 +1,4 @@
-#' bifactorIndices_EFA
+#' bifactorIndices_expl
 #'
 #' Computes all available bifactor indices for the input given.
 #'
@@ -25,13 +25,16 @@
 #'
 #' @seealso \code{\link{bifactorIndices}},
 #'          \code{\link{bifactorIndicesMplus}},
-#'          \code{\link{bifactorIndicesMplus_EFA}},
-#'          \code{\link{bifactorIndices_EFA}},
+#'          \code{\link{bifactorIndicesMplus_expl}},
+#'          \code{\link{bifactorIndicesMplus_ESEM}},
 #'          \code{\link{ECV_SS}},
 #'          \code{\link{ECV_SG}},
 #'          \code{\link{ECV_GS}},
+#'          \code{\link{IECV}},
 #'          \code{\link{Omega_S}},
 #'          \code{\link{Omega_H}},
+#'          \code{\link{H}},
+#'          \code{\link{FD}},
 #'
 #'
 #' @export
