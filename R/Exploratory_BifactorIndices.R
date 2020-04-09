@@ -39,6 +39,21 @@
 #'
 #' @export
 #'
+#' @examples
+#'
+#'# psych::fa() can not access the rotations We have to load the library.
+#'library(psych)
+#'SRS_BEFA <- fa(SRS_data, nfactors = 5, rotate = "bifactor")
+#'
+#'# inspect the solution to see which exploratory factors belong to which subdomain
+#'SRS_BEFA$loadings
+#'ItemsBySF = list(MR4 = paste0("SRS_", c(5, 9, 12, 15, 18)),
+#'                 MR2 = paste0("SRS_", c(1, 2, 8, 11, 17)),
+#'                 MR3 = paste0("SRS_", c(4, 6, 10, 14, 19)),
+#'                 MR5 = paste0("SRS_", c(3, 7, 13, 16, 20)))
+#'
+#'bifactorIndices_expl(SRS_BEFA, ItemsBySF = ItemsBySF)
+
 bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
   ## I'll make this into S3 methods once MplusAutomation supports EFA
   ## This is the method for pscyh::fa
@@ -129,7 +144,7 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
 }
 
 
-#' bifactorIndicesMplus_EFA
+#' bifactorIndicesMplus_expl
 #'
 #' Computes all available bifactor indices given an \code{Mplus} .out file for a bifactor EFA
 #'
@@ -154,8 +169,8 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
 #'
 #' @seealso \code{\link{bifactorIndices}},
 #'          \code{\link{bifactorIndicesMplus}},
-#'          \code{\link{bifactorIndicesMplus_EFA}},
-#'          \code{\link{bifactorIndices_EFA}},
+#'          \code{\link{bifactorIndicesMplus_ESEM}},
+#'          \code{\link{bifactorIndices_expl}},
 #'          \code{\link{ECV_SS}},
 #'          \code{\link{ECV_SG}},
 #'          \code{\link{ECV_GS}},
@@ -201,8 +216,8 @@ bifactorIndicesMplus_expl <- function(Lambda = file.choose(), ItemsBySF = NULL, 
 #'
 #' @seealso \code{\link{bifactorIndices}},
 #'          \code{\link{bifactorIndicesMplus}},
-#'          \code{\link{bifactorIndicesMplus_EFA}},
-#'          \code{\link{bifactorIndices_EFA}},
+#'          \code{\link{bifactorIndicesMplus_expl}},
+#'          \code{\link{bifactorIndices_expl}},
 #'          \code{\link{ECV_SS}},
 #'          \code{\link{ECV_SG}},
 #'          \code{\link{ECV_GS}},
