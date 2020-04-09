@@ -15,9 +15,10 @@ test_that("ECV_SS Works", {
   ECV_SS_Expected <- c(.3229228, .7138154, .1426991, .4064201)
   ## First with no names
   expect_equal(ECV_SS(Lambda), ECV_SS_Expected, tolerance = .000001)
+
+  ## Now with names
   colnames(Lambda) = c("A", "B", "C", "D")
   names(ECV_SS_Expected) = c("A", "B", "C", "D")
-  ## Now with names
   expect_equal(ECV_SS(Lambda), ECV_SS_Expected, tolerance = .000001)
 
   ## Now let's do one with no general factor
@@ -305,6 +306,84 @@ test_that("ARPB Works", {
 
 })
 
+test_that("FD Works", {
+  Lambda <- matrix(c(  0, .82, .10,   0,
+                       0, .77, .35,   0,
+                       0, .79, .32,   0,
+                       0, .66, .39,   0,
+                       0, .51,   0, .71,
+                       0, .56,   0, .43,
+                       0, .68,   0, .13,
+                       0, .60,   0, .50,
+                       .47, .83,   0,   0,
+                       .27, .60,   0,   0,
+                       .28, .78,   0,   0,
+                       .75, .55,   0,   0),
+                   ncol = 4, byrow = TRUE)
+  Phi <- diag(nrow = 4)
+  FD_Expected <- c(0.8764811, 0.9500041, 0.6280990, 0.8438307)
+  ## First with no names
+  expect_equal(FD(Lambda, Phi), FD_Expected, tolerance = .000001)
+  colnames(Lambda) = c("A", "B", "C", "D")
+  names(FD_Expected) = c("A", "B", "C", "D")
+  ## Now with names
+  expect_equal(FD(Lambda, Phi), FD_Expected, tolerance = .000001)
+
+  ## Now let's do one with correlated traits
+  Lambda2 <- matrix(c(.3,  0,  0,
+                      .4,  0,  0,
+                      .5,  0,  0,
+                      0, .4,  0,
+                      0, .6,  0,
+                      0, .7,  0,
+                      0,  0, .4,
+                      0,  0, .5,
+                      0,  0, .3),
+                    ncol = 3, byrow = TRUE)
+  Phi2 <- matrix(c(1, .3, .4, .3, 1, .5, .4, .5, 1), nrow = 3)
+  FD_Expected_2 <- c(0.6489614, 0.8052508, 0.6808390)
+  expect_equal(FD(Lambda2, Phi2), FD_Expected_2, tolerance = .000001)
+
+})
+
+test_that("H Works", {
+  Lambda <- matrix(c(  0, .82, .10,   0,
+                       0, .77, .35,   0,
+                       0, .79, .32,   0,
+                       0, .66, .39,   0,
+                       0, .51,   0, .71,
+                       0, .56,   0, .43,
+                       0, .68,   0, .13,
+                       0, .60,   0, .50,
+                       .47, .83,   0,   0,
+                       .27, .60,   0,   0,
+                       .28, .78,   0,   0,
+                       .75, .55,   0,   0),
+                   ncol = 4, byrow = TRUE)
+  H_Expected <- c(0.6340948, 0.9282446, 0.3070802, 0.6144805)
+  ## First with no names
+  expect_equal(H(Lambda), H_Expected, tolerance = .000001)
+  colnames(Lambda) = c("A", "B", "C", "D")
+  names(H_Expected) = c("A", "B", "C", "D")
+  ## Now with names
+  expect_equal(H(Lambda), H_Expected, tolerance = .000001)
+
+  ## Now let's do one with no general factor
+  Lambda2 <- matrix(c(.3,  0,  0,
+                      .4,  0,  0,
+                      .5,  0,  0,
+                      0, .4,  0,
+                      0, .6,  0,
+                      0, .7,  0,
+                      0,  0, .4,
+                      0,  0, .5,
+                      0,  0, .3),
+                    ncol = 3, byrow = TRUE)
+  H_Expected_2 <- c(0.3837472, 0.6315076, 0.3837472)
+  expect_equal(H(Lambda2), H_Expected_2)
+
+})
+
 test_that("getGen Works", {
   Lambda <- matrix(c(  0, .82, .10,   0,
                        0, .77, .35,   0,
@@ -416,9 +495,9 @@ test_that("bifactorIndices Works", {
   expect_equal(bifactorIndices(bi_fit_cfa), readRDS("lav_indices.rds"), tolerance = .000001)
 
   ## bifactor from mirt -- these lines commented out because they take too long for the R CMD check on CRAN
-  #specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
-  #bi_fit_mirt <- mirt::bfactor(bi_data, specific)
-  #expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
+  specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
+  bi_fit_mirt <- mirt::bfactor(bi_data, specific)
+  expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
 
 })
 
