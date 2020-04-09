@@ -55,9 +55,8 @@
 #'bifactorIndices_expl(SRS_BEFA, ItemsBySF = ItemsBySF)
 
 bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
-  ## I'll make this into S3 methods once MplusAutomation supports EFA
+  ## I'll make this into S3 methods eventually
   ## This is the method for pscyh::fa
-  ## Actually, since I use a separate function for Mplus, that's not a problem
   ## Leaving this as is until I have a reason not to.
   getLambdaExploratory <- function (Lambda) {
     Lambda <- Lambda$loadings
@@ -78,10 +77,20 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     names(ItemsBySF) <- Factors
     SmallLambda <- round(Lambda, 3)
     SmallLambda[SmallLambda < LoadMin] <- 0
-    cat("This matrix describes assignemnt of items to factors \n")
+    cat("This matrix describes assignment of items to factors \n")
     print(ifelse(SmallLambda == 0, "", SmallLambda), quote = FALSE)
     cat("\n \n")
-  } else { # issue a warning for each loading above LoadMin on the wrong factor or loading below LoadMin on the right factor
+  } else {
+    # Need to insert the general factor here!
+    if (length(ItemsBySF) == length(Factors) - 1) {
+      GenFac <- setdiff(Factors, names(ItemsBySF))
+      ItemsBySF[[paste(GenFac)]] <- Items
+    } else {
+      stop("An error was made in the specification of ItemsBySF. It should have one fewer
+            elements than the total number of factors")
+    }
+
+    # issue a warning for each loading above LoadMin on the wrong factor or loading below LoadMin on the right factor
     for (I in Items) {
       for (Fac in Factors) {
         if (!(I %in% ItemsBySF[[Fac]]) & (Lambda[I,Fac] > LoadMin)) {
@@ -113,29 +122,30 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
   })))
 
   if (max(FactorLengths) == nrow(Lambda)) {
-    ModelIndices <- GlobalIndices[["FactorLevelIndices"]][1,]
-    names(ModelIndices) <- c("ECV", "Omega", "OmegaH")
+    GenFac <- which(FactorLengths == nrow(Lambda))
+
+    ModelIndices <- GlobalIndices[["FactorLevelIndices"]][GenFac,]
+    names(ModelIndices) <- c("ECV", "Omega", "OmegaH", "H", "FD")
 
     # ECV_SG taken from version with all items
     SpecificIndices$ECV_SG <- GlobalIndices$FactorLevelIndices$ECV_SS
     # ECV_GS is the general factor's ECV_SS when only items on the specific are included
     SpecificIndices$ECV_GS <- sapply(Factors, function (Fac) {
-      SpecificIndicesList[[Fac]]$FactorLevelIndices[1,"ECV_SS"]
+      SpecificIndicesList[[Fac]]$FactorLevelIndices[GenFac,"ECV_SS"]
     })
     # Reorder the columns
-    SpecificIndices <- SpecificIndices[,c("ECV_SS", "ECV_SG", "ECV_GS", "Omega", "Omega_H")]
+    SpecificIndices <- SpecificIndices[,c("ECV_SS", "ECV_SG", "ECV_GS", "Omega", "OmegaH", "H", "FD")]
 
     # If only one factor is general, then we can do I-ECV
     if (sum(FactorLengths == nrow(Lambda)) == 1) {
       # The I-ECV function cannot be used because there is no "true" general factor
-      GenFac <- which(FactorLengths == nrow(Lambda))
       L2 <- Lambda^2
       IECV <- L2[,GenFac] / rowSums(L2)
     }
 
     return(list(ModelLevelIndices  = ModelIndices,
                 FactorLevelIndices = SpecificIndices,
-                ItemLevelIndices   = IECV)
+                IECV   = IECV)
                 )
   } else {
     return(SpecificIndices)
