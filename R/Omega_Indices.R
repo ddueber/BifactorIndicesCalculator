@@ -25,7 +25,7 @@
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' Theta <- rep(1, nrow(Lambda)) - rowSums(Lambda^2)
 #' Omega_S(Lambda, Theta)
 #'
@@ -81,7 +81,7 @@ Omega_S <- function(Lambda, Theta) {
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' Theta <- rep(1, nrow(Lambda)) - rowSums(Lambda^2)
 #' Omega_H(Lambda, Theta)
 #'

@@ -31,7 +31,7 @@
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' ECV_SS(Lambda)
 #'
 #'
@@ -94,7 +94,7 @@ ECV_SS <- function(Lambda) {
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' ECV_GS(Lambda)
 #'
 #' @references
@@ -162,7 +162,7 @@ ECV_SG <- function(Lambda) {
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' ECV_GS(Lambda)
 #'
 #' @references
@@ -229,7 +229,7 @@ ECV_GS <- function(Lambda) {
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' IECV(Lambda)
 #'
 #' @references

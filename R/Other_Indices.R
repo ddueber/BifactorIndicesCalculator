@@ -27,7 +27,7 @@
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' PUC(Lambda)
 #'
 #'
@@ -75,7 +75,7 @@ PUC <- function(Lambda) {
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
 #' ARPB(Lambda, UniLambda)
 #'
@@ -128,7 +128,7 @@ ARPB <- function(Lambda, UniLambda) {
 #'                 0, 1, 0, 0,
 #'                 0, 0, 1, 0,
 #'                 0, 0, 0, 1), ncol = 4)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' FD(Lambda, Phi)
 #'
 
@@ -169,7 +169,7 @@ FD <- function(Lambda, Phi) {
 #'                    .78,   0,   0, .28,
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
-#' colnames(Lambda) <- c("General", "PS", "HA", "SA")
+#' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' H(Lambda)
 #'
 
