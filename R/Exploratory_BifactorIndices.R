@@ -146,7 +146,7 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
 #' @return A list of bifactor indices, including three different ECV indices, Omega, and
 #' OmegaH.
 #'
-#' @details EFA models are nt currently (3/3/2020) supported by \code{MplsuAutomation::ReadModels()},
+#' @details EFA models are not currently (3/3/2020) supported by \code{MplsuAutomation::ReadModels()},
 #' but they will be in the very near future, at which time this function will be completed.
 #'
 #' @seealso \code{\link{bifactorIndices}},
@@ -162,8 +162,11 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
 #'
 #' @export
 #'
-bifactorIndicesMplus_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
-  stop("MplusAutomation does not support EFA output yet, but should within a month or so.")
+bifactorIndicesMplus_expl <- function(Lambda = file.choose(), ItemsBySF = NULL, LoadMin = 0.2) {
+  ## If Lambda hasn't been put through MplusAutomation::readModels, then we need to do that
+  if (!("mplus.model" %in% class(Lambda))) {Lambda <- MplusAutomation::readModels(Lambda)}
+
+  stop("MplusAutomation does not support EFA output yet, but should soon!")
 }
 
 
@@ -213,5 +216,5 @@ bifactorIndicesMplus_ESEM <- function(Lambda = file.choose(),
   ## Now we need to fish out the factor loading matrix
   Lambda <- getLambda(Lambda)
 
-  bifactorIndices_EFA(Lambda, ItemsBySF = NULL, LoadMin = 0.2)
+  bifactorIndices_expl(Lambda, ItemsBySF = NULL, LoadMin = 0.2)
 }
