@@ -3,19 +3,19 @@
 #' Computes all available bifactor indices for the input given.
 #'
 #' @param Lambda is a factor loading matrix from EFA or an object which can be converted to such.
-#' Currently only \code{psych} objects are supported.
+#' Currently only \code{psych::fa()} objects are supported.
 #'
 #' @param ItemsBySF is a list, indexed by factor, of vectors of item names belonging to each
 #' factor. You must include the general factor in this list, and the list must have names which
 #' match the factor names in \code{Lambda}. It is recommended you look at the EFA solution first
 #' to see which factor is which. Defaults to \code{NULL}, in which case composition of specific
-#' factors in automated by comparing loadings to \code{LoadMin}
+#' factors is automated by comparing loadings to \code{LoadMin}
 #'
 #' @param LoadMin is the minimum loading size so that an item is considered to "belong" to a factor.
 #' If \code{ItemsBySF} is not provided, then items are assigned to factors based on whether their
 #' loading on that factor is greater than \code{LoadMin}. If \code{ItemsBySF} is provided, then
 #' warnings are issued whenever items load above \code{LoadMin} on factors to which they do not belong,
-#' or do not load above \code{LoadMin} on factors to which they do belong,
+#' or do not load above \code{LoadMin} on factors to which they do belong, \code{LoadMin} defaults to 0.2.
 #'
 #' @return A list of bifactor indices, including three different ECV indices, Omega, and
 #' OmegaH.
@@ -36,9 +36,11 @@
 #'
 #' @export
 #'
-bifactorIndices_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
+bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
   ## I'll make this into S3 methods once MplusAutomation supports EFA
   ## This is the method for pscyh::fa
+  ## Actually, since I use a separate function for Mplus, that's not a problem
+  ## Leaving this as is until I have a reason not to.
   getLambdaExploratory <- function (Lambda) {
     Lambda <- Lambda$loadings
     class(Lambda) <- "matrix"
@@ -58,8 +60,9 @@ bifactorIndices_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     names(ItemsBySF) <- Factors
     SmallLambda <- round(Lambda, 3)
     SmallLambda[SmallLambda < LoadMin] <- 0
-    print("This matrix describes assignemnt of items to factors")
+    cat("This matrix describes assignemnt of items to factors \n")
     print(ifelse(SmallLambda == 0, "", SmallLambda), quote = FALSE)
+    cat("\n \n")
   } else { # issue a warning for each loading above LoadMin on the wrong factor or loading below LoadMin on the right factor
     for (I in Items) {
       for (Fac in Factors) {
@@ -73,11 +76,11 @@ bifactorIndices_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     }
   }
 
-  # Is the first factor a true general factor?
-  hasGen <- length(ItemsBySF[[1]]) == length(Items)
+  # Is there single factor that pervades all items
+  FactorLengths <- sapply(ItemsBySF, length)
 
   # Issue a warning if no true gneral factor
-  if (!hasGen) warning("The exploratory model has no general factor")
+  if (max(FactorLengths) != nrow(Lambda)) warning("The exploratory model has no general factor")
 
   ## Some of the indices we want involve all items
   GlobalIndices <- bifactorIndices(Lambda)
@@ -91,7 +94,10 @@ bifactorIndices_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     SpecificIndicesList[[Fac]]$FactorLevelIndices[Fac,]
   })))
 
-  if (hasGen) {
+  if (max(FactorLengths) == nrow(Lambda)) {
+    ModelIndices <- GlobalIndices[["FactorLevelIndices"]][1,]
+    names(ModelIndices) <- c("ECV", "Omega", "OmegaH")
+
     # ECV_SG taken from version with all items
     SpecificIndices$ECV_SG <- GlobalIndices$FactorLevelIndices$ECV_SS
     # ECV_GS is the general factor's ECV_SS when only items on the specific are included
@@ -100,8 +106,19 @@ bifactorIndices_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     })
     # Reorder the columns
     SpecificIndices <- SpecificIndices[,c("ECV_SS", "ECV_SG", "ECV_GS", "Omega", "Omega_H")]
-    return(list(FactorLevelIndices = SpecificIndices,
-                ModelLevelIndices = GlobalIndices[["FactorLevelIndices"]][1,]))
+
+    # If only one factor is general, then we can do I-ECV
+    if (sum(FactorLengths == nrow(Lambda)) == 1) {
+      # The I-ECV function cannot be used because there is no "true" general factor
+      GenFac <- which(FactorLengths == nrow(Lambda))
+      L2 <- Lambda^2
+      IECV <- L2[,GenFac] / rowSums(L2)
+    }
+
+    return(list(ModelLevelIndices  = ModelIndices,
+                FactorLevelIndices = SpecificIndices,
+                ItemLevelIndices   = IECV)
+                )
   } else {
     return(SpecificIndices)
   }
@@ -145,7 +162,7 @@ bifactorIndices_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
 #'
 #' @export
 #'
-bifactorIndicesMplus_EFA <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
+bifactorIndicesMplus_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
   stop("MplusAutomation does not support EFA output yet, but should within a month or so.")
 }
 
