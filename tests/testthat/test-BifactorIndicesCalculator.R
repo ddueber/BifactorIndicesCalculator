@@ -501,13 +501,76 @@ test_that("bifactorIndices Works", {
 
 })
 
+test_that("bifactorIndices_expl Works", {
+  library(psych)
+  SRS_BEFA <- fa(SRS_data, nfactors = 5, rotate = "bifactor")
+
+  ItemsBySF = list(MR4 = paste0("SRS_", c(5, 9, 12, 15, 18)),
+                   MR2 = paste0("SRS_", c(1, 2, 8, 11, 17)),
+                   MR3 = paste0("SRS_", c(4, 6, 10, 14, 19)),
+                   MR5 = paste0("SRS_", c(3, 7, 13, 16, 20)))
+
+  expect_equal(bifactorIndices_expl(SRS_BEFA), readRDS("exploratory_bindices_SRS.rds"), tolerance = .000001)
+  expect_equal(bifactorIndices_expl(SRS_BEFA, ItemsBySF), readRDS("exploratory_bindices_SRS_fixed.rds"), tolerance = .000001)
+
+  # non-bifactor example
+  Lambda2 <- matrix(c(.3,  0,  0,
+                      .4,  0,  0,
+                      .5,  0,  0,
+                      0, .4,  0,
+                      0, .6,  0,
+                      0, .7,  0,
+                      0,  0, .4,
+                      0,  0, .5,
+                      0,  0, .3),
+                    ncol = 3, byrow = TRUE)
+  expect_equal(bifactorIndices(Lambda2), readRDS("Lambda2_indices.rds"),  tolerance = .000001)
+
+  ## bifactor from lavaan
+  bi_data <- read.csv("bifactorData.csv")
+  colnames(bi_data) <- c(paste0("x", 1:24))
+  bi_model <- "Gen =~ NA*x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 + x12 + x13 + x14 + x15 + x16 + x17 + x18 + x19 + x20 + x21 + x22 + x23 + x24
+  SF1 =~ NA*x1 + x2 + x4 + x8 + x11 + x12 + x17 + x22
+  SF2 =~ NA*x3 + x5 + x6 + x7 + x13 + x15 + x16 + x18
+  SF3 =~ NA*x9 + x10 + x14 + x19 + x20 + x21 + x23 + x24
+  Gen ~~ 1*Gen
+  SF1 ~~ 1*SF1
+  SF2 ~~ 1*SF2
+  SF3 ~~ 1*SF3"
+  bi_fit_cfa <- lavaan::cfa(model = bi_model, data = bi_data, orthogonal = TRUE)
+  expect_equal(bifactorIndices(bi_fit_cfa), readRDS("lav_indices.rds"), tolerance = .000001)
+
+  ## bifactor from mirt -- these lines commented out because they take too long for the R CMD check on CRAN
+  specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
+  bi_fit_mirt <- mirt::bfactor(bi_data, specific)
+  expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
+
+})
+
 test_that("bifactorIndicesMplus Works", {
   cont_output <- MplusAutomation::readModels("continuous.out")
   cat_output <- MplusAutomation::readModels("categorical.out")
+  cont_output_facvar <- MplusAutomation::readModels("bifactor_continuous_wrongfacvar.out")
 
   expect_error(bifactorIndicesMplus(cont_output), "You must request standardized output from Mplus when standardized = TRUE")
   expect_equal(bifactorIndicesMplus(cont_output, standardized = FALSE), readRDS("cont_unst.rds"), tolerance = .000001)
   expect_equal(bifactorIndicesMplus(cat_output), readRDS("cat_stdyx.rds"), tolerance = .000001)
   expect_error(bifactorIndicesMplus(cat_output, standardized = FALSE), "Bifactor indices based on unstandardized coefficients with categorical variables is not available")
+  expect_error(bifactorIndicesMplus(cont_output_facvar, standardized = FALSE), "Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
+})
+
+test_that("bifactorIndicesMplus_expl Works", {
+  efa_output <- MplusAutomation::readModels("bifactor_efa.out")
+
+  expect_error(bifactorIndicesMplus_expl(efa_output), "MplusAutomation does not support EFA output yet, but should soon!")
+
+})
+
+test_that("bifactorIndicesMplus_ESEM Works", {
+  std_output <- MplusAutomation::readModels("bifactor_esem.out")
+  nostd_output <- MplusAutomation::readModels("bifactor_esem_nostd.out")
+
+  expect_equal(bifactorIndicesMplus_ESEM(std_output), readRDS("ESEM.rds"), tolerance = .000001)
+  expect_error(bifactorIndicesMplus_ESEM(nostd_output), "You must request standardized output from Mplus when standardized = TRUE")
 
 })

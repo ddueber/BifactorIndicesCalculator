@@ -1,0 +1,350 @@
+Mplus VERSION 7
+MUTHEN & MUTHEN
+04/08/2020   9:48 PM
+
+INPUT INSTRUCTIONS
+
+  TITLE: bifactor
+
+  DATA: FILE IS bifactorData.csv;
+
+  VARIABLE: NAMES ARE saq1-saq24;
+
+  Usevariables are saq1-saq24;
+
+  !Categorical are saq1-saq24;
+
+  Analysis: TYPE = EFA 4 4;
+            rotation=bi-geomin (orthogonal);
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+bifactor
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        1007
+
+Number of dependent variables                                   24
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+
+Observed dependent variables
+
+  Continuous
+   SAQ1        SAQ2        SAQ3        SAQ4        SAQ5        SAQ6
+   SAQ7        SAQ8        SAQ9        SAQ10       SAQ11       SAQ12
+   SAQ13       SAQ14       SAQ15       SAQ16       SAQ17       SAQ18
+   SAQ19       SAQ20       SAQ21       SAQ22       SAQ23       SAQ24
+
+
+Estimator                                                       ML
+Rotation                                                 BI-GEOMIN
+Row standardization                                    CORRELATION
+Type of rotation                                        ORTHOGONAL
+Information matrix                                        OBSERVED
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Optimization Specifications for the Exploratory Factor Analysis
+Rotation Algorithm
+  Number of random starts                                       30
+  Maximum number of iterations                               10000
+  Derivative convergence criterion                       0.100D-04
+
+Input data file(s)
+  bifactorData.csv
+
+Input data format  FREE
+
+
+
+RESULTS FOR EXPLORATORY FACTOR ANALYSIS
+
+
+           EIGENVALUES FOR SAMPLE CORRELATION MATRIX
+                  1             2             3             4             5
+              ________      ________      ________      ________      ________
+      1        14.343         1.337         0.732         0.654         0.618
+
+
+           EIGENVALUES FOR SAMPLE CORRELATION MATRIX
+                  6             7             8             9            10
+              ________      ________      ________      ________      ________
+      1         0.539         0.469         0.435         0.399         0.394
+
+
+           EIGENVALUES FOR SAMPLE CORRELATION MATRIX
+                 11            12            13            14            15
+              ________      ________      ________      ________      ________
+      1         0.382         0.360         0.350         0.325         0.316
+
+
+           EIGENVALUES FOR SAMPLE CORRELATION MATRIX
+                 16            17            18            19            20
+              ________      ________      ________      ________      ________
+      1         0.306         0.293         0.279         0.272         0.265
+
+
+           EIGENVALUES FOR SAMPLE CORRELATION MATRIX
+                 21            22            23            24
+              ________      ________      ________      ________
+      1         0.255         0.239         0.230         0.207
+
+
+EXPLORATORY FACTOR ANALYSIS WITH 4 FACTOR(S):
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                      138
+
+Loglikelihood
+
+          H0 Value                      -28573.913
+          H1 Value                      -28257.101
+
+Information Criteria
+
+          Akaike (AIC)                   57423.827
+          Bayesian (BIC)                 58102.060
+          Sample-Size Adjusted BIC       57663.762
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit
+
+          Value                            633.625
+          Degrees of Freedom                   186
+          P-Value                           0.0000
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.049
+          90 Percent C.I.                    0.045  0.053
+          Probability RMSEA <= .05           0.662
+
+CFI/TLI
+
+          CFI                                0.977
+          TLI                                0.966
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                          19928.597
+          Degrees of Freedom                   276
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.016
+
+
+
+MINIMUM ROTATION FUNCTION VALUE       0.58041
+
+
+
+           BI-GEOMIN ROTATED LOADINGS (* significant at 5% level)
+                  1             2             3             4
+              ________      ________      ________      ________
+ SAQ1           0.730*        0.011         0.271*        0.083*
+ SAQ2           0.739*        0.131*       -0.070        -0.183*
+ SAQ3           0.696*        0.267*       -0.102*       -0.107*
+ SAQ4           0.713*        0.142*        0.027        -0.054
+ SAQ5           0.668*        0.502*        0.101*       -0.024
+ SAQ6           0.679*        0.311*       -0.057        -0.102*
+ SAQ7           0.702*        0.347*        0.061        -0.032
+ SAQ8           0.787*       -0.087*        0.380*        0.023
+ SAQ9           0.796*       -0.089*        0.197*        0.137*
+ SAQ10          0.741*       -0.082*        0.061*        0.173*
+ SAQ11          0.809*        0.023        -0.037        -0.172*
+ SAQ12          0.778*       -0.032        -0.208*       -0.158*
+ SAQ13          0.756*        0.106*       -0.189*       -0.018
+ SAQ14          0.800*       -0.062*        0.031         0.199*
+ SAQ15          0.686*        0.408*       -0.127*        0.025
+ SAQ16          0.736*        0.359*       -0.062         0.053*
+ SAQ17          0.799*       -0.044         0.088*       -0.117*
+ SAQ18          0.802*        0.049         0.052         0.268*
+ SAQ19          0.808*       -0.151*        0.034         0.236*
+ SAQ20          0.821*       -0.025        -0.011        -0.042
+ SAQ21          0.803*        0.039        -0.030        -0.109*
+ SAQ22          0.788*        0.041         0.037         0.017
+ SAQ23          0.784*       -0.059*        0.008         0.284*
+ SAQ24          0.760*       -0.041        -0.051         0.304*
+
+
+           ESTIMATED RESIDUAL VARIANCES
+              SAQ1          SAQ2          SAQ3          SAQ4          SAQ5
+              ________      ________      ________      ________      ________
+      1         0.387         0.398         0.422         0.468         0.291
+
+
+           ESTIMATED RESIDUAL VARIANCES
+              SAQ6          SAQ7          SAQ8          SAQ9          SAQ10
+              ________      ________      ________      ________      ________
+      1         0.429         0.382         0.229         0.301         0.411
+
+
+           ESTIMATED RESIDUAL VARIANCES
+              SAQ11         SAQ12         SAQ13         SAQ14         SAQ15
+              ________      ________      ________      ________      ________
+      1         0.314         0.326         0.381         0.316         0.347
+
+
+           ESTIMATED RESIDUAL VARIANCES
+              SAQ16         SAQ17         SAQ18         SAQ19         SAQ20
+              ________      ________      ________      ________      ________
+      1         0.323         0.339         0.280         0.267         0.324
+
+
+           ESTIMATED RESIDUAL VARIANCES
+              SAQ21         SAQ22         SAQ23         SAQ24
+              ________      ________      ________      ________
+      1         0.342         0.375         0.301         0.326
+
+
+           S.E. BI-GEOMIN ROTATED LOADINGS
+                  1             2             3             4
+              ________      ________      ________      ________
+ SAQ1           0.016         0.025         0.033         0.033
+ SAQ2           0.016         0.037         0.039         0.041
+ SAQ3           0.018         0.037         0.040         0.039
+ SAQ4           0.016         0.029         0.032         0.031
+ SAQ5           0.019         0.029         0.044         0.022
+ SAQ6           0.019         0.033         0.032         0.032
+ SAQ7           0.017         0.027         0.033         0.026
+ SAQ8           0.014         0.038         0.041         0.023
+ SAQ9           0.013         0.030         0.031         0.038
+ SAQ10          0.016         0.028         0.030         0.042
+ SAQ11          0.013         0.026         0.032         0.041
+ SAQ12          0.014         0.030         0.045         0.054
+ SAQ13          0.015         0.035         0.032         0.029
+ SAQ14          0.014         0.026         0.027         0.042
+ SAQ15          0.018         0.033         0.044         0.022
+ SAQ16          0.016         0.028         0.034         0.025
+ SAQ17          0.013         0.026         0.036         0.038
+ SAQ18          0.014         0.026         0.028         0.033
+ SAQ19          0.014         0.029         0.025         0.048
+ SAQ20          0.011         0.024         0.029         0.035
+ SAQ21          0.012         0.026         0.030         0.035
+ SAQ22          0.013         0.024         0.029         0.030
+ SAQ23          0.016         0.027         0.022         0.042
+ SAQ24          0.018         0.027         0.027         0.046
+
+
+           S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ1          SAQ2          SAQ3          SAQ4          SAQ5
+              ________      ________      ________      ________      ________
+      1         0.023         0.022         0.022         0.022         0.024
+
+
+           S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ6          SAQ7          SAQ8          SAQ9          SAQ10
+              ________      ________      ________      ________      ________
+      1         0.022         0.022         0.025         0.018         0.021
+
+
+           S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ11         SAQ12         SAQ13         SAQ14         SAQ15
+              ________      ________      ________      ________      ________
+      1         0.019         0.023         0.021         0.018         0.022
+
+
+           S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ16         SAQ17         SAQ18         SAQ19         SAQ20
+              ________      ________      ________      ________      ________
+      1         0.020         0.021         0.018         0.017         0.018
+
+
+           S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ21         SAQ22         SAQ23         SAQ24
+              ________      ________      ________      ________
+      1         0.019         0.019         0.019         0.023
+
+
+           Est./S.E. BI-GEOMIN ROTATED LOADINGS
+                  1             2             3             4
+              ________      ________      ________      ________
+ SAQ1          46.746         0.441         8.209         2.517
+ SAQ2          45.062         3.589        -1.790        -4.465
+ SAQ3          38.471         7.214        -2.543        -2.745
+ SAQ4          43.311         4.834         0.852        -1.757
+ SAQ5          34.813        17.217         2.269        -1.113
+ SAQ6          36.033         9.435        -1.819        -3.186
+ SAQ7          40.659        12.751         1.854        -1.242
+ SAQ8          55.326        -2.294         9.168         0.971
+ SAQ9          61.408        -2.979         6.390         3.624
+ SAQ10         46.399        -2.886         1.997         4.083
+ SAQ11         63.884         0.874        -1.156        -4.242
+ SAQ12         55.381        -1.066        -4.609        -2.940
+ SAQ13         51.812         2.988        -5.981        -0.626
+ SAQ14         57.475        -2.370         1.154         4.681
+ SAQ15         37.186        12.207        -2.883         1.149
+ SAQ16         46.295        12.646        -1.797         2.143
+ SAQ17         60.949        -1.693         2.424        -3.043
+ SAQ18         55.459         1.908         1.871         8.201
+ SAQ19         56.151        -5.236         1.364         4.922
+ SAQ20         74.334        -1.052        -0.392        -1.207
+ SAQ21         64.446         1.469        -0.980        -3.095
+ SAQ22         62.902         1.683         1.250         0.578
+ SAQ23         47.962        -2.165         0.357         6.757
+ SAQ24         41.716        -1.514        -1.886         6.598
+
+
+           Est./S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ1          SAQ2          SAQ3          SAQ4          SAQ5
+              ________      ________      ________      ________      ________
+      1        16.520        17.775        19.034        20.871        12.081
+
+
+           Est./S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ6          SAQ7          SAQ8          SAQ9          SAQ10
+              ________      ________      ________      ________      ________
+      1        19.176        17.701         9.078        16.957        19.387
+
+
+           Est./S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ11         SAQ12         SAQ13         SAQ14         SAQ15
+              ________      ________      ________      ________      ________
+      1        16.130        13.999        17.764        17.280        15.545
+
+
+           Est./S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ16         SAQ17         SAQ18         SAQ19         SAQ20
+              ________      ________      ________      ________      ________
+      1        16.108        16.484        15.752        15.536        17.534
+
+
+           Est./S.E. ESTIMATED RESIDUAL VARIANCES
+              SAQ21         SAQ22         SAQ23         SAQ24
+              ________      ________      ________      ________
+      1        17.572        19.343        15.645        14.353
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for EFA.
+  No diagram output was produced.
+
+
+     Beginning Time:  21:48:03
+        Ending Time:  21:48:03
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2012 Muthen & Muthen
