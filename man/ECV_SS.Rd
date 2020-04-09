@@ -21,11 +21,12 @@ only with respect to items which load on the factor. Note that \code{ECV_SS} of 
 is simply the ECV. Stucky and Edelen (2015, p. 201) do not refer to this form of ECV. In the Excel
 version of the bifactor indices calculator (Dueber, 2017), this index is referred to as
 'ECV (NEW).' \code{ECV_SS} is useful in that it can be computed when there is no general factor, such
-as in a two-tier model.
+as in a two-tier model, and interpreted in the same way as ECV for general factors.
 }
 \details{
-\code{ECV_SS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-which are the only functions in this package intended for casual users
+\code{ECV_SS} is called by \code{\link{bifactorIndices}} and the various convenience functions
+for exploratory models and/or Mplus output,
+which are the only functions in this package intended for casual users.``
 }
 \examples{
 Lambda <- matrix(c(.82, .10,   0,   0,
@@ -41,7 +42,7 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    .78,   0,   0, .28,
                    .55,   0,   0, .75),
                    ncol = 4, byrow = TRUE)
-colnames(Lambda) <- c("General", "PS", "HA", "SA")
+colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 ECV_SS(Lambda)
 
 
@@ -52,5 +53,5 @@ Dueber, D. M. (2017). Bifactor Indices Calculator: A Microsoft Excel-based tool 
 Stucky, B. D., & Edelen, M. O. (2015). Using hierarchical IRT models to create unidimensional measures from multidimensional data. In S. P. Reise & D. A. Revicki (Eds.), \emph{Handbook of item response theory modeling: Applications to typical performance assessment} (pp.183-206). New York: Routledge.
 }
 \seealso{
-\code{\link{ECV_SG}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+\code{\link{ECV_SG}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}
 }

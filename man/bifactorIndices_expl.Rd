@@ -2,7 +2,7 @@
 % Please edit documentation in R/Exploratory_BifactorIndices.R
 \name{bifactorIndices_expl}
 \alias{bifactorIndices_expl}
-\title{bifactorIndices_EFA}
+\title{bifactorIndices_expl}
 \usage{
 bifactorIndices_expl(Lambda, ItemsBySF = NULL, LoadMin = 0.2)
 }
@@ -33,14 +33,32 @@ Computes all available bifactor indices for the input given.
 Only standardized models are considered for exploratory models. PUC and ARPB are not
 supported for exploratory models currently, although that may change.
 }
+\examples{
+
+# psych::fa() can not access the rotations We have to load the library.
+library(psych)
+SRS_BEFA <- fa(SRS_data, nfactors = 5, rotate = "bifactor")
+
+# inspect the solution to see which exploratory factors belong to which subdomain
+SRS_BEFA$loadings
+ItemsBySF = list(MR4 = paste0("SRS_", c(5, 9, 12, 15, 18)),
+                MR2 = paste0("SRS_", c(1, 2, 8, 11, 17)),
+                MR3 = paste0("SRS_", c(4, 6, 10, 14, 19)),
+                MR5 = paste0("SRS_", c(3, 7, 13, 16, 20)))
+
+bifactorIndices_expl(SRS_BEFA, ItemsBySF = ItemsBySF)
+}
 \seealso{
 \code{\link{bifactorIndices}},
          \code{\link{bifactorIndicesMplus}},
-         \code{\link{bifactorIndicesMplus_EFA}},
-         \code{\link{bifactorIndices_EFA}},
+         \code{\link{bifactorIndicesMplus_expl}},
+         \code{\link{bifactorIndicesMplus_ESEM}},
          \code{\link{ECV_SS}},
          \code{\link{ECV_SG}},
          \code{\link{ECV_GS}},
+         \code{\link{IECV}},
          \code{\link{Omega_S}},
          \code{\link{Omega_H}},
+         \code{\link{H}},
+         \code{\link{FD}}
 }

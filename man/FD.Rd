@@ -20,7 +20,8 @@ a vector of factor determinacies.
 standardized factor loadings and an interfactor correlation matrix.
 }
 \details{
-\code{FD} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+\code{FD} is called by \code{\link{bifactorIndices}} and the various convenience functions
+for exploratory models and/or Mplus output,
 which are the only functions in this package intended for casual users.
 }
 \examples{
@@ -41,10 +42,10 @@ Phi <- matrix(c(1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
                 0, 0, 0, 1), ncol = 4)
-colnames(Lambda) <- c("General", "PS", "HA", "SA")
+colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 FD(Lambda, Phi)
 
 }
 \seealso{
-\code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+\code{\link{bifactorIndices}}
 }

@@ -12,16 +12,16 @@ indices described in Rodriguez et al. (2016) for confirmatory or exploratory mod
 \section{BifactorIndicesCalculator functions}{
 
 The BifactorIndicesCalculator package includes helper functions that can compute the various
-indices from Rodriguez et al. (2016) for fitted \code(lavaan) or \code(mirt) objects using
-(\code{\link{bifactorIndices}}) and \code(Mplus) output files using
-(\code{\link{bifactorIndicesMplus}}). For users of other software and those
+indices from Rodriguez et al. (2016) for fitted \pkg{lavaan} or \pkg{mirt} objects using
+\code{\link{bifactorIndices}} and \code{Mplus} output files using
+\code{\link{bifactorIndicesMplus}}. For users of other software and those
 interested, a matrix of standardized factor loadings can also be input to
-(\code{\link{bifactorIndices}}).
+\code{\link{bifactorIndices}}.
 
 Calculation of bifactor indices for exploratory bifactor models can also be accomplished
-using (\code{\link{bifactorIndices_expl}}) for exploratory models fit using \code(psych::fa())
-or using (\code{\link{bifactorIndicesMplus_expl}}) for exploratory models fit using
-\code(Mplus). For ESEM models fit using \code(Mplus), please use (\code{\link{bifactorIndicesMplus_ESEM}})
+using \code{\link{bifactorIndices_expl}} for exploratory models fit using \pkg{psych}
+or using \code{\link{bifactorIndicesMplus_expl}} for exploratory models fit using
+\code{Mplus}. For ESEM models fit using \code{Mplus}, please use \code{\link{bifactorIndicesMplus_ESEM}}
 }
 
 \section{References}{

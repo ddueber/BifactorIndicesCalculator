@@ -2,7 +2,7 @@
 % Please edit documentation in R/Exploratory_BifactorIndices.R
 \name{bifactorIndicesMplus_expl}
 \alias{bifactorIndicesMplus_expl}
-\title{bifactorIndicesMplus_EFA}
+\title{bifactorIndicesMplus_expl}
 \usage{
 bifactorIndicesMplus_expl(Lambda = file.choose(), ItemsBySF = NULL,
   LoadMin = 0.2)
@@ -29,17 +29,15 @@ OmegaH.
 Computes all available bifactor indices given an \code{Mplus} .out file for a bifactor EFA
 }
 \details{
+To use this function, simply call it without any arguments and a dialog box
+will pop up for you to select a .out file of an exploratory bifactor model.
+
 EFA models are not currently (3/3/2020) supported by \code{MplsuAutomation::ReadModels()},
 but they will be in the very near future, at which time this function will be completed.
 }
 \seealso{
 \code{\link{bifactorIndices}},
          \code{\link{bifactorIndicesMplus}},
-         \code{\link{bifactorIndicesMplus_EFA}},
-         \code{\link{bifactorIndices_EFA}},
-         \code{\link{ECV_SS}},
-         \code{\link{ECV_SG}},
-         \code{\link{ECV_GS}},
-         \code{\link{Omega_S}},
-         \code{\link{Omega_H}},
+         \code{\link{bifactorIndicesMplus_ESEM}},
+         \code{\link{bifactorIndices_expl}}
 }

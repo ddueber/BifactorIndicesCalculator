@@ -29,17 +29,15 @@ OmegaH.
 Computes all available bifactor indices given an \code{Mplus} .out file for a bifactor ESEM
 }
 \details{
+To use this function, simply call it without any arguments and a dialog box
+will pop up for you to select a .out file for an ESEM model.
+
 Only standardized models are considered for exploratory models. PUC and ARPB are not
 supported for exploratory models currently, although that may change.
 }
 \seealso{
 \code{\link{bifactorIndices}},
          \code{\link{bifactorIndicesMplus}},
-         \code{\link{bifactorIndicesMplus_EFA}},
-         \code{\link{bifactorIndices_EFA}},
-         \code{\link{ECV_SS}},
-         \code{\link{ECV_SG}},
-         \code{\link{ECV_GS}},
-         \code{\link{Omega_S}},
-         \code{\link{Omega_H}},
+         \code{\link{bifactorIndicesMplus_expl}},
+         \code{\link{bifactorIndices_expl}}
 }

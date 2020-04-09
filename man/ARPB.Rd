@@ -20,8 +20,9 @@ element is a vector of absolute relative bias by item
 bifactor model and a unidimensional model.
 }
 \details{
-\code{ARPB} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-which are the only functions in this package intended for casual users
+\code{ARPB} is called by \code{\link{bifactorIndices}} and the various convenience functions
+for exploratory models and/or Mplus output,
+which are the only functions in this package intended for casual users.
 }
 \examples{
 Lambda <- matrix(c(.82, .10,   0,   0,
@@ -37,12 +38,12 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    .78,   0,   0, .28,
                    .55,   0,   0, .75),
                    ncol = 4, byrow = TRUE)
-colnames(Lambda) <- c("General", "PS", "HA", "SA")
+colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
 ARPB(Lambda, UniLambda)
 
 
 }
 \seealso{
-\code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+\code{\link{bifactorIndices}}
 }

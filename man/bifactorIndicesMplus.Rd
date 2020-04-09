@@ -28,6 +28,9 @@ correlated traits, and even unidimensional models.
 Computes all available bifactor indices given an \code{Mplus} .out file for a bifactor model
 }
 \details{
+To use this function, simply call it without any arguments and a dialog box
+will pop up for you to select a .out file of a confirmatory bifactor model.
+
 ARPB will only be compute if the factor loadings from a unidimensional model
 (as a vector or as the result of using \code{\link[MplusAutomation]{readModels}} on an
 \code{Mplus} .out file) are included. Note that if a correlated traits model is provided,
@@ -37,6 +40,9 @@ man page for the individual indices.
 }
 \seealso{
 \code{\link{bifactorIndices}},
+         \code{\link{bifactorIndices_expl}},
+         \code{\link{bifactorIndicesMplus_expl}},
+         \code{\link{bifactorIndicesMplus_ESEM}},
          \code{\link{ECV_SS}},
          \code{\link{ECV_SG}},
          \code{\link{ECV_GS}},
@@ -44,5 +50,7 @@ man page for the individual indices.
          \code{\link{PUC}},
          \code{\link{Omega_S}},
          \code{\link{Omega_H}},
+         \code{\link{H}},
+         \code{\link{FD}},
          \code{\link{ARPB}}
 }

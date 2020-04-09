@@ -19,8 +19,9 @@ Computes an omega reliability estimate for all factors as described in Rodriguez
 Haviland (2016).
 }
 \details{
-\code{Omega_S} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-which are the only functions in this package intended for casual users
+\code{Omega_S} is called by \code{\link{bifactorIndices}} and the various convenience functions
+for exploratory models and/or Mplus output,
+which are the only functions in this package intended for casual users.
 }
 \examples{
 Lambda <- matrix(c(.82, .10,   0,   0,
@@ -36,7 +37,7 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    .78,   0,   0, .28,
                    .55,   0,   0, .75),
                    ncol = 4, byrow = TRUE)
-colnames(Lambda) <- c("General", "PS", "HA", "SA")
+colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 Theta <- rep(1, nrow(Lambda)) - rowSums(Lambda^2)
 Omega_S(Lambda, Theta)
 
@@ -47,5 +48,5 @@ calculating and interpreting statistical indices. \emph{Psychological Methods, 2
 137 \doi{10.1037/met0000045}.
 }
 \seealso{
-\code{\link{Omega_H}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+\code{\link{Omega_H}}, \code{\link{bifactorIndices}}
 }

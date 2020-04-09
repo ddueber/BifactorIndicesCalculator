@@ -17,7 +17,8 @@ a vector of construct reliabilities.
 standardized factor loadings.
 }
 \details{
-\code{H} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+\code{H} is called by \code{\link{bifactorIndices}} and the various convenience functions
+for exploratory models and/or Mplus output,
 which are the only functions in this package intended for casual users.
 }
 \examples{
@@ -34,10 +35,10 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    .78,   0,   0, .28,
                    .55,   0,   0, .75),
                    ncol = 4, byrow = TRUE)
-colnames(Lambda) <- c("General", "PS", "HA", "SA")
+colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 H(Lambda)
 
 }
 \seealso{
-\code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+\code{\link{bifactorIndices}}
 }

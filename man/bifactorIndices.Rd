@@ -5,7 +5,7 @@
 \title{bifactorIndices}
 \usage{
 bifactorIndices(Lambda, Theta = NULL, UniLambda = NULL,
-  standardized = TRUE)
+  standardized = TRUE, Phi = NULL)
 }
 \arguments{
 \item{Lambda}{is a matrix of factor loadings or an object that can be converted to a
@@ -19,15 +19,19 @@ input for \code{Lambda}.}
 \item{UniLambda}{is a matrix of factor loadings or an object that can be converted to
 a matrix of factor loadings such as a fitted \pkg{lavaan} objects or fitted \pkg{mirt}
 object. Defaults to \code{NULL}, as \code{UniLambda} is only required if you wish to
-compute \code{\link{ARPB}}}
+compute \code{\link{ARPB}}.}
 
 \item{standardized}{lets the function know whether to look for standardized or
 unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan} object,
 then \code{standardized} will be ignored.}
+
+\item{Psi}{is the correlation matrix of factors. User should generally ignore this
+parameter. \code{bifactorIndices} will try to determine it from Lambda or will assume
+it is the identity matrix.}
 }
 \value{
 A list of bifactor indices, including three different ECV indices, IECV, PUC,
-Omega, OmegaH, Factor Determinacy (FD), Consruct Replicability (H) and ARPB.
+Omega, OmegaH, Factor Determinacy (FD), Construct Replicability (H) and ARPB.
 Please note that many of these indices are interpretable even
 when the model being used is not a bifactor model; some indices may be useful for
 two-tier, trifactor, correlated traits, and even unidimensional models.
@@ -52,16 +56,38 @@ individual indices.
 \examples{
 
 # Computing bifactor indices from fitted lavaan object
-# (using mirt object is similar)
-HS_model_bifactor <- "visual  =~ x1 + x2 + x3
-                      textual =~ x4 + x5 + x6
-                      speed   =~ x7 + x8 + x9
-                      general =~ x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9"
-# lavaan cannot find a good solution, but that's ok since this is just for illustration
-fit <- suppressWarnings(lavaan::cfa(HS_model_bifactor,
-                   data = lavaan::HolzingerSwineford1939,
-                   orthogonal = TRUE))
-bifactorIndices(fit)
+# (using mirt object is similar). Use of the unidimensional
+# model is optional; it is only used to compute ARPB.
+
+SRS_UnidimensionalModel <-
+  "SRS =~ SRS_1  + SRS_2  + SRS_3  + SRS_4  + SRS_5  +
+          SRS_6  + SRS_7  + SRS_8  + SRS_9  + SRS_10 +
+          SRS_11 + SRS_12 + SRS_13 + SRS_14 + SRS_15 +
+          SRS_16 + SRS_17 + SRS_18 + SRS_19 + SRS_20"
+
+SRS_Unidimensional <- lavaan::cfa(SRS_UnidimensionalModel,
+                                 SRS_data,
+                                 ordered = paste0("SRS_", 1:20),
+                                 orthogonal = TRUE)
+
+
+SRS_BifactorModel <-
+"SRS =~ SRS_1  + SRS_2  + SRS_3  + SRS_4  + SRS_5  +
+        SRS_6  + SRS_7  + SRS_8  + SRS_9  + SRS_10 +
+        SRS_11 + SRS_12 + SRS_13 + SRS_14 + SRS_15 +
+        SRS_16 + SRS_17 + SRS_18 + SRS_19 + SRS_20
+ Function     =~ SRS_5  + SRS_9  + SRS_12 + SRS_15 + SRS_18
+ Pain         =~ SRS_1  + SRS_2  + SRS_8  + SRS_11 + SRS_17
+ SelfImage    =~ SRS_4  + SRS_6  + SRS_10 + SRS_14 + SRS_19
+ MentalHealth =~ SRS_3  + SRS_7  + SRS_13 + SRS_16 + SRS_20"
+
+SRS_bifactor <- lavaan::cfa(SRS_BifactorModel,
+                            SRS_data,
+                            ordered = paste0("SRS_", 1:20),
+                            orthogonal = TRUE)
+
+bifactorIndices(SRS_bifactor, UniLambda = SRS_Unidimensional)
+
 
 
 # Computing bifactor indices from standardized factor loading matrices
@@ -79,8 +105,47 @@ Lambda <-  matrix(c(.82, .10,   0,   0,
                     .55,   0,   0, .75),
                     ncol = 4, byrow = TRUE)
 colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
-UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
-bifactorIndices(Lambda, UniLambda = UniLambda)
+bifactorIndices(Lambda)
+
+
+# bifactorIndices can also be used on two-tier models
+MTMM_model <- "
+Trait_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
+           T1M2_1 + T1M2_2 + T1M2_3 +
+           T1M3_1 + T1M3_2 + T1M3_3
+Trait_2 =~ T2M1_1 + T2M1_2 + T2M1_3 +
+           T2M2_1 + T2M2_2 + T2M2_3 +
+           T2M3_1 + T2M3_2 + T2M3_3
+Trait_3 =~ T3M1_1 + T3M1_2 + T3M1_3 +
+           T3M2_1 + T3M2_2 + T3M2_3 +
+           T3M3_1 + T3M3_2 + T3M3_3
+
+Method_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
+            T2M1_1 + T2M1_2 + T2M1_3 +
+            T3M1_1 + T3M1_2 + T3M1_3 +
+Method_2 =~ T1M2_1 + T1M2_2 + T1M2_3 +
+            T2M2_1 + T2M2_2 + T2M2_3 +
+            T3M2_1 + T3M2_2 + T3M2_3 +
+Method_3 =~ T1M3_1 + T1M3_2 + T1M3_3 +
+            T2M3_1 + T2M3_2 + T2M3_3 +
+            T3M3_1 + T3M3_2 + T3M3_3 +
+
+Trait1 ~~ 0*Method1
+Trait1 ~~ 0*Method2
+Trait1 ~~ 0*Method3
+Trait2 ~~ 0*Method1
+Trait2 ~~ 0*Method2
+Trait2 ~~ 0*Method3
+Trait3 ~~ 0*Method1
+Trait3 ~~ 0*Method2
+Trait3 ~~ 0*Method3
+
+Method1 ~~ 0*Method2
+Method1 ~~ 0*Method3
+Method2 ~~ 0*Method3"
+
+MTMM_fit <- lavaan::cfa(MTMM_model, MTMM_data)
+bifactorIndices(MTMM_fit)
 
 }
 \references{
@@ -90,6 +155,9 @@ response theory models. \emph{Structural Equation Modeling: A Multidisciplinary 
 }
 \seealso{
 \code{\link{bifactorIndicesMplus}},
+         \code{\link{bifactorIndices_expl}},
+         \code{\link{bifactorIndicesMplus_expl}},
+         \code{\link{bifactorIndicesMplus_ESEM}},
          \code{\link{ECV_SS}},
          \code{\link{ECV_SG}},
          \code{\link{ECV_GS}},

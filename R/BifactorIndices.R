@@ -16,11 +16,11 @@
 #' unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan} object,
 #' then \code{standardized} will be ignored.
 #' @param Psi is the correlation matrix of factors. User should generally ignore this
-#' parameter. \code(bifactorIndices) will try to determine it from Lambda or will assume
+#' parameter. \code{bifactorIndices} will try to determine it from Lambda or will assume
 #' it is the identity matrix.
 #'
 #' @return A list of bifactor indices, including three different ECV indices, IECV, PUC,
-#' Omega, OmegaH, Factor Determinacy (FD), Consruct Replicability (H) and ARPB.
+#' Omega, OmegaH, Factor Determinacy (FD), Construct Replicability (H) and ARPB.
 #' Please note that many of these indices are interpretable even
 #' when the model being used is not a bifactor model; some indices may be useful for
 #' two-tier, trifactor, correlated traits, and even unidimensional models.
@@ -45,7 +45,8 @@
 #'
 #' @export
 #'
-#' @seealso \code{\link{bifactorIndicesMplus}},
+#' @seealso
+#'          \code{\link{bifactorIndicesMplus}},
 #'          \code{\link{bifactorIndices_expl}},
 #'          \code{\link{bifactorIndicesMplus_expl}},
 #'          \code{\link{bifactorIndicesMplus_ESEM}},
@@ -116,7 +117,7 @@
 #'
 #'
 #' # bifactorIndices can also be used on two-tier models
-#' # MTMM_model <- "
+#' MTMM_model <- "
 #' Trait_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
 #'            T1M2_1 + T1M2_2 + T1M2_3 +
 #'            T1M3_1 + T1M3_2 + T1M3_3
@@ -153,6 +154,7 @@
 #'
 #' MTMM_fit <- lavaan::cfa(MTMM_model, MTMM_data)
 #' bifactorIndices(MTMM_fit)
+#'
 
 bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE, Phi = NULL) {
   ## if fitted mirt object, then throw warning about Omegas probably being meaningless
@@ -254,7 +256,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #' correlated traits, and even unidimensional models.
 #'
 #' @details To use this function, simply call it without any arguments and a dialog box
-#' will pop up for you to select a .out file.
+#' will pop up for you to select a .out file of a confirmatory bifactor model.
 #'
 #' ARPB will only be compute if the factor loadings from a unidimensional model
 #' (as a vector or as the result of using \code{\link[MplusAutomation]{readModels}} on an

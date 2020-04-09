@@ -23,9 +23,9 @@ the numerator; Stucky and Edelen (2015, p. 199)
 refer to this index simply as 'specific-dimension ECV.' Note that \code{ECV_SG} of the general factor
 is simply the ECV. In the Excel version of the Bifactor
 Indices Calculator (Dueber, 2017), this form of ECV is referred to as 'ECV (S&E).'
-\code{ECV_SG} is called by \code{\link{bifactorIndices}} and
-\code{\link{bifactorIndicesMplus}}, which are the only functions in this package
-intended for casual users
+\code{ECV_SG} is called by \code{\link{bifactorIndices}} and the various convenience functions
+for exploratory models and/or Mplus output,
+which are the only functions in this package intended for casual users.
 }
 \examples{
 Lambda <- matrix(c(.82, .10,   0,   0,
@@ -41,7 +41,7 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    .78,   0,   0, .28,
                    .55,   0,   0, .75),
                    ncol = 4, byrow = TRUE)
-colnames(Lambda) <- c("General", "PS", "HA", "SA")
+colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 ECV_GS(Lambda)
 
 }
@@ -55,5 +55,5 @@ unidimensional measures from multidimensional data. In S. P. Reise & D. A. Revic
 performance assessment} (pp.183-206). New York: Routledge.
 }
 \seealso{
-\code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+\code{\link{ECV_SS}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}
 }

@@ -25,8 +25,9 @@ specific factor. In the
 Excel version of the bifactor indices calculator (Dueber, 2017), this index is not computed.
 }
 \details{
-\code{ECV_GS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
- which are the only functions in this package intended for casual users
+\code{ECV_GS} is called by \code{\link{bifactorIndices}} and the various convenience functions
+for exploratory models and/or Mplus output,
+which are the only functions in this package intended for casual users.
 }
 \examples{
 Lambda <- matrix(c(.82, .10,   0,   0,
@@ -42,7 +43,7 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    .78,   0,   0, .28,
                    .55,   0,   0, .75),
                    ncol = 4, byrow = TRUE)
-colnames(Lambda) <- c("General", "PS", "HA", "SA")
+colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 ECV_GS(Lambda)
 
 }
@@ -56,5 +57,5 @@ response theory modeling: Applications to typical performance assessment} (pp.18
 New York: Routledge.
 }
 \seealso{
-\code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+\code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}
 }

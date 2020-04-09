@@ -19,8 +19,9 @@ Computes hierarchical omega reliability estimate for all factors as described in
 Rodriguez, Reise, and Haviland (2016).
 }
 \details{
-\code{Omega_H} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-which are the only functions in this package intended for casual users
+\code{Omega_H} is called by \code{\link{bifactorIndices}} and the various convenience functions
+for exploratory models and/or Mplus output,
+which are the only functions in this package intended for casual users.
 }
 \section{References}{
 
@@ -43,11 +44,11 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    .78,   0,   0, .28,
                    .55,   0,   0, .75),
                    ncol = 4, byrow = TRUE)
-colnames(Lambda) <- c("General", "PS", "HA", "SA")
+colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 Theta <- rep(1, nrow(Lambda)) - rowSums(Lambda^2)
 Omega_H(Lambda, Theta)
 
 }
 \seealso{
-\code{\link{Omega_S}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+\code{\link{Omega_S}}, \code{\link{bifactorIndices}}
 }
