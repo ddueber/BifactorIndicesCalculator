@@ -2,7 +2,7 @@
 % Please edit documentation in R/Omega_Indices.R
 \name{Omega_H}
 \alias{Omega_H}
-\title{Omega_H}
+\title{OmegaH}
 \usage{
 Omega_H(Lambda, Theta)
 }

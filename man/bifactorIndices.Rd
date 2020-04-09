@@ -27,7 +27,8 @@ then \code{standardized} will be ignored.}
 }
 \value{
 A list of bifactor indices, including three different ECV indices, IECV, PUC,
-Omega, OmegaH, and ARPB. Please note that many of these indices are interpretable even
+Omega, OmegaH, Factor Determinacy (FD), Consruct Replicability (H) and ARPB.
+Please note that many of these indices are interpretable even
 when the model being used is not a bifactor model; some indices may be useful for
 two-tier, trifactor, correlated traits, and even unidimensional models.
 }
@@ -96,5 +97,7 @@ response theory models. \emph{Structural Equation Modeling: A Multidisciplinary 
          \code{\link{PUC}},
          \code{\link{Omega_S}},
          \code{\link{Omega_H}},
+         \code{\link{H}},
+         \code{\link{FD}},
          \code{\link{ARPB}}
 }
