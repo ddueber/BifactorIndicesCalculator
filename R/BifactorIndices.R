@@ -15,7 +15,7 @@
 #' @param standardized lets the function know whether to look for standardized or
 #' unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan} object,
 #' then \code{standardized} will be ignored.
-#' @param Psi is the correlation matrix of factors. User should generally ignore this
+#' @param Phi is the correlation matrix of factors. User should generally ignore this
 #' parameter. \code{bifactorIndices} will try to determine it from Lambda or will assume
 #' it is the identity matrix.
 #'
@@ -130,13 +130,13 @@
 #'
 #' Method_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
 #'             T2M1_1 + T2M1_2 + T2M1_3 +
-#'             T3M1_1 + T3M1_2 + T3M1_3 +
+#'             T3M1_1 + T3M1_2 + T3M1_3
 #' Method_2 =~ T1M2_1 + T1M2_2 + T1M2_3 +
 #'             T2M2_1 + T2M2_2 + T2M2_3 +
-#'             T3M2_1 + T3M2_2 + T3M2_3 +
+#'             T3M2_1 + T3M2_2 + T3M2_3
 #' Method_3 =~ T1M3_1 + T1M3_2 + T1M3_3 +
 #'             T2M3_1 + T2M3_2 + T2M3_3 +
-#'             T3M3_1 + T3M3_2 + T3M3_3 +
+#'             T3M3_1 + T3M3_2 + T3M3_3
 #'
 #' Trait1 ~~ 0*Method1
 #' Trait1 ~~ 0*Method2
@@ -173,7 +173,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
     } else if ("lavaan" %in% class(Lambda)) {
       Phi <- lavaan::lavInspect(Lambda, "std")$psi
       # I hate that dumb symmetric matrix print method
-      class(Psi) <- "matrix"
+      class(Phi) <- "matrix"
     }
   }
 
@@ -181,7 +181,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   Lambda <- getLambda(Lambda, standardized = standardized)
 
   # If Phi is still NULL, let's make it the identity matrix
-  if (is.null(Phi)) {Phi <- diag(nrow = nrow(Lambda))}
+  if (is.null(Phi)) {Phi <- diag(nrow = ncol(Lambda))}
 
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
 
@@ -212,7 +212,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   ItemLevelIndices <- ItemLevelIndices[which(!sapply(ItemLevelIndices, is.null))]
   ItemLevelIndices <- as.data.frame(ItemLevelIndices)
   if (isTRUE(all.equal(dim(ItemLevelIndices), c(0, 0)))) {ItemLevelIndices <- NULL}
-  if (ncol(ItemLevelIndices) == 2) {colnames(ItemLevelIndices)[2] <- "RelParBias"}
+  if (!is.null(ItemLevelIndices) && ncol(ItemLevelIndices) == 2) {colnames(ItemLevelIndices)[2] <- "RelParBias"}
 
   ## Model level indices next
   if (is.null(getGen(Lambda))) { # No general factor
@@ -287,8 +287,19 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
   if ("character" %in% class(UniLambda)) {UniLambda <- MplusAutomation::readModels(UniLambda)}
 
   if (!("mplus.model" %in% class(Lambda))) {Lambda <- MplusAutomation::readModels(Lambda)}
-  ## if categorical, then error if standardized = FALSE and manually compute Theta if standardized - TRUE
+  ## if categorical, then error if standardized = FALSE and manually compute Theta if standardized = TRUE
   categorical <- !is.null(Lambda$input$variable$categorical)
+
+  # if unstandardized and any factor has a variance other than 1, throw an error
+  if (!standardized) {
+    params <- Lambda$parameters$unstandardized
+    facVar <- params[params$paramHeader == "Variances","est"]
+      if (all(facVar == 1)) {
+        stop("Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
+      }
+  }
+  # Let's grab the interfactor correlation matrix
+
 
   if (categorical) {
     if (standardized) {
