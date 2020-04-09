@@ -164,7 +164,10 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
 #' @return A list of bifactor indices, including three different ECV indices, Omega, and
 #' OmegaH.
 #'
-#' @details EFA models are not currently (3/3/2020) supported by \code{MplsuAutomation::ReadModels()},
+#' @details To use this function, simply call it without any arguments and a dialog box
+#' will pop up for you to select a .out file of an exploratory bifactor model.
+#'
+#' EFA models are not currently (3/3/2020) supported by \code{MplsuAutomation::ReadModels()},
 #' but they will be in the very near future, at which time this function will be completed.
 #'
 #' @seealso \code{\link{bifactorIndices}},
@@ -211,7 +214,10 @@ bifactorIndicesMplus_expl <- function(Lambda = file.choose(), ItemsBySF = NULL, 
 #' @return A list of bifactor indices, including three different ECV indices, Omega, and
 #' OmegaH.
 #'
-#' @details Only standardized models are considered for exploratory models. PUC and ARPB are not
+#' @details To use this function, simply call it without any arguments and a dialog box
+#' will pop up for you to select a .out file for an ESEM model.
+#'
+#' Only standardized models are considered for exploratory models. PUC and ARPB are not
 #' supported for exploratory models currently, although that may change.
 #'
 #' @seealso \code{\link{bifactorIndices}},

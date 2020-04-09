@@ -46,6 +46,9 @@
 #' @export
 #'
 #' @seealso \code{\link{bifactorIndicesMplus}},
+#'          \code{\link{bifactorIndices_expl}},
+#'          \code{\link{bifactorIndicesMplus_expl}},
+#'          \code{\link{bifactorIndicesMplus_ESEM}},
 #'          \code{\link{ECV_SS}},
 #'          \code{\link{ECV_SG}},
 #'          \code{\link{ECV_GS}},
@@ -111,6 +114,46 @@
 #' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
 #' bifactorIndices(Lambda)
 #'
+#'
+#' # bifactorIndices can also be used on two-tier models
+#' # MTMM_model <- "
+#' Trait_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
+#'            T1M2_1 + T1M2_2 + T1M2_3 +
+#'            T1M3_1 + T1M3_2 + T1M3_3
+#' Trait_2 =~ T2M1_1 + T2M1_2 + T2M1_3 +
+#'            T2M2_1 + T2M2_2 + T2M2_3 +
+#'            T2M3_1 + T2M3_2 + T2M3_3
+#' Trait_3 =~ T3M1_1 + T3M1_2 + T3M1_3 +
+#'            T3M2_1 + T3M2_2 + T3M2_3 +
+#'            T3M3_1 + T3M3_2 + T3M3_3
+#'
+#' Method_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
+#'             T2M1_1 + T2M1_2 + T2M1_3 +
+#'             T3M1_1 + T3M1_2 + T3M1_3 +
+#' Method_2 =~ T1M2_1 + T1M2_2 + T1M2_3 +
+#'             T2M2_1 + T2M2_2 + T2M2_3 +
+#'             T3M2_1 + T3M2_2 + T3M2_3 +
+#' Method_3 =~ T1M3_1 + T1M3_2 + T1M3_3 +
+#'             T2M3_1 + T2M3_2 + T2M3_3 +
+#'             T3M3_1 + T3M3_2 + T3M3_3 +
+#'
+#' Trait1 ~~ 0*Method1
+#' Trait1 ~~ 0*Method2
+#' Trait1 ~~ 0*Method3
+#' Trait2 ~~ 0*Method1
+#' Trait2 ~~ 0*Method2
+#' Trait2 ~~ 0*Method3
+#' Trait3 ~~ 0*Method1
+#' Trait3 ~~ 0*Method2
+#' Trait3 ~~ 0*Method3
+#'
+#' Method1 ~~ 0*Method2
+#' Method1 ~~ 0*Method3
+#' Method2 ~~ 0*Method3"
+#'
+#' MTMM_fit <- lavaan::cfa(MTMM_model, MTMM_data)
+#' bifactorIndices(MTMM_fit)
+
 bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE, Phi = NULL) {
   ## if fitted mirt object, then throw warning about Omegas probably being meaningless
   if ("SingleGroupClass" %in% class(Lambda)) {
@@ -210,7 +253,10 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #' model being used is not a bifactor model; some indices may be useful for two-tier, trifactor,
 #' correlated traits, and even unidimensional models.
 #'
-#' @details ARPB will only be compute if the factor loadings from a unidimensional model
+#' @details To use this function, simply call it without any arguments and a dialog box
+#' will pop up for you to select a .out file.
+#'
+#' ARPB will only be compute if the factor loadings from a unidimensional model
 #' (as a vector or as the result of using \code{\link[MplusAutomation]{readModels}} on an
 #' \code{Mplus} .out file) are included. Note that if a correlated traits model is provided,
 #' the omega indices will simply be the regular omega values for those factors. Interpretations
@@ -218,6 +264,9 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #' man page for the individual indices.
 #'
 #' @seealso \code{\link{bifactorIndices}},
+#'          \code{\link{bifactorIndices_expl}},
+#'          \code{\link{bifactorIndicesMplus_expl}},
+#'          \code{\link{bifactorIndicesMplus_ESEM}},
 #'          \code{\link{ECV_SS}},
 #'          \code{\link{ECV_SG}},
 #'          \code{\link{ECV_GS}},
@@ -228,7 +277,6 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #'          \code{\link{H}},
 #'          \code{\link{FD}},
 #'          \code{\link{ARPB}}
-#'
 #'
 #' @export
 #'
@@ -251,7 +299,6 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
     Theta <- getTheta(Lambda, standardized = standardized)
     Lambda <- getLambda(Lambda, standardized = standardized)
   }
-
 
   bifactorIndices(Lambda, Theta, UniLambda, standardized)
 }

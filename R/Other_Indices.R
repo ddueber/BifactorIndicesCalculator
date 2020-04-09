@@ -2,14 +2,15 @@
 #'
 #' \code{PUC} computes the proportion of uncontaminated correlations for a bifactor mode
 #'
-#' \code{PUC} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-#' which are the only functions in this package intended for casual users
+#' \code{PUC} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
+#' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of factor loadings
 #'
 #' @return \code{numeric}
 #'
-#' @seealso \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{bifactorIndices}}
 #'
 #' @export
 #'
@@ -48,8 +49,9 @@ PUC <- function(Lambda) {
 #' \code{ARPB} computes absolute relative bias in factor loadings between the general factor of a
 #' bifactor model and a unidimensional model.
 #'
-#'\code{ARPB} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-#'which are the only functions in this package intended for casual users
+#'\code{ARPB} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
+#' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of factor loadings
 #' @param UniLambda is a matrix of factor loadings
@@ -57,7 +59,7 @@ PUC <- function(Lambda) {
 #' @return a list where the first element is the average absolute relative paramter bias, and the second
 #' element is a vector of absolute relative bias by item
 #'
-#' @seealso \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{bifactorIndices}}
 #'
 #' @export
 #'
@@ -97,7 +99,8 @@ ARPB <- function(Lambda, UniLambda) {
 #' \code{FD} computes factor determinacies for all factors provided
 #' standardized factor loadings and an interfactor correlation matrix.
 #'
-#' \code{FD} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+#' \code{FD} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
 #' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of standardized factor loadings
@@ -106,7 +109,7 @@ ARPB <- function(Lambda, UniLambda) {
 #'
 #' @return a vector of factor determinacies.
 #'
-#' @seealso \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{bifactorIndices}}
 #'
 #' @export
 #'
@@ -144,14 +147,15 @@ FD <- function(Lambda, Phi) {
 #' \code{H} computes construct replicability for all factors given
 #' standardized factor loadings.
 #'
-#' \code{H} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
+#' \code{H} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
 #' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of standardized factor loadings
 #'
 #' @return a vector of construct reliabilities.
 #'
-#' @seealso \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{bifactorIndices}}
 #'
 #' @export
 #'

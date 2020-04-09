@@ -7,10 +7,11 @@
 #' is simply the ECV. Stucky and Edelen (2015, p. 201) do not refer to this form of ECV. In the Excel
 #' version of the bifactor indices calculator (Dueber, 2017), this index is referred to as
 #' 'ECV (NEW).' \code{ECV_SS} is useful in that it can be computed when there is no general factor, such
-#' as in a two-tier model.
+#' as in a two-tier model, and interpreted in the same way as ECV for general factors.
 #'
-#' \code{ECV_SS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-#' which are the only functions in this package intended for casual users
+#' \code{ECV_SS} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
+#' which are the only functions in this package intended for casual users.``
 #'
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same variance
 #'  before calling this function.
@@ -42,7 +43,7 @@
 #'
 #' @export
 #'
-#' @seealso \code{\link{ECV_SG}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{ECV_SG}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}
 #'
 ECV_SS <- function(Lambda) {
   ECV_SS_C <- function(Fac, Lambda) {
@@ -71,9 +72,9 @@ ECV_SS <- function(Lambda) {
 #' is simply the ECV. In the Excel version of the Bifactor
 #' Indices Calculator (Dueber, 2017), this form of ECV is referred to as 'ECV (S&E).'
 #
-#' \code{ECV_SG} is called by \code{\link{bifactorIndices}} and
-#' \code{\link{bifactorIndicesMplus}}, which are the only functions in this package
-#' intended for casual users
+#' \code{ECV_SG} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
+#' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same
 #' variance before calling this function.
@@ -108,7 +109,7 @@ ECV_SS <- function(Lambda) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}
 #'
 
 ECV_SG <- function(Lambda) {
@@ -140,8 +141,9 @@ ECV_SG <- function(Lambda) {
 #' specific factor. In the
 #' Excel version of the bifactor indices calculator (Dueber, 2017), this index is not computed.
 #'
-#' \code{ECV_GS} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-#'  which are the only functions in this package intended for casual users
+#' \code{ECV_GS} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
+#' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same variance
 #' before calling this function.
@@ -176,7 +178,7 @@ ECV_SG <- function(Lambda) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}
 #'
 
 ECV_GS <- function(Lambda) {
@@ -207,8 +209,9 @@ ECV_GS <- function(Lambda) {
 #' I-ECV, which is also computed in the Excel version of the bifactor indices calculator
 #' (Dueber, 2017).
 #'
-#' \code{IECV} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-#' which are the only functions in this package intended for casual users
+#' \code{IECV} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
+#' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of factor loadings. Be sure that all factors have the same variance
 #' before calling this function.
@@ -243,7 +246,7 @@ ECV_GS <- function(Lambda) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{ECV_SS}}, \code{\link{ECV_SG}}, \code{\link{ECV_GS}}, \code{\link{bifactorIndices}}
 #'
 
 IECV <- function(Lambda) {

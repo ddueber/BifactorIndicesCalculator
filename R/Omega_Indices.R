@@ -3,8 +3,9 @@
 #' Computes an omega reliability estimate for all factors as described in Rodriguez, Reise, and
 #' Haviland (2016).
 #'
-#' \code{Omega_S} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-#' which are the only functions in this package intended for casual users
+#' \code{Omega_S} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
+#' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of factor loadings
 #' @param Theta is a vector of indicator error variances
@@ -36,7 +37,7 @@
 #'
 #' @export
 #'
-#' @seealso \code{\link{Omega_H}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{Omega_H}}, \code{\link{bifactorIndices}}
 #'
 #'
 
@@ -59,8 +60,9 @@ Omega_S <- function(Lambda, Theta) {
 #' Computes hierarchical omega reliability estimate for all factors as described in
 #' Rodriguez, Reise, and Haviland (2016).
 #'
-#' \code{Omega_H} is called by \code{\link{bifactorIndices}} and \code{\link{bifactorIndicesMplus}},
-#' which are the only functions in this package intended for casual users
+#' \code{Omega_H} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' for exploratory models and/or Mplus output,
+#' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of factor loadings
 #' @param Theta is a vector of indicator error variances
@@ -92,7 +94,7 @@ Omega_S <- function(Lambda, Theta) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{Omega_S}}, \code{\link{bifactorIndices}}, \code{\link{bifactorIndicesMplus}}
+#' @seealso \code{\link{Omega_S}}, \code{\link{bifactorIndices}}
 #'
 #'
 
