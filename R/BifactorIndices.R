@@ -196,9 +196,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
                             OmegaH  = Omega_H(Lambda, Theta))
   if (standardized) {
     FactorLevelIndices[["H"]] <- H(Lambda)
-    if (!is.null(Phi)) {
-      FactorLevelIndices[["FD"]] <- FD(Lambda, Phi)
-    }
+    FactorLevelIndices[["FD"]] <- FD(Lambda, Phi)
   }
 
   ## Remove any NULL values and convert to dataframe
@@ -301,8 +299,19 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
         stop("Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
       }
   }
-  # Let's grab the interfactor correlation matrix
-
+  # Let's grab the interfactor correlation matrix, if we have stdyx results
+  if (is.null(Lambda$parameters$stdyx.standardized)) {
+    Phi <- NULL
+  } else {
+    params <- Lambda$parameters$stdyx.standardized
+    facNames <- params[params$paramHeader == "Variances", "param"]
+    factorCorrs <- lapply(1:length(facNames), function (x) {
+      fac <- facNames[x]
+      c(rep(0, x-1), .5, params[params$paramHeader == paste0(fac, ".WITH"), "est"])
+    })
+    factorCorrs <- matrix(unlist(factorCorrs), byrow=TRUE, nrow=length(factorCorrs) )
+    Phi <- factorCorrs + t(factorCorrs)
+  }
 
   if (categorical) {
     if (standardized) {
@@ -316,6 +325,6 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
     Lambda <- getLambda(Lambda, standardized = standardized)
   }
 
-  bifactorIndices(Lambda, Theta, UniLambda, standardized)
+  bifactorIndices(Lambda, Theta, UniLambda, standardized, Phi)
 }
 
