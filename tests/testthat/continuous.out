@@ -1,12 +1,12 @@
 Mplus VERSION 7
 MUTHEN & MUTHEN
-10/19/2019   1:58 PM
+04/09/2020   8:39 PM
 
 INPUT INSTRUCTIONS
 
   TITLE: bifactor
 
-  DATA: FILE IS saqonly.csv;
+  DATA: FILE IS bifactorData.csv;
 
   VARIABLE: NAMES ARE saq1-saq24;
 
@@ -66,7 +66,7 @@ Convergence criterion                                    0.500D-04
 Maximum number of steepest descent iterations                   20
 
 Input data file(s)
-  saqonly.csv
+  bifactorData.csv
 
 Input data format  FREE
 
@@ -267,8 +267,8 @@ DIAGRAM INFORMATION
   Diagram output
     d:\dropbox\2. courses\679 measurement\notes\10 bifactor\bifactor examples in mplus\bifac\bifacto
 
-     Beginning Time:  13:58:23
-        Ending Time:  13:58:23
+     Beginning Time:  20:39:34
+        Ending Time:  20:39:34
        Elapsed Time:  00:00:00
 
 

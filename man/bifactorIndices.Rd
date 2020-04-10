@@ -25,7 +25,7 @@ compute \code{\link{ARPB}}.}
 unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan} object,
 then \code{standardized} will be ignored.}
 
-\item{Psi}{is the correlation matrix of factors. User should generally ignore this
+\item{Phi}{is the correlation matrix of factors. User should generally ignore this
 parameter. \code{bifactorIndices} will try to determine it from Lambda or will assume
 it is the identity matrix.}
 }
@@ -110,25 +110,25 @@ bifactorIndices(Lambda)
 
 # bifactorIndices can also be used on two-tier models
 MTMM_model <- "
-Trait_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
+Trait1  =~ T1M1_1 + T1M1_2 + T1M1_3 +
            T1M2_1 + T1M2_2 + T1M2_3 +
            T1M3_1 + T1M3_2 + T1M3_3
-Trait_2 =~ T2M1_1 + T2M1_2 + T2M1_3 +
+Trait2  =~ T2M1_1 + T2M1_2 + T2M1_3 +
            T2M2_1 + T2M2_2 + T2M2_3 +
            T2M3_1 + T2M3_2 + T2M3_3
-Trait_3 =~ T3M1_1 + T3M1_2 + T3M1_3 +
+Trait3  =~ T3M1_1 + T3M1_2 + T3M1_3 +
            T3M2_1 + T3M2_2 + T3M2_3 +
            T3M3_1 + T3M3_2 + T3M3_3
 
-Method_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
+Method1  =~ T1M1_1 + T1M1_2 + T1M1_3 +
             T2M1_1 + T2M1_2 + T2M1_3 +
-            T3M1_1 + T3M1_2 + T3M1_3 +
-Method_2 =~ T1M2_1 + T1M2_2 + T1M2_3 +
+            T3M1_1 + T3M1_2 + T3M1_3
+Method2  =~ T1M2_1 + T1M2_2 + T1M2_3 +
             T2M2_1 + T2M2_2 + T2M2_3 +
-            T3M2_1 + T3M2_2 + T3M2_3 +
-Method_3 =~ T1M3_1 + T1M3_2 + T1M3_3 +
+            T3M2_1 + T3M2_2 + T3M2_3
+Method3  =~ T1M3_1 + T1M3_2 + T1M3_3 +
             T2M3_1 + T2M3_2 + T2M3_3 +
-            T3M3_1 + T3M3_2 + T3M3_3 +
+            T3M3_1 + T3M3_2 + T3M3_3
 
 Trait1 ~~ 0*Method1
 Trait1 ~~ 0*Method2

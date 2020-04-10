@@ -380,7 +380,7 @@ test_that("H Works", {
                       0,  0, .3),
                     ncol = 3, byrow = TRUE)
   H_Expected_2 <- c(0.3837472, 0.6315076, 0.3837472)
-  expect_equal(H(Lambda2), H_Expected_2)
+  expect_equal(H(Lambda2), H_Expected_2, tolerance = .000001)
 
 })
 
@@ -467,7 +467,7 @@ test_that("bifactorIndices Works", {
   expect_equal(bifactorIndices(Lambda, UniLambda = UniLambda), readRDS("bindices_from_matrix.rds"), tolerance = .000001)
   expect_error(bifactorIndices(Lambda, UniLambda = UniLambda, standardized = FALSE), "Not enough information is provided to compute indicator residual variances. Either provide indicator residual variances or use a standardized solution.")
 
-  # non-bifactor example
+  # correlated traits example
   Lambda2 <- matrix(c(.3,  0,  0,
                       .4,  0,  0,
                       .5,  0,  0,
@@ -478,26 +478,71 @@ test_that("bifactorIndices Works", {
                       0,  0, .5,
                       0,  0, .3),
                     ncol = 3, byrow = TRUE)
-  expect_equal(bifactorIndices(Lambda2), readRDS("Lambda2_indices.rds"),  tolerance = .000001)
+  Phi2 <- matrix(c(1, .5, .4, .5, 1, .6, .4, .6, 1), nrow = 3)
+  expect_equal(bifactorIndices(Lambda2, Phi = Phi2), readRDS("Lambda2_indices.rds"),  tolerance = .000001)
 
   ## bifactor from lavaan
-  bi_data <- read.csv("bifactorData.csv")
-  colnames(bi_data) <- c(paste0("x", 1:24))
-  bi_model <- "Gen =~ NA*x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 + x12 + x13 + x14 + x15 + x16 + x17 + x18 + x19 + x20 + x21 + x22 + x23 + x24
-               SF1 =~ NA*x1 + x2 + x4 + x8 + x11 + x12 + x17 + x22
-               SF2 =~ NA*x3 + x5 + x6 + x7 + x13 + x15 + x16 + x18
-               SF3 =~ NA*x9 + x10 + x14 + x19 + x20 + x21 + x23 + x24
-               Gen ~~ 1*Gen
-               SF1 ~~ 1*SF1
-               SF2 ~~ 1*SF2
-               SF3 ~~ 1*SF3"
-  bi_fit_cfa <- lavaan::cfa(model = bi_model, data = bi_data, orthogonal = TRUE)
-  expect_equal(bifactorIndices(bi_fit_cfa), readRDS("lav_indices.rds"), tolerance = .000001)
+  SRS_UnidimensionalModel <-
+    "SRS =~ SRS_1  + SRS_2  + SRS_3  + SRS_4  + SRS_5  +
+            SRS_6  + SRS_7  + SRS_8  + SRS_9  + SRS_10 +
+            SRS_11 + SRS_12 + SRS_13 + SRS_14 + SRS_15 +
+            SRS_16 + SRS_17 + SRS_18 + SRS_19 + SRS_20"
+
+SRS_BifactorModel <-
+   "SRS =~ SRS_1  + SRS_2  + SRS_3  + SRS_4  + SRS_5  +
+           SRS_6  + SRS_7  + SRS_8  + SRS_9  + SRS_10 +
+           SRS_11 + SRS_12 + SRS_13 + SRS_14 + SRS_15 +
+           SRS_16 + SRS_17 + SRS_18 + SRS_19 + SRS_20
+  Function     =~ SRS_5  + SRS_9  + SRS_12 + SRS_15 + SRS_18
+  Pain         =~ SRS_1  + SRS_2  + SRS_8  + SRS_11 + SRS_17
+  SelfImage    =~ SRS_4  + SRS_6  + SRS_10 + SRS_14 + SRS_19
+  MentalHealth =~ SRS_3  + SRS_7  + SRS_13 + SRS_16 + SRS_20"
+
+  SRS_Unidimensional <- lavaan::cfa(SRS_UnidimensionalModel,
+                                  SRS_data,
+                                  ordered = paste0("SRS_", 1:20),
+                                  orthogonal = TRUE)
+
+  SRS_bifactor <- lavaan::cfa(SRS_BifactorModel,
+                            SRS_data,
+                            ordered = paste0("SRS_", 1:20),
+                            orthogonal = TRUE)
+
+  expect_equal(bifactorIndices(SRS_bifactor, UniLambda = SRS_Unidimensional), readRDS("lav_indices.rds"), tolerance = .000001)
+
+  ## Two tier from lavaan
+  MTMM_model <- "
+  Trait1  =~ T1M1_1+T1M1_2+T1M1_3+T1M2_1+T1M2_2+T1M2_3+T1M3_1+T1M3_2+T1M1_3
+  Trait2  =~ T2M1_1+T2M1_2+T2M1_3+T2M2_1+T2M2_2+T2M2_3+T2M3_1+T2M3_2+T2M1_3
+  Trait3  =~ T3M1_1+T3M1_2+T3M1_3+T3M2_1+T3M2_2+T3M2_3+T3M3_1+T3M3_2+T3M1_3
+  Method1 =~ T1M1_1+T1M1_2+T1M1_3+T2M1_1+T2M1_2+T2M1_3+T3M1_1+T3M1_2+T3M1_3
+  Method2 =~ T1M2_1+T1M2_2+T1M2_3+T2M2_1+T2M2_2+T2M2_3+T3M2_1+T3M2_2+T3M2_3
+  Method3 =~ T1M3_1+T1M3_2+T1M3_3+T2M3_1+T2M3_2+T2M3_3+T3M3_1+T3M3_2+T3M3_3
+
+  Trait1 ~~ 0*Method1
+  Trait1 ~~ 0*Method2
+  Trait1 ~~ 0*Method3
+  Trait2 ~~ 0*Method1
+  Trait2 ~~ 0*Method2
+  Trait2 ~~ 0*Method3
+  Trait3 ~~ 0*Method1
+  Trait3 ~~ 0*Method2
+  Trait3 ~~ 0*Method3
+
+  Method1 ~~ 0*Method2
+  Method1 ~~ 0*Method3
+  Method2 ~~ 0*Method3"
+
+  MTMM_fit <- lavaan::cfa(MTMM_model, MTMM_data)
+  expect_equal(bifactorIndices(MTMM_fit), readRDS("mtmm.rds"), tolerance = .000001)
+
 
   ## bifactor from mirt -- these lines commented out because they take too long for the R CMD check on CRAN
-  specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
-  bi_fit_mirt <- mirt::bfactor(bi_data, specific)
-  expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
+  #bi_data <- read.csv("bifactorData.csv")
+  #colnames(bi_data) <- c(paste0("x", 1:24))
+  #specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
+  #bi_fit_mirt <- mirt::bfactor(bi_data, specific)
+  #expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
 
 })
 
@@ -513,38 +558,6 @@ test_that("bifactorIndices_expl Works", {
   expect_equal(bifactorIndices_expl(SRS_BEFA), readRDS("exploratory_bindices_SRS.rds"), tolerance = .000001)
   expect_equal(bifactorIndices_expl(SRS_BEFA, ItemsBySF), readRDS("exploratory_bindices_SRS_fixed.rds"), tolerance = .000001)
 
-  # non-bifactor example
-  Lambda2 <- matrix(c(.3,  0,  0,
-                      .4,  0,  0,
-                      .5,  0,  0,
-                      0, .4,  0,
-                      0, .6,  0,
-                      0, .7,  0,
-                      0,  0, .4,
-                      0,  0, .5,
-                      0,  0, .3),
-                    ncol = 3, byrow = TRUE)
-  expect_equal(bifactorIndices(Lambda2), readRDS("Lambda2_indices.rds"),  tolerance = .000001)
-
-  ## bifactor from lavaan
-  bi_data <- read.csv("bifactorData.csv")
-  colnames(bi_data) <- c(paste0("x", 1:24))
-  bi_model <- "Gen =~ NA*x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 + x12 + x13 + x14 + x15 + x16 + x17 + x18 + x19 + x20 + x21 + x22 + x23 + x24
-  SF1 =~ NA*x1 + x2 + x4 + x8 + x11 + x12 + x17 + x22
-  SF2 =~ NA*x3 + x5 + x6 + x7 + x13 + x15 + x16 + x18
-  SF3 =~ NA*x9 + x10 + x14 + x19 + x20 + x21 + x23 + x24
-  Gen ~~ 1*Gen
-  SF1 ~~ 1*SF1
-  SF2 ~~ 1*SF2
-  SF3 ~~ 1*SF3"
-  bi_fit_cfa <- lavaan::cfa(model = bi_model, data = bi_data, orthogonal = TRUE)
-  expect_equal(bifactorIndices(bi_fit_cfa), readRDS("lav_indices.rds"), tolerance = .000001)
-
-  ## bifactor from mirt -- these lines commented out because they take too long for the R CMD check on CRAN
-  specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
-  bi_fit_mirt <- mirt::bfactor(bi_data, specific)
-  expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
-
 })
 
 test_that("bifactorIndicesMplus Works", {
@@ -555,7 +568,7 @@ test_that("bifactorIndicesMplus Works", {
   expect_error(bifactorIndicesMplus(cont_output), "You must request standardized output from Mplus when standardized = TRUE")
   expect_equal(bifactorIndicesMplus(cont_output, standardized = FALSE), readRDS("cont_unst.rds"), tolerance = .000001)
   expect_equal(bifactorIndicesMplus(cat_output), readRDS("cat_stdyx.rds"), tolerance = .000001)
-  expect_error(bifactorIndicesMplus(cat_output, standardized = FALSE), "Bifactor indices based on unstandardized coefficients with categorical variables is not available")
+  expect_error(bifactorIndicesMplus(cat_output, standardized = FALSE), "Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
   expect_error(bifactorIndicesMplus(cont_output_facvar, standardized = FALSE), "Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
 })
 

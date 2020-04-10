@@ -118,23 +118,23 @@
 #'
 #' # bifactorIndices can also be used on two-tier models
 #' MTMM_model <- "
-#' Trait_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
+#' Trait1  =~ T1M1_1 + T1M1_2 + T1M1_3 +
 #'            T1M2_1 + T1M2_2 + T1M2_3 +
 #'            T1M3_1 + T1M3_2 + T1M3_3
-#' Trait_2 =~ T2M1_1 + T2M1_2 + T2M1_3 +
+#' Trait2  =~ T2M1_1 + T2M1_2 + T2M1_3 +
 #'            T2M2_1 + T2M2_2 + T2M2_3 +
 #'            T2M3_1 + T2M3_2 + T2M3_3
-#' Trait_3 =~ T3M1_1 + T3M1_2 + T3M1_3 +
+#' Trait3  =~ T3M1_1 + T3M1_2 + T3M1_3 +
 #'            T3M2_1 + T3M2_2 + T3M2_3 +
 #'            T3M3_1 + T3M3_2 + T3M3_3
 #'
-#' Method_1 =~ T1M1_1 + T1M1_2 + T1M1_3 +
+#' Method1  =~ T1M1_1 + T1M1_2 + T1M1_3 +
 #'             T2M1_1 + T2M1_2 + T2M1_3 +
 #'             T3M1_1 + T3M1_2 + T3M1_3
-#' Method_2 =~ T1M2_1 + T1M2_2 + T1M2_3 +
+#' Method2  =~ T1M2_1 + T1M2_2 + T1M2_3 +
 #'             T2M2_1 + T2M2_2 + T2M2_3 +
 #'             T3M2_1 + T3M2_2 + T3M2_3
-#' Method_3 =~ T1M3_1 + T1M3_2 + T1M3_3 +
+#' Method3  =~ T1M3_1 + T1M3_2 + T1M3_3 +
 #'             T2M3_1 + T2M3_2 + T2M3_3 +
 #'             T3M3_1 + T3M3_2 + T3M3_3
 #'
@@ -180,8 +180,11 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 
   Lambda <- getLambda(Lambda, standardized = standardized)
 
-  # If Phi is still NULL, let's make it the identity matrix
-  if (is.null(Phi)) {Phi <- diag(nrow = ncol(Lambda))}
+  # If Phi is still NULL, let's make it the identity matrix and throw a warning
+  if (is.null(Phi)) {
+    Phi <- diag(nrow = ncol(Lambda))
+    warning("Factor intercorrelation matrix assumed to be the identity matrix for computation of FD.")
+  }
 
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
 
@@ -294,7 +297,7 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
   if (!standardized) {
     params <- Lambda$parameters$unstandardized
     facVar <- params[params$paramHeader == "Variances","est"]
-      if (all(facVar == 1)) {
+      if (!all(facVar == 1)) {
         stop("Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
       }
   }

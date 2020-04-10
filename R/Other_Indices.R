@@ -138,7 +138,9 @@ ARPB <- function(Lambda, UniLambda) {
 FD <- function(Lambda, Phi) {
   Psi   <- getTheta(Lambda)
   Sigma <- Lambda %*% Phi %*% t(Lambda) + diag(Psi)
-  sqrt(diag(Phi %*% t(Lambda) %*% solve(Sigma) %*% Lambda %*% Phi))
+  FacDet <- sqrt(diag(Phi %*% t(Lambda) %*% solve(Sigma) %*% Lambda %*% Phi))
+  names(FacDet) <- colnames(Lambda)
+  FacDet
 }
 
 
