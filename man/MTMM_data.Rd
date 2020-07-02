@@ -4,8 +4,10 @@
 \name{MTMM_data}
 \alias{MTMM_data}
 \title{Simulated data for multi-trait multi-method}
-\format{A data frame with 500 rows and 27 columns
-The item names indicate the trait number, method number, and item number}
+\format{
+A data frame with 500 rows and 27 columns
+The item names indicate the trait number, method number, and item number
+}
 \usage{
 MTMM_data
 }

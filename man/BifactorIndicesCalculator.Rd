@@ -3,7 +3,6 @@
 \docType{package}
 \name{BifactorIndicesCalculator}
 \alias{BifactorIndicesCalculator}
-\alias{BifactorIndicesCalculator-package}
 \title{BifactorIndicesCalculator: A package for computing statistical indices relevant to bifactor measurement models.}
 \description{
 The BifactorIndicesCalculator package provides functions use to compute

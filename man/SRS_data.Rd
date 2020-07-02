@@ -4,8 +4,10 @@
 \name{SRS_data}
 \alias{SRS_data}
 \title{Response Data to the SRS-22r}
-\format{A data frame with 500 rows and 20 columns
-Rownames indicate the item number}
+\format{
+A data frame with 500 rows and 20 columns
+Rownames indicate the item number
+}
 \usage{
 SRS_data
 }

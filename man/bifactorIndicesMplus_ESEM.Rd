@@ -4,8 +4,11 @@
 \alias{bifactorIndicesMplus_ESEM}
 \title{bifactorIndicesMplus_ESEM}
 \usage{
-bifactorIndicesMplus_ESEM(Lambda = file.choose(), ItemsBySF = NULL,
-  LoadMin = 0.2)
+bifactorIndicesMplus_ESEM(
+  Lambda = file.choose(),
+  ItemsBySF = NULL,
+  LoadMin = 0.2
+)
 }
 \arguments{
 \item{Lambda}{is an Mplus .out file. Defaults to an open file dialog box}

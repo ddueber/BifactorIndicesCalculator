@@ -4,8 +4,11 @@
 \alias{bifactorIndicesMplus}
 \title{bifactorIndicesMplus}
 \usage{
-bifactorIndicesMplus(Lambda = file.choose(), UniLambda = NULL,
-  standardized = TRUE)
+bifactorIndicesMplus(
+  Lambda = file.choose(),
+  UniLambda = NULL,
+  standardized = TRUE
+)
 }
 \arguments{
 \item{Lambda}{is an Mplus .out file. Defaults to an open file dialog box}

@@ -14,7 +14,7 @@ Imports:
     lavaan,
     mirt,
     MplusAutomation
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 URL: https://github.com/ddueber/BifactorIndicesCalculator
 BugReports: https://github.com/ddueber/BifactorIndicesCalculator/issues
 Suggests: 
