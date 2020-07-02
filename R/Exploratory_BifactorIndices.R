@@ -106,7 +106,7 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
   # Is there single factor that pervades all items
   FactorLengths <- sapply(ItemsBySF, length)
 
-  # Issue a warning if no true gneral factor
+  # Issue a warning if no true general factor
   if (max(FactorLengths) != nrow(Lambda)) warning("The exploratory model has no general factor")
 
   ## Some of the indices we want involve all items
@@ -240,5 +240,5 @@ bifactorIndicesMplus_ESEM <- function(Lambda = file.choose(),
   ## Now we need to fish out the factor loading matrix
   Lambda <- getLambda(Lambda)
 
-  bifactorIndices_expl(Lambda, ItemsBySF = NULL, LoadMin = 0.2)
+  bifactorIndices_expl(Lambda, ItemsBySF, LoadMin = 0.2)
 }
