@@ -5,8 +5,8 @@
 #' @param Lambda is a factor loading matrix from EFA or an object which can be converted to such.
 #' Currently only \code{psych::fa()} objects are supported.
 #'
-#' @param ItemsBySF is a list, indexed by factor, of vectors of item names belonging to each
-#' factor. You must include the general factor in this list, and the list must have names which
+#' @param ItemsBySF is a list, indexed by factor, of vectors of item names belonging to each specific
+#' factor. You must NOT include the general factor in this list, and the list must have names which
 #' match the factor names in \code{Lambda}. It is recommended you look at the EFA solution first
 #' to see which factor is which. Defaults to \code{NULL}, in which case composition of specific
 #' factors is automated by comparing loadings to \code{LoadMin}
@@ -85,6 +85,10 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     if (length(ItemsBySF) == length(Factors) - 1) {
       GenFac <- setdiff(Factors, names(ItemsBySF))
       ItemsBySF[[paste(GenFac)]] <- Items
+      # We also need to reorder ItemsBySF so it matches the order of Factors.
+      # I think everything below this should be completely redone to avoid the confusion
+      # of two different lists of factors!!
+      ItemsBySF <- ItemsBySF[Factors]
     } else {
       stop("An error was made in the specification of ItemsBySF. It should have one fewer
             elements than the total number of factors")
@@ -94,10 +98,10 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     for (I in Items) {
       for (Fac in Factors) {
         if (!(I %in% ItemsBySF[[Fac]]) & (Lambda[I,Fac] > LoadMin)) {
-          warning(paste0("Item ", I, " loads on factor ", Fac, "above ", LoadMin))
+          warning(paste0("Item ", I, " loads on factor ", Fac, " above ", LoadMin))
         }
         if ((I %in% ItemsBySF[[Fac]]) & (Lambda[I,Fac] < LoadMin)) {
-          warning(paste0("Item ", I, " loads on factor ", Fac, "below ", LoadMin))
+          warning(paste0("Item ", I, " loads on factor ", Fac, " below ", LoadMin))
         }
       }
     }
@@ -203,9 +207,9 @@ bifactorIndicesMplus_expl <- function(Lambda = file.choose(), ItemsBySF = NULL, 
 #' @param Lambda is an Mplus .out file. Defaults to an open file dialog box
 #'
 #' @param ItemsBySF is a list, indexed by factor, of vectors of item names belonging to each
-#' factor. You must include the general factor in this list, and the list must have names which
+#' factor. You must NOT include the general factor in this list, and the list must have names which
 #' match the factor names in Mplus. Defaults to \code{NULL}, in which case composition of specific
-#' factors in automated by comparing loadings to \code{LoadMin}
+#' factors is automated by comparing loadings to \code{LoadMin}
 #'
 #' @param LoadMin is the minimum loading size so that an item is considered to "belong" to a factor.
 #' If \code{ItemsBySF} is not provided, then items are assigned to factors based on whether their
@@ -240,5 +244,5 @@ bifactorIndicesMplus_ESEM <- function(Lambda = file.choose(),
   ## Now we need to fish out the factor loading matrix
   Lambda <- getLambda(Lambda)
 
-  bifactorIndices_expl(Lambda, ItemsBySF, LoadMin = 0.2)
+  bifactorIndices_expl(Lambda, ItemsBySF = ItemsBySF, LoadMin = LoadMin)
 }
