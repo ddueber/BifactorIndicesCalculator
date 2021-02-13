@@ -14,9 +14,9 @@ bifactorIndicesMplus_ESEM(
 \item{Lambda}{is an Mplus .out file. Defaults to an open file dialog box}
 
 \item{ItemsBySF}{is a list, indexed by factor, of vectors of item names belonging to each
-factor. You must include the general factor in this list, and the list must have names which
+factor. You must NOT include the general factor in this list, and the list must have names which
 match the factor names in Mplus. Defaults to \code{NULL}, in which case composition of specific
-factors in automated by comparing loadings to \code{LoadMin}}
+factors is automated by comparing loadings to \code{LoadMin}}
 
 \item{LoadMin}{is the minimum loading size so that an item is considered to "belong" to a factor.
 If \code{ItemsBySF} is not provided, then items are assigned to factors based on whether their

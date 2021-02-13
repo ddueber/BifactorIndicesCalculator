@@ -10,8 +10,8 @@ bifactorIndices_expl(Lambda, ItemsBySF = NULL, LoadMin = 0.2)
 \item{Lambda}{is a factor loading matrix from EFA or an object which can be converted to such.
 Currently only \code{psych::fa()} objects are supported.}
 
-\item{ItemsBySF}{is a list, indexed by factor, of vectors of item names belonging to each
-factor. You must include the general factor in this list, and the list must have names which
+\item{ItemsBySF}{is a list, indexed by factor, of vectors of item names belonging to each specific
+factor. You must NOT include the general factor in this list, and the list must have names which
 match the factor names in \code{Lambda}. It is recommended you look at the EFA solution first
 to see which factor is which. Defaults to \code{NULL}, in which case composition of specific
 factors is automated by comparing loadings to \code{LoadMin}}

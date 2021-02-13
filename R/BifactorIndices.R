@@ -16,8 +16,10 @@
 #' unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan} object,
 #' then \code{standardized} will be ignored.
 #' @param Phi is the correlation matrix of factors. User should generally ignore this
-#' parameter. \code{bifactorIndices} will try to determine it from Lambda or will assume
-#' it is the identity matrix.
+#' parameter. \code{bifactorIndices} will try to determine it from Lambda when Lambda
+#' is a fitted lavaan model or will assume it is the identity matrix.
+#' @param Thresh is a list of vectors of item thresholds, used only when items are categorical.
+#' \code{Thresh} defaults to null, which indicates items are continuous.
 #'
 #' @return A list of bifactor indices, including three different ECV indices, IECV, PUC,
 #' Omega, OmegaH, Factor Determinacy (FD), Construct Replicability (H) and ARPB.
@@ -156,7 +158,7 @@
 #' bifactorIndices(MTMM_fit)
 #'
 
-bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE, Phi = NULL) {
+bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE, Phi = NULL, Thresh = NULL) {
   ## if fitted mirt object, then throw warning about Omegas probably being meaningless
   if ("SingleGroupClass" %in% class(Lambda)) {
     warning("Interpreting omega indices for IRT models is not recommended at this time")
@@ -177,6 +179,19 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
     }
   }
 
+  # Can do Thresh for lavaan
+  if (is.null(Thresh) & ("lavaan" %in% class(Lambda))) {
+    # Check to see if items are ordered; if so, rip out the thresholds
+    if (length(lavInspect(Lambda, "ordered")) > 0) {
+      thresh_long <- lavInspect(Lambda, "std")$tau
+      rownames(thresh_long) <- sapply(strsplit(rownames(thresh_long), "[|]"), "[[", 1)
+      items <- unique(rownames(thresh_long))
+      Thresh <- lapply(items, function (i) {
+        thresh_long[rownames(thresh_long) == i]
+      })
+    }
+  }
+
 
   Lambda <- getLambda(Lambda, standardized = standardized)
 
@@ -189,11 +204,18 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
 
   ## Build up the lists of indices. FactorLevelIndices first
+
   FactorLevelIndices = list(ECV_SS  = ECV_SS(Lambda),
                             ECV_SG  = ECV_SG(Lambda),
-                            ECV_GS  = ECV_GS(Lambda),
-                            Omega   = Omega_S(Lambda, Theta),
-                            OmegaH  = Omega_H(Lambda, Theta))
+                            ECV_GS  = ECV_GS(Lambda))
+  if (is.null(Thresh)) {
+    FactorLevelIndices[["Omega"]]  <- Omega_S(Lambda, Theta)
+    FactorLevelIndices[["OmegaH"]] <- Omega_H(Lambda, Theta)
+  } else {
+    FactorLevelIndices[["Omega"]]  <- cat_Omega_S(Lambda, Theta, Thresh)
+    FactorLevelIndices[["OmegaH"]] <- cat_Omega_H(Lambda, Theta, Thresh)
+  }
+
   if (standardized) {
     FactorLevelIndices[["H"]] <- H(Lambda)
     FactorLevelIndices[["FD"]] <- FD(Lambda, Phi)
@@ -223,8 +245,13 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   } else {
     Gen <- getGen(Lambda)
     ECV <- ECV_SG(Lambda)[Gen]
-    Omega <- Omega_S(Lambda, Theta)[Gen]
-    OmegaH <- Omega_H(Lambda, Theta)[Gen]
+    if (is.null(Thresh)) {
+      Omega <- Omega_S(Lambda, Theta)[Gen]
+      OmegaH <- Omega_H(Lambda, Theta)[Gen]
+    } else {
+      Omega <- cat_Omega_S(Lambda, Theta, Thresh)[Gen]
+      OmegaH <- cat_Omega_H(Lambda, Theta, Thresh)[Gen]
+    }
   }
 
   ModelLevelIndices <- c(ECV = ECV, PUC = PUC(Lambda), Omega = Omega, OmegaH  = OmegaH, ARPB = ARPB_indices[[1]])
@@ -291,6 +318,8 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
   ## if categorical, then error if standardized = FALSE and manually compute Theta if standardized = TRUE
   categorical <- !is.null(Lambda$input$variable$categorical)
 
+  Thresh <- NULL ## If we need thresholds, we'll fetch them later
+
   # if unstandardized and any factor has a variance other than 1, throw an error
   if (!standardized) {
     params <- Lambda$parameters$unstandardized
@@ -317,6 +346,13 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
     if (standardized) {
       Lambda <- getLambda(Lambda, standardized = standardized)
       Theta <- getTheta(Lambda, standardized = standardized)
+      ## now get thresholds
+      items <- rownames(Lambda)
+      thresh_long <- params[params$paramHeader == "Thresholds",]
+      thresh_long$itemName <- sapply(strsplit(thresh_long$param, "[$]"), "[[", 1)
+      Thresh <- lapply(items, function (i) {
+        thresh_long[thresh_long$itemName == i, "est"]
+      })
     } else {
       stop("Bifactor indices based on unstandardized coefficients with categorical variables is not available")
     }
@@ -325,6 +361,6 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
     Lambda <- getLambda(Lambda, standardized = standardized)
   }
 
-  bifactorIndices(Lambda, Theta, UniLambda, standardized, Phi)
+  bifactorIndices(Lambda, Theta, UniLambda, standardized, Phi, Thresh)
 }
 
