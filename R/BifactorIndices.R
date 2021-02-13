@@ -177,7 +177,7 @@
 bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE, Phi = NULL, Thresh = NULL) {
   ## if fitted mirt object, then throw warning about Omegas probably being meaningless
   if ("SingleGroupClass" %in% class(Lambda)) {
-    warning("Interpreting omega indices for IRT models is not recommended at this time")
+    message("Interpreting omega indices for IRT models is not recommended at this time")
   }
 
   ## Make Lambda, Theta, Phi, and UniLambda matrices. Do Theta and Phi first because
@@ -214,7 +214,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   # If Phi is still NULL, let's make it the identity matrix and throw a warning
   if (is.null(Phi)) {
     Phi <- diag(nrow = ncol(Lambda))
-    warning("Factor intercorrelation matrix assumed to be the identity matrix for computation of FD.")
+    message("Factor intercorrelation matrix assumed to be the identity matrix for computation of FD.")
   }
 
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}

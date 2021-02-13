@@ -98,10 +98,10 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     for (I in Items) {
       for (Fac in Factors) {
         if (!(I %in% ItemsBySF[[Fac]]) & (Lambda[I,Fac] > LoadMin)) {
-          warning(paste0("Item ", I, " loads on factor ", Fac, " above ", LoadMin))
+          message(paste0("Item ", I, " loads on factor ", Fac, " above ", LoadMin))
         }
         if ((I %in% ItemsBySF[[Fac]]) & (Lambda[I,Fac] < LoadMin)) {
-          warning(paste0("Item ", I, " loads on factor ", Fac, " below ", LoadMin))
+          message(paste0("Item ", I, " loads on factor ", Fac, " below ", LoadMin))
         }
       }
     }
@@ -111,7 +111,7 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
   FactorLengths <- sapply(ItemsBySF, length)
 
   # Issue a warning if no true general factor
-  if (max(FactorLengths) != nrow(Lambda)) warning("The exploratory model has no general factor")
+  if (max(FactorLengths) != nrow(Lambda)) message("The exploratory model has no general factor")
 
   ## Some of the indices we want involve all items
   GlobalIndices <- bifactorIndices(Lambda)

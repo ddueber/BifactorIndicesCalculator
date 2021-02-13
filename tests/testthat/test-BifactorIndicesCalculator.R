@@ -14,12 +14,12 @@ test_that("ECV_SS Works", {
                    ncol = 4, byrow = TRUE)
   ECV_SS_Expected <- c(.3229228, .7138154, .1426991, .4064201)
   ## First with no names
-  expect_equal(ECV_SS(Lambda), ECV_SS_Expected, tolerance = .000001)
+  expect_equal(ECV_SS(Lambda), ECV_SS_Expected, tolerance = .0001)
 
   ## Now with names
   colnames(Lambda) = c("A", "B", "C", "D")
   names(ECV_SS_Expected) = c("A", "B", "C", "D")
-  expect_equal(ECV_SS(Lambda), ECV_SS_Expected, tolerance = .000001)
+  expect_equal(ECV_SS(Lambda), ECV_SS_Expected, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -33,7 +33,7 @@ test_that("ECV_SS Works", {
                       0,  0, .3),
                     ncol = 3, byrow = TRUE)
   ECV_SS_Expected2 <- c(1, 1, 1)
-  expect_equal(ECV_SS(Lambda2), ECV_SS_Expected2, tolerance = .000001)
+  expect_equal(ECV_SS(Lambda2), ECV_SS_Expected2, tolerance = .0001)
 
 })
 
@@ -53,11 +53,11 @@ test_that("ECV_SG Works", {
                    ncol = 4, byrow = TRUE)
   ECV_SG_Expected <- c(.11744676, .71381542, .04862725, .12011057)
   ## First with no names
-  expect_equal(ECV_SG(Lambda), ECV_SG_Expected, tolerance = .000001)
+  expect_equal(ECV_SG(Lambda), ECV_SG_Expected, tolerance = .0001)
   colnames(Lambda) = c("A", "B", "C", "D")
   names(ECV_SG_Expected) = c("A", "B", "C", "D")
   ## Now with names
-  expect_equal(ECV_SG(Lambda), ECV_SG_Expected, tolerance = .000001)
+  expect_equal(ECV_SG(Lambda), ECV_SG_Expected, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -89,11 +89,11 @@ test_that("ECV_GS Works", {
                    ncol = 4, byrow = TRUE)
   ECV_GS_Expected <- c(.6770772, .71381542, .8573009, .5935799)
   ## First with no names
-  expect_equal(ECV_GS(Lambda), ECV_GS_Expected, tolerance = .000001)
+  expect_equal(ECV_GS(Lambda), ECV_GS_Expected, tolerance = .0001)
   colnames(Lambda) = c("A", "B", "C", "D")
   names(ECV_GS_Expected) = c("A", "B", "C", "D")
   ## Now with names
-  expect_equal(ECV_GS(Lambda), ECV_GS_Expected, tolerance = .000001)
+  expect_equal(ECV_GS(Lambda), ECV_GS_Expected, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -128,11 +128,11 @@ test_that("IECV Works", {
                        0.6290873, 0.9647402, 0.5901639, 0.7571994, 0.8316008,
                        0.8858474, 0.3497110)
   ## First with no names
-  expect_equal(IECV(Lambda), IECV_Expected, tolerance = .000001)
+  expect_equal(IECV(Lambda), IECV_Expected, tolerance = .0001)
   rownames(Lambda) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L")
   names(IECV_Expected) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L")
   ## Now with names
-  expect_equal(IECV(Lambda), IECV_Expected, tolerance = .000001)
+  expect_equal(IECV(Lambda), IECV_Expected, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -166,11 +166,11 @@ test_that("Omega_S Works", {
   Theta <- rep(1, nrow(Lambda)) - rowSums(Lambda^2)
   Omega_S_Expected <- c(.9067561, .9482359, .8915387, .8400528)
   ## First with no names
-  expect_equal(Omega_S(Lambda, Theta), Omega_S_Expected, tolerance = .000001)
+  expect_equal(Omega_S(Lambda, Theta), Omega_S_Expected, tolerance = .0001)
   colnames(Lambda) = c("A", "B", "C", "D")
   names(Omega_S_Expected) = c("A", "B", "C", "D")
   ## Now with names
-  expect_equal(Omega_S(Lambda, Theta), Omega_S_Expected, tolerance = .000001)
+  expect_equal(Omega_S(Lambda, Theta), Omega_S_Expected, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -185,7 +185,7 @@ test_that("Omega_S Works", {
                     ncol = 3, byrow = TRUE)
   Theta2 <- rep(1, nrow(Lambda2)) - rowSums(Lambda2^2)
   Omega_S_Expected2 <- c(.3654822, .5922131, .3654822)
-  expect_equal(Omega_S(Lambda2, Theta2), Omega_S_Expected2,  tolerance = .000001)
+  expect_equal(Omega_S(Lambda2, Theta2), Omega_S_Expected2,  tolerance = .0001)
 
 })
 
@@ -206,12 +206,12 @@ test_that("Omega_H Works", {
   Theta <- rep(1, nrow(Lambda)) - rowSums(Lambda^2)
   Omega_H_Expected <- c(.2642460, .8507481, .1133118, .3040647)
   ## First with no names
-  expect_equal(Omega_H(Lambda, Theta), Omega_H_Expected, tolerance = .000001)
+  expect_equal(Omega_H(Lambda, Theta), Omega_H_Expected, tolerance = .0001)
 
   ## Now with names
   colnames(Lambda) = c("A", "B", "C", "D")
   names(Omega_H_Expected) = c("A", "B", "C", "D")
-  expect_equal(Omega_H(Lambda, Theta), Omega_H_Expected, tolerance = .000001)
+  expect_equal(Omega_H(Lambda, Theta), Omega_H_Expected, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -226,7 +226,7 @@ test_that("Omega_H Works", {
                     ncol = 3, byrow = TRUE)
   Theta2 <- rep(1, nrow(Lambda2)) - rowSums(Lambda2^2)
   Omega_H_Expected2 <- c(.3654822, .5922131, .3654822)
-  expect_equal(Omega_H(Lambda2, Theta2), Omega_H_Expected2,  tolerance = .000001)
+  expect_equal(Omega_H(Lambda2, Theta2), Omega_H_Expected2,  tolerance = .0001)
 
 
 })
@@ -245,7 +245,7 @@ test_that("PUC Works", {
                      .28, .78,   0,   0,
                      .75, .55,   0,   0),
                    ncol = 4, byrow = TRUE)
-  expect_equal(PUC(Lambda), .7272727272727, tolerance = .000001)
+  expect_equal(PUC(Lambda), .7272727272727, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -282,12 +282,12 @@ test_that("ARPB Works", {
                         AbsRelBias = c(0.04878049, 0.09090909, 0.03797468, 0.16666667,
                                        0.35294118, 0.10714286, 0.01470588, 0.10000000,
                                        0.01204819, 0.06666667, 0.05128205, 0.18181818))
-  expect_equal(ARPB(Lambda, UniLambda), ARPB_Expected, tolerance = .000001)
+  expect_equal(ARPB(Lambda, UniLambda), ARPB_Expected, tolerance = .0001)
 
   # Now, with names
   rownames(Lambda) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L")
   names(ARPB_Expected$AbsRelBias) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L")
-  expect_equal(ARPB(Lambda, UniLambda), ARPB_Expected, tolerance = .000001)
+  expect_equal(ARPB(Lambda, UniLambda), ARPB_Expected, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -323,11 +323,11 @@ test_that("FD Works", {
   Phi <- diag(nrow = 4)
   FD_Expected <- c(0.8764811, 0.9500041, 0.6280990, 0.8438307)
   ## First with no names
-  expect_equal(FD(Lambda, Phi), FD_Expected, tolerance = .000001)
+  expect_equal(FD(Lambda, Phi), FD_Expected, tolerance = .0001)
   colnames(Lambda) = c("A", "B", "C", "D")
   names(FD_Expected) = c("A", "B", "C", "D")
   ## Now with names
-  expect_equal(FD(Lambda, Phi), FD_Expected, tolerance = .000001)
+  expect_equal(FD(Lambda, Phi), FD_Expected, tolerance = .0001)
 
   ## Now let's do one with correlated traits
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -342,7 +342,7 @@ test_that("FD Works", {
                     ncol = 3, byrow = TRUE)
   Phi2 <- matrix(c(1, .3, .4, .3, 1, .5, .4, .5, 1), nrow = 3)
   FD_Expected_2 <- c(0.6489614, 0.8052508, 0.6808390)
-  expect_equal(FD(Lambda2, Phi2), FD_Expected_2, tolerance = .000001)
+  expect_equal(FD(Lambda2, Phi2), FD_Expected_2, tolerance = .0001)
 
 })
 
@@ -362,11 +362,11 @@ test_that("H Works", {
                    ncol = 4, byrow = TRUE)
   H_Expected <- c(0.6340948, 0.9282446, 0.3070802, 0.6144805)
   ## First with no names
-  expect_equal(H(Lambda), H_Expected, tolerance = .000001)
+  expect_equal(H(Lambda), H_Expected, tolerance = .0001)
   colnames(Lambda) = c("A", "B", "C", "D")
   names(H_Expected) = c("A", "B", "C", "D")
   ## Now with names
-  expect_equal(H(Lambda), H_Expected, tolerance = .000001)
+  expect_equal(H(Lambda), H_Expected, tolerance = .0001)
 
   ## Now let's do one with no general factor
   Lambda2 <- matrix(c(.3,  0,  0,
@@ -380,7 +380,7 @@ test_that("H Works", {
                       0,  0, .3),
                     ncol = 3, byrow = TRUE)
   H_Expected_2 <- c(0.3837472, 0.6315076, 0.3837472)
-  expect_equal(H(Lambda2), H_Expected_2, tolerance = .000001)
+  expect_equal(H(Lambda2), H_Expected_2, tolerance = .0001)
 
 })
 
@@ -464,7 +464,7 @@ test_that("bifactorIndices Works", {
                      .75, .55,   0,   0),
                    ncol = 4, byrow = TRUE)
   UniLambda <- c(.78, .84, .82, .77, .69, .62, .69, .66, .82, .56, .74, .65)
-  expect_equal(bifactorIndices(Lambda, UniLambda = UniLambda), readRDS("bindices_from_matrix.rds"), tolerance = .000001)
+  expect_equal(bifactorIndices(Lambda, UniLambda = UniLambda), readRDS("bindices_from_matrix.rds"), tolerance = .0001)
   expect_error(bifactorIndices(Lambda, UniLambda = UniLambda, standardized = FALSE), "Not enough information is provided to compute indicator residual variances. Either provide indicator residual variances or use a standardized solution.")
 
   # correlated traits example
@@ -479,7 +479,7 @@ test_that("bifactorIndices Works", {
                       0,  0, .3),
                     ncol = 3, byrow = TRUE)
   Phi2 <- matrix(c(1, .5, .4, .5, 1, .6, .4, .6, 1), nrow = 3)
-  expect_equal(bifactorIndices(Lambda2, Phi = Phi2), readRDS("Lambda2_indices.rds"),  tolerance = .000001)
+  expect_equal(bifactorIndices(Lambda2, Phi = Phi2), readRDS("Lambda2_indices.rds"),  tolerance = .0001)
 
   ## bifactor from lavaan
   SRS_UnidimensionalModel <-
@@ -508,7 +508,7 @@ SRS_BifactorModel <-
                             ordered = paste0("SRS_", 1:20),
                             orthogonal = TRUE)
 
-  expect_equal(bifactorIndices(SRS_bifactor, UniLambda = SRS_Unidimensional), readRDS("lav_indices.rds"), tolerance = .000001)
+  expect_equal(bifactorIndices(SRS_bifactor, UniLambda = SRS_Unidimensional), readRDS("lav_indices.rds"), tolerance = .0001)
 
   ## Two tier from lavaan
   MTMM_model <- "
@@ -534,7 +534,7 @@ SRS_BifactorModel <-
   Method2 ~~ 0*Method3"
 
   MTMM_fit <- lavaan::cfa(MTMM_model, MTMM_data)
-  expect_equal(bifactorIndices(MTMM_fit), readRDS("mtmm.rds"), tolerance = .000001)
+  expect_equal(bifactorIndices(MTMM_fit), readRDS("mtmm.rds"), tolerance = .0001)
 
 
   ## bifactor from mirt -- these lines commented out because they take too long for the R CMD check on CRAN
@@ -542,7 +542,7 @@ SRS_BifactorModel <-
   #colnames(bi_data) <- c(paste0("x", 1:24))
   #specific <- c(1, 1, 2, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 3, 2, 2, 1, 2, 3, 3, 3, 1, 3, 3)
   #bi_fit_mirt <- mirt::bfactor(bi_data, specific)
-  #expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .000001)
+  #expect_equal(bifactorIndices(bi_fit_mirt), readRDS("mirt_indices.rds"), tolerance = .0001)
 
 })
 
@@ -555,8 +555,8 @@ test_that("bifactorIndices_expl Works", {
                    MR3 = paste0("SRS_", c(4, 6, 10, 14, 19)),
                    MR5 = paste0("SRS_", c(3, 7, 13, 16, 20)))
 
-  expect_equal(bifactorIndices_expl(SRS_BEFA), readRDS("exploratory_bindices_SRS.rds"), tolerance = .000001)
-  expect_equal(bifactorIndices_expl(SRS_BEFA, ItemsBySF), readRDS("exploratory_bindices_SRS_fixed.rds"), tolerance = .000001)
+  expect_equal(bifactorIndices_expl(SRS_BEFA), readRDS("exploratory_bindices_SRS.rds"), tolerance = .0001)
+  expect_equal(bifactorIndices_expl(SRS_BEFA, ItemsBySF), readRDS("exploratory_bindices_SRS_fixed.rds"), tolerance = .0001)
 
 })
 
@@ -566,8 +566,8 @@ test_that("bifactorIndicesMplus Works", {
   cont_output_facvar <- MplusAutomation::readModels("bifactor_continuous_wrongfacvar.out")
 
   expect_error(bifactorIndicesMplus(cont_output), "You must request standardized output from Mplus when standardized = TRUE")
-  expect_equal(bifactorIndicesMplus(cont_output, standardized = FALSE), readRDS("cont_unst.rds"), tolerance = .000001)
-  expect_equal(bifactorIndicesMplus(cat_output), readRDS("cat_stdyx.rds"), tolerance = .000001)
+  expect_equal(bifactorIndicesMplus(cont_output, standardized = FALSE), readRDS("cont_unst.rds"), tolerance = .0001)
+  expect_equal(bifactorIndicesMplus(cat_output), readRDS("cat_stdyx.rds"), tolerance = .0001)
   expect_error(bifactorIndicesMplus(cat_output, standardized = FALSE), "Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
   expect_error(bifactorIndicesMplus(cont_output_facvar, standardized = FALSE), "Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
 })
@@ -583,7 +583,7 @@ test_that("bifactorIndicesMplus_ESEM Works", {
   std_output <- MplusAutomation::readModels("bifactor_esem.out")
   nostd_output <- MplusAutomation::readModels("bifactor_esem_nostd.out")
 
-  expect_equal(bifactorIndicesMplus_ESEM(std_output), readRDS("ESEM.rds"), tolerance = .000001)
+  expect_equal(bifactorIndicesMplus_ESEM(std_output), readRDS("ESEM.rds"), tolerance = .0001)
   expect_error(bifactorIndicesMplus_ESEM(nostd_output), "You must request standardized output from Mplus when standardized = TRUE")
 
 })
