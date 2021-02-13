@@ -64,12 +64,14 @@ Omega_S <- function(Lambda, Theta) {
 #' which are the only functions in this package intended for casual users.
 #'
 #' @param Lambda is a matrix of standardized factor loadings
-#' @param Thresh is a list (indexed by items) of vectors of item thresholds
+#' @param Thresh is a list (indexed by items) of vectors of item thresholds (items must be
+#' on a standardized metric).
 #'
 #' @return A \code{numeric}, the omega reliability estimate for all factors using the technique of
 #' Green and Yang (2009).
 #'
 #' @examples
+#'
 #' Lambda <- matrix(c(.82, .10,   0,   0,
 #'                    .77, .35,   0,   0,
 #'                    .79, .32,   0,   0,
@@ -84,7 +86,14 @@ Omega_S <- function(Lambda, Theta) {
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
 #' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
-#' Thresh # Gotta define Thresh
+#'
+#' Thresh = list(c(-1, 0, 1),  c(-0.5, 0, 0.5),
+#'               c(0, 1, 2),   c(0, 0.5, 1),
+#'               c(-2, -1, 0), c(-1, -0.5, 0),
+#'               c(-1, 0, 2),  c(-0.5, 0, 1),
+#'               c(-2, 0, 1),  c(-1, 0, 0.5),
+#'               c(-1, 0, 1),  c(-0.5, 0, 0.5))
+#'
 #' catOmega_S(Lambda, Thresh)
 #'
 #' @references
@@ -282,8 +291,15 @@ Omega_H <- function(Lambda, Theta) {
 #'                    .55,   0,   0, .75),
 #'                    ncol = 4, byrow = TRUE)
 #' colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
-#' Thresh # Gotta define Thresh
-#' catOmega_S_H(Lambda, Thresh)
+#'
+#' Thresh = list(c(-1, 0, 1),  c(-0.5, 0, 0.5),
+#'               c(0, 1, 2),   c(0, 0.5, 1),
+#'               c(-2, -1, 0), c(-1, -0.5, 0),
+#'               c(-1, 0, 2),  c(-0.5, 0, 1),
+#'               c(-2, 0, 1),  c(-1, 0, 0.5),
+#'               c(-1, 0, 1),  c(-0.5, 0, 0.5))
+#'
+#' catOmega_S(Lambda, Thresh)
 #'
 #' @references
 #' Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models:

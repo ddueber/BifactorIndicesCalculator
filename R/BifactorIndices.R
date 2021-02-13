@@ -13,12 +13,14 @@
 #' object. Defaults to \code{NULL}, as \code{UniLambda} is only required if you wish to
 #' compute \code{\link{ARPB}}.
 #' @param standardized lets the function know whether to look for standardized or
-#' unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan} object,
-#' then \code{standardized} will be ignored.
-#' @param Phi is the correlation matrix of factors. User should generally ignore this
-#' parameter. \code{bifactorIndices} will try to determine it from Lambda when Lambda
-#' is a fitted lavaan model or will assume it is the identity matrix.
-#' @param Thresh is a list of vectors of item thresholds, used only when items are categorical.
+#' unstandardized results from \pkg{lavaan} and defaults to \code{TRUE}. If \code{Lambda} is not a
+#'  \pkg{lavaan} object, then \code{standardized} will be ignored.
+#' @param Phi is the correlation matrix of factors and defaults to \code{NULL}. User should generally ignore this
+#' parameter. If not provided, \code{bifactorIndices} will try to determine \code{Phi} from \code{Lambda} when \code{Lambda}
+#' is a fitted lavaan model or will assume it is the identity matrix otherwise.
+#' @param Thresh is a list of vectors of item thresholds, used only when items are categorical.\code{bifactorIndices}
+#'  will try to determine \code{Thresh} from \code{Lambda} when \code{Lambda}
+#' is a fitted lavaan model and the indicators are categorical.
 #' \code{Thresh} defaults to null, which indicates items are continuous.
 #'
 #' @return A list of bifactor indices, including three different ECV indices, IECV, PUC,
@@ -40,11 +42,23 @@
 #' indices as well as details about their computation can be found in the man page for the
 #' individual indices.
 #'
+#' Formulas for all indices can be found in Rodriguez et al. (2016). When indicators are categorical,
+#' the methodology of Green and Yang (2009) is used for computing Omega and OmegaH.
+#'
 #' @references
+#' Green, S. B., & Yang, Y. (2009). Reliability of summed item scores using
+#' structural equation modeling: An alternative to coefficient alpha.
+#' \emph{Psychometrika, 74}(1), 155-167 \doi{10.1007/s11336-008-9099-3}.
+#'
 #' Kamata, A., & Bauer, D. J. (2008). A note on the relation between factor analytic and item
 #' response theory models. \emph{Structural Equation Modeling: A Multidisciplinary Journal, 15}
 #' (1), 136-153.
 #'
+#' #' Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models:
+#' calculating and interpreting statistical indices. \emph{Psychological Methods, 21}(2),
+#' 137 \doi{10.1037/met0000045}.
+#'
+
 #' @export
 #'
 #' @seealso
@@ -249,8 +263,8 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
       Omega <- Omega_S(Lambda, Theta)[Gen]
       OmegaH <- Omega_H(Lambda, Theta)[Gen]
     } else {
-      Omega <- cat_Omega_S(Lambda, Theta, Thresh)[Gen]
-      OmegaH <- cat_Omega_H(Lambda, Theta, Thresh)[Gen]
+      Omega <- cat_Omega_S(Lambda, Thresh)[Gen]
+      OmegaH <- cat_Omega_H(Lambda, Thresh)[Gen]
     }
   }
 
@@ -286,7 +300,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 #' @details To use this function, simply call it without any arguments and a dialog box
 #' will pop up for you to select a .out file of a confirmatory bifactor model.
 #'
-#' ARPB will only be compute if the factor loadings from a unidimensional model
+#' ARPB will only be computed if the factor loadings from a unidimensional model
 #' (as a vector or as the result of using \code{\link[MplusAutomation]{readModels}} on an
 #' \code{Mplus} .out file) are included. Note that if a correlated traits model is provided,
 #' the omega indices will simply be the regular omega values for those factors. Interpretations
