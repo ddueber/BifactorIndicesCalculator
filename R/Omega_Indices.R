@@ -103,12 +103,14 @@ Omega_S <- function(Lambda, Theta) {
 #'
 
 cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
+
   cat_Omega_S_C <- function(Fac, Lambda, Thresh, Phi = NULL, denom = NULL) {
     ## Make a matrix of logical vectors for non-zero elements of Lambda.
     inFactor <- Lambda[,Fac] != 0
     ## subset Lambda to only include appropriate items
+    ## and make sure it is still a MATRIX!!
     subLambda <- Lambda[inFactor,]
-
+    subLambda <- as.matrix(subLambda)
     ## create Phi matrix
     if (is.null(Phi)) {Phi <- diag(ncol(subLambda))}
 
@@ -178,8 +180,7 @@ cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
     numer/denom
   }
 
-
-  omega_results <- sapply(1:ncol(Lambda), cat_Omega_S_C, Lambda = Lambda, Theta = Theta)
+  omega_results <- sapply(1:ncol(Lambda), cat_Omega_S_C, Lambda = Lambda, Thresh = Thresh)
   names(omega_results) <- colnames(Lambda)
   omega_results
 }
@@ -299,12 +300,13 @@ Omega_H <- function(Lambda, Theta) {
 #'
 #'
 
-cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
-  cat_Omega_S_C <- function(Fac, Lambda, Thresh, Phi = NULL, denom = NULL) {
+cat_Omega_H <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
+  cat_Omega_H_C <- function(Fac, Lambda, Thresh, Phi = NULL, denom = NULL) {
     ## Make a matrix of logical vectors for non-zero elements of Lambda.
     inFactor <- Lambda[,Fac] != 0
     ## subset Lambda to only include appropriate items
     subLambda <- Lambda[inFactor,]
+    subLambda <- as.matrix(subLambda)
 
     ## create Phi matrix
     if (is.null(Phi)) {Phi <- diag(ncol(subLambda))}
@@ -322,8 +324,10 @@ cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
     #for computing the numerator
 
     subLambda <- subLambda[, Fac]
+    subLambda <- as.matrix(subLambda)
+
     Phi <- Phi[Fac, Fac]
-    lat_cov <- subLambda %*% t(subLambda) * Phi
+    lat_cov <- subLambda %*% as.matrix(Phi) %*% t(subLambda)
 
     ## Create covariance matrix of parallel items
     par_cov_mat <- sapply(1:num_items, function (j) {
@@ -383,7 +387,7 @@ cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
   }
 
 
-  omega_results <- sapply(1:ncol(Lambda), cat_Omega_S_C, Lambda = Lambda, Theta = Theta)
+  omega_results <- sapply(1:ncol(Lambda), cat_Omega_H_C, Lambda = Lambda, Thresh = Thresh)
   names(omega_results) <- colnames(Lambda)
   omega_results
 }

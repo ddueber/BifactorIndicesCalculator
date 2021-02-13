@@ -212,8 +212,8 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
     FactorLevelIndices[["Omega"]]  <- Omega_S(Lambda, Theta)
     FactorLevelIndices[["OmegaH"]] <- Omega_H(Lambda, Theta)
   } else {
-    FactorLevelIndices[["Omega"]]  <- cat_Omega_S(Lambda, Theta, Thresh)
-    FactorLevelIndices[["OmegaH"]] <- cat_Omega_H(Lambda, Theta, Thresh)
+    FactorLevelIndices[["Omega"]]  <- cat_Omega_S(Lambda, Thresh)
+    FactorLevelIndices[["OmegaH"]] <- cat_Omega_H(Lambda, Thresh)
   }
 
   if (standardized) {
