@@ -26,7 +26,7 @@ which are the only functions in this package intended for casual users.
 \section{References}{
 
 Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models:
-Calculating and interpreting statistical indices. Psychological methods, 21(2),
+Calculating and interpreting statistical indices. Psychological Methods, 21(2),
 137 \doi{10.1037/met0000045}.
 }
 

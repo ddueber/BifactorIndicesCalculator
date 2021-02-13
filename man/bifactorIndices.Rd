@@ -9,7 +9,8 @@ bifactorIndices(
   Theta = NULL,
   UniLambda = NULL,
   standardized = TRUE,
-  Phi = NULL
+  Phi = NULL,
+  Thresh = NULL
 )
 }
 \arguments{
@@ -31,8 +32,11 @@ unstandardized results from \pkg{lavaan}. If \code{Lambda} is not a \pkg{lavaan}
 then \code{standardized} will be ignored.}
 
 \item{Phi}{is the correlation matrix of factors. User should generally ignore this
-parameter. \code{bifactorIndices} will try to determine it from Lambda or will assume
-it is the identity matrix.}
+parameter. \code{bifactorIndices} will try to determine it from Lambda when Lambda
+is a fitted lavaan model or will assume it is the identity matrix.}
+
+\item{Thresh}{is a list of vectors of item thresholds, used only when items are categorical.
+\code{Thresh} defaults to null, which indicates items are continuous.}
 }
 \value{
 A list of bifactor indices, including three different ECV indices, IECV, PUC,
