@@ -73,6 +73,8 @@
 #'          \code{\link{PUC}},
 #'          \code{\link{Omega_S}},
 #'          \code{\link{Omega_H}},
+#'          \code{\link{cat_Omega_S}},
+#'          \code{\link{cat_Omega_H}},
 #'          \code{\link{H}},
 #'          \code{\link{FD}},
 #'          \code{\link{ARPB}}
