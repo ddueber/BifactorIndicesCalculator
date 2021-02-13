@@ -196,8 +196,8 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   # Can do Thresh for lavaan
   if (is.null(Thresh) & ("lavaan" %in% class(Lambda))) {
     # Check to see if items are ordered; if so, rip out the thresholds
-    if (length(lavInspect(Lambda, "ordered")) > 0) {
-      thresh_long <- lavInspect(Lambda, "std")$tau
+    if (length(lavaan::lavInspect(Lambda, "ordered")) > 0) {
+      thresh_long <- lavaan::lavInspect(Lambda, "std")$tau
       rownames(thresh_long) <- sapply(strsplit(rownames(thresh_long), "[|]"), "[[", 1)
       items <- unique(rownames(thresh_long))
       Thresh <- lapply(items, function (i) {

@@ -4,12 +4,20 @@
 \alias{cat_Omega_S}
 \title{cat_Omega_S}
 \usage{
-cat_Omega_S(Lambda, Thresh, Phi = NULL, denom = NULL)
+cat_Omega_S(Lambda, Thresh, Phi = NULL, Denom = NULL)
 }
 \arguments{
 \item{Lambda}{is a matrix of standardized factor loadings}
 
-\item{Thresh}{is a list (indexed by items) of vectors of item thresholds}
+\item{Thresh}{is a list (indexed by items) of vectors of item thresholds (items must be
+on a standardized metric).}
+
+\item{Phi}{is the latent variable covariance matrix. Defaults to \code{NULL}, and
+the identity matrix will be used. No other options are currently available.}
+
+\item{Denom}{specifies how the variance of the total score will be computed. Defaults
+to \code{NULL}, and the model implied total score variance will be used. No other options
+are currently available.}
 }
 \value{
 A \code{numeric}, the omega reliability estimate for all factors using the technique of
@@ -25,6 +33,7 @@ for exploratory models and/or Mplus output,
 which are the only functions in this package intended for casual users.
 }
 \examples{
+
 Lambda <- matrix(c(.82, .10,   0,   0,
                    .77, .35,   0,   0,
                    .79, .32,   0,   0,
@@ -39,8 +48,15 @@ Lambda <- matrix(c(.82, .10,   0,   0,
                    .55,   0,   0, .75),
                    ncol = 4, byrow = TRUE)
 colnames(Lambda) <- c("General", "SF1", "SF2", "SF3")
-Thresh # Gotta define Thresh
-catOmega_S(Lambda, Thresh)
+
+Thresh = list(c(-1, 0, 1),  c(-0.5, 0, 0.5),
+              c(0, 1, 2),   c(0, 0.5, 1),
+              c(-2, -1, 0), c(-1, -0.5, 0),
+              c(-1, 0, 2),  c(-0.5, 0, 1),
+              c(-2, 0, 1),  c(-1, 0, 0.5),
+              c(-1, 0, 1),  c(-0.5, 0, 0.5))
+
+cat_Omega_S(Lambda, Thresh)
 
 }
 \references{

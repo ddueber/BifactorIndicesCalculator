@@ -34,7 +34,7 @@ Computes all available bifactor indices given an \code{Mplus} .out file for a bi
 To use this function, simply call it without any arguments and a dialog box
 will pop up for you to select a .out file of a confirmatory bifactor model.
 
-ARPB will only be compute if the factor loadings from a unidimensional model
+ARPB will only be computed if the factor loadings from a unidimensional model
 (as a vector or as the result of using \code{\link[MplusAutomation]{readModels}} on an
 \code{Mplus} .out file) are included. Note that if a correlated traits model is provided,
 the omega indices will simply be the regular omega values for those factors. Interpretations

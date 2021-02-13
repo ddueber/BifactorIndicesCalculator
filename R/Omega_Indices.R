@@ -66,6 +66,11 @@ Omega_S <- function(Lambda, Theta) {
 #' @param Lambda is a matrix of standardized factor loadings
 #' @param Thresh is a list (indexed by items) of vectors of item thresholds (items must be
 #' on a standardized metric).
+#' @param Phi is the latent variable covariance matrix. Defaults to \code{NULL}, and
+#' the identity matrix will be used. No other options are currently available.
+#' @param Denom specifies how the variance of the total score will be computed. Defaults
+#' to \code{NULL}, and the model implied total score variance will be used. No other options
+#' are currently available.
 #'
 #' @return A \code{numeric}, the omega reliability estimate for all factors using the technique of
 #' Green and Yang (2009).
@@ -94,7 +99,7 @@ Omega_S <- function(Lambda, Theta) {
 #'               c(-2, 0, 1),  c(-1, 0, 0.5),
 #'               c(-1, 0, 1),  c(-0.5, 0, 0.5))
 #'
-#' catOmega_S(Lambda, Thresh)
+#' cat_Omega_S(Lambda, Thresh)
 #'
 #' @references
 #' Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models:
@@ -111,9 +116,9 @@ Omega_S <- function(Lambda, Theta) {
 #'
 #'
 
-cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
+cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, Denom = NULL) {
 
-  cat_Omega_S_C <- function(Fac, Lambda, Thresh, Phi = NULL, denom = NULL) {
+  cat_Omega_S_C <- function(Fac, Lambda, Thresh, Phi = NULL, Denom = NULL) {
     ## Make a matrix of logical vectors for non-zero elements of Lambda.
     inFactor <- Lambda[,Fac] != 0
     ## subset Lambda to only include appropriate items
@@ -127,7 +132,7 @@ cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
 
     ## latent item covariances (correlations, because they're standardized!!)
     lat_cov <- subLambda %*% Phi %*% t(subLambda)
-    if (is.null(denom)) {
+    if (is.null(Denom)) {
       poly_cor <- lat_cov
       diag(poly_cor) <- rep(1, num_items)
     }
@@ -148,8 +153,8 @@ cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
         })) ## end c
 
         ## now the two expression in the right half of the expression in equation 19 in G&Y
-        right_j  <- sum(pnorm(t_j))
-        right_jp <- sum(pnorm(t_jp))
+        right_j  <- sum(stats::pnorm(t_j))
+        right_jp <- sum(stats::pnorm(t_jp))
 
         ## put it together and what do you get? Bibbidi-Bobbidi-Boo
         left - right_j * right_jp
@@ -174,8 +179,8 @@ cat_Omega_S <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
         })) ## end c
 
         ## now the two expression in the right half of the expression in equation 19 in G&Y
-        right_j  <- sum(pnorm(t_j))
-        right_jp <- sum(pnorm(t_jp))
+        right_j  <- sum(stats::pnorm(t_j))
+        right_jp <- sum(stats::pnorm(t_jp))
 
         ## put it together and what do you get? Bibbidi-Bobbidi-Boo
         left - right_j * right_jp
@@ -256,12 +261,12 @@ Omega_H <- function(Lambda, Theta) {
 
 
 
-#' cat_Omega_S_H
+#' cat_Omega_H
 #'
 #' Computes hierarchical omega reliability estimate for all factors as described in Rodriguez, Reise, and
 #' Haviland (2016).
 #'
-#' \code{cat_Omega_S_H} is called by \code{\link{bifactorIndices}} and the various convenience functions
+#' \code{cat_Omega_H} is called by \code{\link{bifactorIndices}} and the various convenience functions
 #' for exploratory models and/or Mplus output,
 #' which are the only functions in this package intended for casual users.
 #'
@@ -269,7 +274,7 @@ Omega_H <- function(Lambda, Theta) {
 #' @param Thresh is a list (indexed by items) of vectors of item thresholds
 #' @param Phi is the latent variable covariance matrix. Defaults to \code{NULL}, and
 #' the identity matrix will be used. No other options are currently available.
-#' @param denom specifies how the variance of the total score will be computed. Defaults
+#' @param Denom specifies how the variance of the total score will be computed. Defaults
 #' to \code{NULL}, and the model implied total score variance will be used. No other options
 #' are currently available.
 #'
@@ -299,7 +304,7 @@ Omega_H <- function(Lambda, Theta) {
 #'               c(-2, 0, 1),  c(-1, 0, 0.5),
 #'               c(-1, 0, 1),  c(-0.5, 0, 0.5))
 #'
-#' catOmega_S(Lambda, Thresh)
+#' cat_Omega_H(Lambda, Thresh)
 #'
 #' @references
 #' Rodriguez, A., Reise, S. P., & Haviland, M. G. (2016). Evaluating bifactor models:
@@ -316,8 +321,8 @@ Omega_H <- function(Lambda, Theta) {
 #'
 #'
 
-cat_Omega_H <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
-  cat_Omega_H_C <- function(Fac, Lambda, Thresh, Phi = NULL, denom = NULL) {
+cat_Omega_H <- function(Lambda, Thresh, Phi = NULL, Denom = NULL) {
+  cat_Omega_H_C <- function(Fac, Lambda, Thresh, Phi = NULL, Denom = NULL) {
     ## Make a matrix of logical vectors for non-zero elements of Lambda.
     inFactor <- Lambda[,Fac] != 0
     ## subset Lambda to only include appropriate items
@@ -331,7 +336,7 @@ cat_Omega_H <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
 
     ## latent item covariances (correlations, because they're standardized!!)
     lat_cov <- subLambda %*% Phi %*% t(subLambda)
-    if (is.null(denom)) {
+    if (is.null(Denom)) {
       poly_cor <- lat_cov
       diag(poly_cor) <- rep(1, num_items)
     }
@@ -361,8 +366,8 @@ cat_Omega_H <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
         })) ## end c
 
         ## now the two expression in the right half of the expression in equation 19 in G&Y
-        right_j  <- sum(pnorm(t_j))
-        right_jp <- sum(pnorm(t_jp))
+        right_j  <- sum(stats::pnorm(t_j))
+        right_jp <- sum(stats::pnorm(t_jp))
 
         ## put it together and what do you get? Bibbidi-Bobbidi-Boo
         left - right_j * right_jp
@@ -387,8 +392,8 @@ cat_Omega_H <- function(Lambda, Thresh, Phi = NULL, denom = NULL) {
         })) ## end c
 
         ## now the two expression in the right half of the expression in equation 19 in G&Y
-        right_j  <- sum(pnorm(t_j))
-        right_jp <- sum(pnorm(t_jp))
+        right_j  <- sum(stats::pnorm(t_j))
+        right_jp <- sum(stats::pnorm(t_jp))
 
         ## put it together and what do you get? Bibbidi-Bobbidi-Boo
         left - right_j * right_jp
