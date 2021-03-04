@@ -175,6 +175,15 @@
 #'
 
 bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized = TRUE, Phi = NULL, Thresh = NULL) {
+  ## If categorical and lavaan, then force standardized = TRUE and message about it
+  if (!standardized & "lavaan" %in% class(Lambda) ) {
+    if (length(lavaan::lavInspect(Lambda, "ordered")) > 0) {
+      standardized <- TRUE
+      message("Only bifactor indices based on standardized coefficients make sense for categorical indicators.")
+    }
+  }
+
+
   ## if fitted mirt object, then throw warning about Omegas probably being meaningless
   if ("SingleGroupClass" %in% class(Lambda)) {
     message("Interpreting omega indices for IRT models is not recommended at this time")
@@ -182,24 +191,28 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 
   ## Make Lambda, Theta, Phi, and UniLambda matrices. Do Theta and Phi first because
   ## they need the Lambda object, not the Lambda matrix
-  if (is.null(Theta)) {Theta = getTheta(Lambda, standardized = standardized)}
+  if (is.null(Theta)) {Theta <- getTheta(Lambda, standardized = standardized)}
 
   # Can do Phi for SingleGroupClass and for lavaan
   if (is.null(Phi)) {
     if ("SingleGroupClass" %in% class(Lambda)) {
       Phi <- mirt::summary(Lambda)$fcor
     } else if ("lavaan" %in% class(Lambda)) {
-      Phi <- lavaan::lavInspect(Lambda, "std")$psi
+      Phi <- lavaan::lavInspect(Lambda, "std.lv")$psi
       # I hate that dumb symmetric matrix print method
       class(Phi) <- "matrix"
+    } else {
+      message("Latent variable covariance matrix is assumed to be the identity. This influences
+            FD and, in the case of categorical models, the omega indices.")
+      Phi <- diag(nrow = ncol(Lambda))  ## we can only get here is Lambda was provided as a matrix
     }
   }
 
-  # Can do Thresh for lavaan
+  # Can do Thresh for lavaan. Maybe we should do it for mirt as well.
   if (is.null(Thresh) & ("lavaan" %in% class(Lambda))) {
     # Check to see if items are ordered; if so, rip out the thresholds
     if (length(lavaan::lavInspect(Lambda, "ordered")) > 0) {
-      thresh_long <- lavaan::lavInspect(Lambda, "std")$tau
+      thresh_long <- lavaan::lavInspect(Lambda, "std")$tau  ## if categorical, then standardized.
       rownames(thresh_long) <- sapply(strsplit(rownames(thresh_long), "[|]"), "[[", 1)
       items <- unique(rownames(thresh_long))
       Thresh <- lapply(items, function (i) {
@@ -211,11 +224,6 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
 
   Lambda <- getLambda(Lambda, standardized = standardized)
 
-  # If Phi is still NULL, let's make it the identity matrix and throw a warning
-  if (is.null(Phi)) {
-    Phi <- diag(nrow = ncol(Lambda))
-    message("Factor intercorrelation matrix assumed to be the identity matrix for computation of FD.")
-  }
 
   if (!is.null(UniLambda)) {UniLambda <- getLambda(UniLambda, standardized = standardized)}
 
@@ -235,6 +243,8 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   if (standardized) {
     FactorLevelIndices[["H"]] <- H(Lambda)
     FactorLevelIndices[["FD"]] <- FD(Lambda, Phi)
+  } else {
+    message("H and FD are currently only available when standardized = TRUE")
   }
 
   ## Remove any NULL values and convert to dataframe
@@ -277,7 +287,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
                       FactorLevelIndices = FactorLevelIndices,
                       ItemLevelIndices   = ItemLevelIndices
                       )
-  ## if any index type is emtirely missing, remove that index type entirely (e.g., no model or item level indices if not bifactor)
+  ## if any index type is entirely missing, remove that index type entirely (e.g., no model or item level indices if not bifactor)
   indicesList[which(!sapply(indicesList, is.null))]
 
 }
@@ -331,51 +341,61 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
   if ("character" %in% class(UniLambda)) {UniLambda <- MplusAutomation::readModels(UniLambda)}
 
   if (!("mplus.model" %in% class(Lambda))) {Lambda <- MplusAutomation::readModels(Lambda)}
-  ## if categorical, then error if standardized = FALSE and manually compute Theta if standardized = TRUE
+
+  ## Check if categorical indicators.
   categorical <- !is.null(Lambda$input$variable$categorical)
-
-  Thresh <- NULL ## If we need thresholds, we'll fetch them later
-
-  # if unstandardized and any factor has a variance other than 1, throw an error
-  if (!standardized) {
-    params <- Lambda$parameters$unstandardized
-    facVar <- params[params$paramHeader == "Variances","est"]
-      if (!all(facVar == 1)) {
-        stop("Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
-      }
+  ## categorical -> standardized
+  if (!standardized & categorical) {
+    standardized <- TRUE
+    message("Only bifactor indices based on standardized coefficients make sense for categorical indicators.")
   }
-  # Let's grab the interfactor correlation matrix, if we have stdyx results
-  if (is.null(Lambda$parameters$stdyx.standardized)) {
-    Phi <- NULL
-  } else {
+
+  # Fetch Phi matrix. Why isn't there a getPhi function?
+  if (standardized) {
+    # need to have standardized parameters if standardized!
+    if (is.null(Lambda$parameters$stdyx.standardized)) {
+      stop("You must request STDYX output for computing bifactor indices based on standardized coefficients.")
+    }
     params <- Lambda$parameters$stdyx.standardized
     facNames <- params[params$paramHeader == "Variances", "param"]
     factorCorrs <- lapply(1:length(facNames), function (x) {
       fac <- facNames[x]
-      c(rep(0, x-1), .5, params[params$paramHeader == paste0(fac, ".WITH"), "est"])
+      c(rep(0, x-1), .5, params[params$paramHeader == paste0(fac, ".WITH"), "est"]) # since standardized, we know all factor variances are 1
+    })
+    factorCorrs <- matrix(unlist(factorCorrs), byrow=TRUE, nrow=length(factorCorrs) )
+    Phi <- factorCorrs + t(factorCorrs)
+  } else {
+    params <- Lambda$parameters$unstandardized
+    facVar <- params[params$paramHeader == "Variances","est"]
+    facNames <- params[params$paramHeader == "Variances", "param"]
+    factorCorrs <- lapply(1:length(facNames), function (x) {
+      fac <- facNames[x]
+      c(rep(0, x-1), facVar[x]/2, params[params$paramHeader == paste0(fac, ".WITH"), "est"]) # since standardized, we know all factor variances are 1
     })
     factorCorrs <- matrix(unlist(factorCorrs), byrow=TRUE, nrow=length(factorCorrs) )
     Phi <- factorCorrs + t(factorCorrs)
   }
 
   if (categorical) {
-    if (standardized) {
-      Lambda <- getLambda(Lambda, standardized = standardized)
-      Theta <- getTheta(Lambda, standardized = standardized)
-      ## now get thresholds
-      items <- rownames(Lambda)
-      thresh_long <- params[params$paramHeader == "Thresholds",]
-      thresh_long$itemName <- sapply(strsplit(thresh_long$param, "[$]"), "[[", 1)
-      Thresh <- lapply(items, function (i) {
-        thresh_long[thresh_long$itemName == i, "est"]
-      })
-    } else {
-      stop("Bifactor indices based on unstandardized coefficients with categorical variables is not available")
-    }
+    Lambda <- getLambda(Lambda, standardized = standardized)
+    Theta <- getTheta(Lambda, standardized = standardized)
+    ## now get thresholds
+    items <- rownames(Lambda)
+    thresh_long <- params[params$paramHeader == "Thresholds",]
+    thresh_long$itemName <- sapply(strsplit(thresh_long$param, "[$]"), "[[", 1)
+    Thresh <- lapply(items, function (i) {
+      thresh_long[thresh_long$itemName == i, "est"]
+    })
   } else {
     Theta <- getTheta(Lambda, standardized = standardized)
     Lambda <- getLambda(Lambda, standardized = standardized)
+    Thresh <- NULL
   }
+
+  # if diag(Phi) is not all ones, then we are in trouble. Let's deal with that
+  D <- diag(x = sqrt(diag(Phi)))
+  Phi <- solve(D) %*% Phi %*% t(solve(D))
+  Lambda <- Lambda %*% solve(D)
 
   bifactorIndices(Lambda, Theta, UniLambda, standardized, Phi, Thresh)
 }

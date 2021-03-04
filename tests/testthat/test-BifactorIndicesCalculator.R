@@ -565,11 +565,11 @@ test_that("bifactorIndicesMplus Works", {
   cat_output <- MplusAutomation::readModels("categorical.out")
   cont_output_facvar <- MplusAutomation::readModels("bifactor_continuous_wrongfacvar.out")
 
-  expect_error(bifactorIndicesMplus(cont_output), "You must request standardized output from Mplus when standardized = TRUE")
+  expect_error(bifactorIndicesMplus(cont_output), "You must request STDYX output for computing bifactor indices based on standardized coefficients.")
   expect_equal(bifactorIndicesMplus(cont_output, standardized = FALSE), readRDS("cont_unst.rds"), tolerance = .0001)
   expect_equal(bifactorIndicesMplus(cat_output), readRDS("cat_stdyx.rds"), tolerance = .0001)
-  expect_error(bifactorIndicesMplus(cat_output, standardized = FALSE), "Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
-  expect_error(bifactorIndicesMplus(cont_output_facvar, standardized = FALSE), "Bifactor indices require latent factors have variance = 1. Respecify your model or use standardized = TRUE")
+  expect_message(bifactorIndicesMplus(cat_output, standardized = FALSE), "Only bifactor indices based on standardized coefficients make sense for categorical indicators.")
+  expect_error(bifactorIndicesMplus(cont_output_facvar, standardized = FALSE), NA)
 })
 
 test_that("bifactorIndicesMplus_expl Works", {

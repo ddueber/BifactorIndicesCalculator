@@ -53,9 +53,6 @@ getLambda.mplus.model <- function(x, standardized = TRUE) {
 
     getLambda(x$parameters$stdyx.standardized)
   } else {
-    ## check to make sure factor variances are all one.
-    if (!all(x$parameters$unstandardized[x$parameters$unstandardized$paramHeader == "Variances", "est"] == 1)) stop("All factor variances must be one when standardized = FALSE. Please respecify your model.")
-
     getLambda(x$parameters$unstandardized)
   }
 }
@@ -135,7 +132,7 @@ getTheta.lavaan <- function(x, standardized = TRUE) {
   if (standardized) {
     diag(lavaan::lavInspect(x, "std")$theta)
   } else {
-    diag(lavaan::lavInspect(x, "est")$theta)
+    diag(lavaan::lavInspect(x, "std.lv")$theta)
   }
 }
 
