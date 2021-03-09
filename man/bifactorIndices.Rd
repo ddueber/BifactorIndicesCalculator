@@ -73,6 +73,7 @@ the methodology of Green and Yang (2009) is used for computing Omega and OmegaH.
 # (using mirt object is similar). Use of the unidimensional
 # model is optional; it is only used to compute ARPB.
 
+\donttest{
 SRS_UnidimensionalModel <-
   "SRS =~ SRS_1  + SRS_2  + SRS_3  + SRS_4  + SRS_5  +
           SRS_6  + SRS_7  + SRS_8  + SRS_9  + SRS_10 +
@@ -101,7 +102,7 @@ SRS_bifactor <- lavaan::cfa(SRS_BifactorModel,
                             orthogonal = TRUE)
 
 bifactorIndices(SRS_bifactor, UniLambda = SRS_Unidimensional)
-
+}
 
 
 # Computing bifactor indices from standardized factor loading matrices

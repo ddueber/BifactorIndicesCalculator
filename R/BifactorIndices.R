@@ -85,6 +85,7 @@
 #' # (using mirt object is similar). Use of the unidimensional
 #' # model is optional; it is only used to compute ARPB.
 #'
+#'\donttest{
 #'SRS_UnidimensionalModel <-
 #'   "SRS =~ SRS_1  + SRS_2  + SRS_3  + SRS_4  + SRS_5  +
 #'           SRS_6  + SRS_7  + SRS_8  + SRS_9  + SRS_10 +
@@ -113,7 +114,7 @@
 #'                             orthogonal = TRUE)
 #'
 #' bifactorIndices(SRS_bifactor, UniLambda = SRS_Unidimensional)
-#'
+#'}
 #'
 #'
 #' # Computing bifactor indices from standardized factor loading matrices
@@ -357,24 +358,39 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
       stop("You must request STDYX output for computing bifactor indices based on standardized coefficients.")
     }
     params <- Lambda$parameters$stdyx.standardized
-    facNames <- params[params$paramHeader == "Variances", "param"]
-    factorCorrs <- lapply(1:length(facNames), function (x) {
-      fac <- facNames[x]
-      c(rep(0, x-1), .5, params[params$paramHeader == paste0(fac, ".WITH"), "est"]) # since standardized, we know all factor variances are 1
-    })
-    factorCorrs <- matrix(unlist(factorCorrs), byrow=TRUE, nrow=length(factorCorrs) )
-    Phi <- factorCorrs + t(factorCorrs)
   } else {
     params <- Lambda$parameters$unstandardized
-    facVar <- params[params$paramHeader == "Variances","est"]
-    facNames <- params[params$paramHeader == "Variances", "param"]
-    factorCorrs <- lapply(1:length(facNames), function (x) {
-      fac <- facNames[x]
-      c(rep(0, x-1), facVar[x]/2, params[params$paramHeader == paste0(fac, ".WITH"), "est"]) # since standardized, we know all factor variances are 1
-    })
-    factorCorrs <- matrix(unlist(factorCorrs), byrow=TRUE, nrow=length(factorCorrs) )
-    Phi <- factorCorrs + t(factorCorrs)
   }
+
+  ## We need factor names to be in the same order as factor loading matrix
+  facNames <- params[grep(".BY", params$paramHeader), "paramHeader"]
+  facNames <- gsub(".BY", "", facNames, fixed = TRUE)
+  facNames <- unique(facNames)
+  facVar <- sapply(facNames, function (fac) {
+    params[params$paramHeader == "Variances" & params$param == fac,"est"]
+  })
+
+  # grab factor correlations, make them more easily parsed, then grab them
+  factorCorrs <- params[grep(".WITH", params$paramHeader), ]
+  factorCorrs$paramHeader <- gsub(".WITH", "", factorCorrs$paramHeader, fixed = TRUE)
+  Phi <- lapply(1:length(facNames), function (x) {
+    fac1 <- facNames[x]
+    sapply(1:length(facNames), function (y) {
+      fac2 <- facNames[y]
+      ## Factor variances are different
+      if (x == y) {
+        facVar[x]
+      } else {
+        ## Look for (x,y) and if that's not there look for (y,x)
+        if (length(factorCorrs[factorCorrs$paramHeader == fac1 & factorCorrs$param == fac2, "est"]) == 1) {
+          factorCorrs[factorCorrs$paramHeader == fac1 & factorCorrs$param == fac2, "est"]
+        } else {
+          factorCorrs[factorCorrs$paramHeader == fac2 & factorCorrs$param == fac1, "est"]
+        }
+      }
+    })
+  })
+  Phi <- matrix(unlist(Phi), byrow=TRUE, nrow=length(Phi) )
 
   if (categorical) {
     Lambda <- getLambda(Lambda, standardized = standardized)
