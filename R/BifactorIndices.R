@@ -412,6 +412,9 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
   D <- diag(x = sqrt(diag(Phi)))
   Phi <- solve(D) %*% Phi %*% t(solve(D))
   Lambda <- Lambda %*% solve(D)
+  colnames(Lambda) <- facNames
+
+
 
   bifactorIndices(Lambda, Theta, UniLambda, standardized, Phi, Thresh)
 }
