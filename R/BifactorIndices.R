@@ -205,7 +205,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
     } else {
       message("Latent variable covariance matrix is assumed to be the identity. This influences
             FD and, in the case of categorical models, the omega indices.")
-      Phi <- diag(nrow = ncol(Lambda))  ## we can only get here is Lambda was provided as a matrix
+      Phi <- diag(nrow = ncol(Lambda))  ## we can only get here if Lambda was provided as a matrix
     }
   }
 
