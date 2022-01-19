@@ -367,7 +367,7 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
   facNames <- gsub(".BY", "", facNames, fixed = TRUE)
   facNames <- unique(facNames)
   facVar <- sapply(facNames, function (fac) {
-    params[params$paramHeader == "Variances" & params$param == fac,"est"]
+    params[params$paramHeader == "Variances" & substring(params$param, 1, 8) == fac,"est"]
   })
 
   # grab factor correlations, make them more easily parsed, then grab them
@@ -382,10 +382,10 @@ bifactorIndicesMplus <- function(Lambda = file.choose(), UniLambda = NULL, stand
         facVar[x]
       } else {
         ## Look for (x,y) and if that's not there look for (y,x)
-        if (length(factorCorrs[factorCorrs$paramHeader == fac1 & factorCorrs$param == fac2, "est"]) == 1) {
-          factorCorrs[factorCorrs$paramHeader == fac1 & factorCorrs$param == fac2, "est"]
+        if (length(factorCorrs[substring(factorCorrs$paramHeader, 1, 8) == fac1 & substring(factorCorrs$param, 1, 8) == fac2, "est"]) == 1) {
+          factorCorrs[substring(factorCorrs$paramHeader, 1, 8) == fac1 & substring(factorCorrs$param, 1, 8) == fac2, "est"]
         } else {
-          factorCorrs[factorCorrs$paramHeader == fac2 & factorCorrs$param == fac1, "est"]
+          factorCorrs[substring(factorCorrs$paramHeader, 1, 8) == fac2 & substring(factorCorrs$param, 1, 8) == fac1, "est"]
         }
       }
     })
