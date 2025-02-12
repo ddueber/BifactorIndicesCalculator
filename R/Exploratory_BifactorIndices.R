@@ -107,7 +107,7 @@ bifactorIndices_expl <- function(Lambda, ItemsBySF = NULL, LoadMin = 0.2) {
     }
   }
 
-  # Is there single factor that pervades all items
+  # Is there single factor that pervades all items?
   FactorLengths <- sapply(ItemsBySF, length)
 
   # Issue a warning if no true general factor

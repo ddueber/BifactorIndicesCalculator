@@ -17,10 +17,10 @@
 #'  \pkg{lavaan} object, then \code{standardized} will be ignored.
 #' @param Phi is the correlation matrix of factors and defaults to \code{NULL}. User should generally ignore this
 #' parameter. If not provided, \code{bifactorIndices} will try to determine \code{Phi} from \code{Lambda} when \code{Lambda}
-#' is a fitted lavaan model or will assume it is the identity matrix otherwise.
+#' is a fitted \pkg{lavaan} or \pkg{mirt} model or will assume it is the identity matrix otherwise.
 #' @param Thresh is a list of vectors of item thresholds, used only when items are categorical.\code{bifactorIndices}
 #'  will try to determine \code{Thresh} from \code{Lambda} when \code{Lambda}
-#' is a fitted lavaan model and the indicators are categorical.
+#' is a fitted \pkg{lavaan} or \pkg{mirt} model and the indicators are categorical.
 #' \code{Thresh} defaults to null, which indicates items are continuous.
 #'
 #' @return A list of bifactor indices, including three different ECV indices, IECV, PUC,
@@ -36,7 +36,7 @@
 #' coefficients, item error variance will be computed directly from standardized factor
 #' loadings. \code{\link{ARPB}} will only be computed if the factor loadings from a unidimensional model
 #' are included, while \code{\link{ECV_GS}} and \code{\link{ECV_SG}} will only be computed for
-#' models with a general factor, and \code{\link{PUC}} will only be conputed for a true bifactor
+#' models with a general factor, and \code{\link{PUC}} will only be computed for a true bifactor
 #' model. Note that if a correlated traits model is provided, the omega indices
 #' will simply be the regular omega values for those factors. Interpretations for individual
 #' indices as well as details about their computation can be found in the man page for the
