@@ -199,7 +199,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   # Can do Phi for SingleGroupClass and for lavaan
   if (is.null(Phi)) {
     if ("SingleGroupClass" %in% class(Lambda)) {
-      Phi <- mirt::summary(Lambda)$fcor
+      utils::capture.output(Phi <- mirt::summary(Lambda)$fcor)  ##this suppresses the printing to screen of summary
     } else if ("lavaan" %in% class(Lambda)) {
       Phi <- lavaan::lavInspect(Lambda, "std.lv")$psi
       # I hate that dumb symmetric matrix print method
