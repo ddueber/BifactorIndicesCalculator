@@ -185,9 +185,11 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
   }
 
 
-  ## if fitted mirt object, then throw warning about Omegas probably being meaningless
+  ## if fitted mirt object, then throw message about Omegas being based on corresponding IFA model
   if ("SingleGroupClass" %in% class(Lambda)) {
-    message("Interpreting omega indices for IRT models is not recommended at this time")
+    message("Omega indices are computed by mathematically converting IRT parameters
+            to parameters for a item factor analysis model and then applying the
+            Green and Yang (2009) reliability formula. I am not sure this is a good idea.")
   }
 
   ## Make Lambda, Theta, Phi, and UniLambda matrices. Do Theta and Phi first because
@@ -209,7 +211,7 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
     }
   }
 
-  # Can do Thresh for lavaan. Maybe we should do it for mirt as well.
+  # Can do Thresh for lavaan.
   if (is.null(Thresh) & ("lavaan" %in% class(Lambda))) {
     # Check to see if items are ordered; if so, rip out the thresholds
     if (length(lavaan::lavInspect(Lambda, "ordered")) > 0) {
@@ -222,6 +224,18 @@ bifactorIndices <- function(Lambda, Theta = NULL, UniLambda = NULL, standardized
     }
   }
 
+  # Let's do thresholds for mirt as well
+  if (is.null(Thresh) & ("SingleGroupClass" %in% class(Lambda))) {
+    item_coef <- mirt::coef(Lambda, simplify = TRUE)$items
+    Thresh <- item_coef[,grepl("d", colnames(item_coef))]
+    Thresh <- Thresh * (-1/1.7) ## Conversion to probit
+    Thresh <- lapply(rownames(Thresh), function (item) {
+      item_thresh <- Thresh[rownames(Thresh) == item,]
+      item_thresh <- item_thresh[!is.na(item_thresh)] ## Need to drop the NAs for the cat_omega function.
+                                                      ## Making thresh a matrix/dataframe might have been easier
+      item_thresh
+    })
+  }
 
   Lambda <- getLambda(Lambda, standardized = standardized)
 
